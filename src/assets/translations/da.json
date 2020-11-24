@@ -70,5 +70,10 @@
     "CANCEL"            : "Cancel",
     "VIRTUAL_LINK"      : "Virtual Link",
     "PHONE_MEETING"     : "Phone Meeting Dial-in",
-    "TEMP_CLOSED"       : "Midlertidigt lukket"
+    "TEMP_CLOSED"       : "Midlertidigt lukket",
+    "VIRTUAL_MEETINGS"  : "virtual-na.org",
+    "LIST"              : "Liste",
+    "SEARCH"            : "Søg",
+    "VISIT"             : "Besøg",
+    "WEEKDAYS"          : "Hverdage"
 }

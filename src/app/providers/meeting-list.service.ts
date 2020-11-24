@@ -7,18 +7,25 @@ export class MeetingListProvider {
 
   tomatoBMLT = 'https://tomato.bmltenabled.org/main_server/client_interface/json/';
   virtualBMLT = 'https://bmlt.virtual-na.org/main_server/client_interface/json/';
+  getApiUrlVirt = 'https://bmlt.virtual-na.org/main_server/client_interface/json/?switcher=GetSearchResults&sort_keys=weekday_tinyint,start_time';
+  getAllVirtMtgs = 'https://bmlt.virtual-na.org/main_server/client_interface/json/?switcher=GetSearchResults&data_field_key=location_postal_code_1,duration_time,start_time,time_zone,weekday_tinyint,service_body_bigint,longitude,latitude,location_province,location_municipality,location_street,location_info,location_text,location_neighborhood,formats,format_shared_id_list,comments,meeting_name,location_sub_province,worldid_mixed,root_server_uri,id_bigint,meeting_name,location_text,formatted_address,formatted_location_info,formatted_comments,contact_name_1,contact_phone_1,contact_email_1,contact_name_2,contact_phone_2,contact_email_2&services[]=4&recursive=1&sort_keys=start_time';
 
   constructor(
     private http: HttpClient,
     private httpCors: HTTP
   ) {
-  }
 
-  getApiUrlVirt = 'https://bmlt.virtual-na.org/main_server/client_interface/json/?switcher=GetSearchResults&sort_keys=weekday_tinyint,start_time';
+  }
 
 
   async getVirtualMeetings() {
     const data = await this.httpCors.get(this.getApiUrlVirt, {}, {});
+    return JSON.parse(data.data);
+  }
+
+
+  async getAllVirtualMeetings() {
+    const data = await this.httpCors.get(this.getAllVirtMtgs, {}, {});
     return JSON.parse(data.data);
   }
 

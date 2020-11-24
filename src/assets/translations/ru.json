@@ -70,5 +70,10 @@
     "CANCEL"            : "Отмена",
     "VIRTUAL_LINK"      : "Виртуальная ссылка",
     "PHONE_MEETING"     : "Телефонный звонок",
-    "TEMP_CLOSED"       : "Временно закрыто"
+    "TEMP_CLOSED"       : "Временно закрыто",
+    "VIRTUAL_MEETINGS"  : "virtual-na.org",
+    "LIST"              : "Список",
+    "SEARCH"            : "Поиск",
+    "VISIT"             : "Визит",
+    "WEEKDAYS"          : "Будние дни"
 }

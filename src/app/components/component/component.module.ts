@@ -5,16 +5,27 @@ import { MeetingListComponent } from '../meeting-list/meeting-list.component';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [MeetingCardComponent, MeetingListComponent],
+  declarations: [
+    MeetingCardComponent,
+    MeetingListComponent
+  ],
   imports: [
     CommonModule,
     PipesModule,
     IonicModule,
-    TranslateModule
+    TranslateModule,
+    FormsModule
   ],
-  exports: [MeetingCardComponent, MeetingListComponent],
-  entryComponents: [MeetingCardComponent, MeetingListComponent]
+  exports: [
+    MeetingCardComponent,
+    MeetingListComponent
+  ],
+  entryComponents: [
+    MeetingCardComponent,
+    MeetingListComponent
+  ]
 })
 export class ComponentModule { }

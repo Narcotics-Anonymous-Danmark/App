@@ -70,5 +70,10 @@
     "CANCEL"            : "Cancelar",
     "VIRTUAL_LINK"      : "Virtual Link",
     "PHONE_MEETING"     : "Phone Meeting Dial-in",
-    "TEMP_CLOSED"       : "Fechado temporariamente"
+    "TEMP_CLOSED"       : "Fechado temporariamente",
+    "VIRTUAL_MEETINGS"  : "virtual-na.org",
+    "LIST"              : "Lista",
+    "SEARCH"            : "Pesquisa",
+    "VISIT"             : "Visita",
+    "WEEKDAYS"          : "Dias da semana"
 }

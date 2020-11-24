@@ -71,5 +71,9 @@
     "VIRTUAL_LINK"      : "Virtual Link",
     "PHONE_MEETING"     : "Phone Meeting Dial-in",
     "TEMP_CLOSED"       : "Temporarily Closed",
-    "VIRTUAL_MEETINGS"  : "virtual-na.org"
+    "VIRTUAL_MEETINGS"  : "virtual-na.org",
+    "LIST"              : "List",
+    "SEARCH"            : "Search",
+    "VISIT"             : "Visit",
+    "WEEKDAYS"          : "Weekdays"
 }

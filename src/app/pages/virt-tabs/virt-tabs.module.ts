@@ -5,11 +5,13 @@ import { IonicModule } from '@ionic/angular';
 import { VirtTabsPageRoutingModule } from './virt-tabs-routing.module';
 import { VirtTabsPage } from './virt-tabs.page';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    TranslateModule,
     IonicModule,
     VirtTabsPageRoutingModule
   ],

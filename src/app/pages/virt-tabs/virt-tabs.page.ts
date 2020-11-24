@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-virt-tabs',
@@ -8,7 +9,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 })
 export class VirtTabsPage implements OnInit {
 
-  constructor(public iab: InAppBrowser) { }
+  constructor(public iab: InAppBrowser,
+              private translate: TranslateService) { }
 
   ngOnInit() {
   }

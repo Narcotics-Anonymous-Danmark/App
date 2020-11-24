@@ -12,7 +12,7 @@
 
     <ng-template #BMLT_List>
     <ion-title>
-      List virtual-na.org
+      virtual-na.org
     </ion-title>
   </ng-template>
 
@@ -127,28 +127,30 @@
         </div>
       </div>
     </div>
+
+    <div>
+      <ion-card text-wrap>
+  
+        <ion-card-header>{{'VIRTUAL_MEETINGS' | translate }}</ion-card-header>
+        <ion-card-content>
+          <p>Virtual NA is a globally based collaborative service resource whose primary purpose is to provide a meeting search for both Online and Phone line meetings of Narcotics Anonymous hosted from different countries around the world.</p>
+          <br>
+          <p>All of the meetings on virtual-na.org are stored in their BMLT installation.</p>
+          <br>
+          <p>Click the&nbsp;<ion-icon color="secondary" name="add-circle"></ion-icon>&nbsp;above to expand the list of meetings.</p>
+        </ion-card-content>
+  
+      </ion-card>
+    </div>
+
   </div>
 
-  <div *ngIf="HTMLGrouping == 'meetings'">
 
+  <div *ngIf="HTMLGrouping == 'meetings'">
     <div *ngIf="isLoaded">
       <app-meeting-list [data]="meetingListArea" meetingType='virt'></app-meeting-list>
     </div>
-    
   </div>
 
-  <div>
-    <ion-card text-wrap>
 
-      <ion-card-header>Virtual NA</ion-card-header>
-      <ion-card-content>
-        <p>Virtual NA is a globally based collaborative service resource whose primary purpose is to provide a meeting search for both Online and Phone line meetings of Narcotics Anonymous hosted from different countries around the world.</p>
-        <br>
-        <p>All of the meetings on virtual-na.org are stored in their BMLT installation.</p>
-        <br>
-        <p>Click the&nbsp;<ion-icon color="secondary" name="add-circle"></ion-icon>&nbsp;above to expand the list of meetings.</p>
-      </ion-card-content>
-
-    </ion-card>
-  </div>
 </ion-content>
