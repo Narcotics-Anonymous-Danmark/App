@@ -87,5 +87,8 @@
   "JFT": "Dagens tekst",
   "AUDIOBOOKS": "Lydbøger",
   "NACC": "Cleantime counter",
-  "GRC": "Gruppeoplæsninger"
+  "GRC": "Gruppeoplæsninger",
+
+  "COMING_SOON": "Kommer snart.",
+  "COMING_SOON_BODY": "Vi arbejder på det .."
 }
