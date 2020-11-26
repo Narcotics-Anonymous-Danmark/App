@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
         //},
         {
             title: 'JFT',
-            url: 'coming-soon',
+            url: 'jft',
             icon: 'albums'
         },
         {

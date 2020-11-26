@@ -45,6 +45,10 @@ const routes: Routes = [
   },  {
     path: 'coming-soon',
     loadChildren: () => import('./coming-soon/coming-soon.module').then( m => m.ComingSoonPageModule)
+  },
+  {
+    path: 'jft',
+    loadChildren: () => import('./jft/jft.module').then( m => m.JftPageModule)
   }
 
 ];
