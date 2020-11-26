@@ -99,13 +99,13 @@ export class AppComponent implements OnInit {
         private storage: Storage
     ) {
         this.initializeApp();
-        this.translate.setDefaultLang('en');
+        this.translate.setDefaultLang('da');
         storage.get('language').then((value) => {
             if (value) {
                 this.translate.use(value);
             } else {
-                this.translate.use('en');
-                storage.set('language', 'en');
+                this.translate.use('da');
+                storage.set('language', 'da');
             }
         });
     }
