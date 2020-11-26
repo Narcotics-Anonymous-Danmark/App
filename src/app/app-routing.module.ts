@@ -42,7 +42,11 @@ const routes: Routes = [
   {
     path: 'virt-tabs',
     loadChildren: () => import('./pages/virt-tabs/virt-tabs.module').then( m => m.VirtTabsPageModule)
+  },  {
+    path: 'coming-soon',
+    loadChildren: () => import('./coming-soon/coming-soon.module').then( m => m.ComingSoonPageModule)
   }
+
 ];
 
 @NgModule({
