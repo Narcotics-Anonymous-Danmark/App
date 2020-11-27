@@ -76,7 +76,7 @@ export class AppComponent implements OnInit {
         },
         {
             title: 'GRC',
-            url: 'coming-soon',
+            url: 'grc',
             icon: 'reader'
         },
         {
