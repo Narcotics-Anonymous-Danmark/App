@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, OnChanges, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -9,8 +9,6 @@ import { GrcPageRoutingModule } from './grc-routing.module';
 import { GrcPage } from './grc.page';
 import { TranslateModule } from '@ngx-translate/core';
 import { ComponentModule } from '../../components/component/component.module';
-
-//import { PdfViewerComponent } from '../../components/pdf-viewer/pdf-viewer.component';
 
 @NgModule({
   imports: [
@@ -23,4 +21,9 @@ import { ComponentModule } from '../../components/component/component.module';
     ],
     declarations: [GrcPage]
 })
-export class GrcPageModule {}
+export class GrcPageModule implements OnInit, OnChanges {
+
+    ngOnInit() { }
+
+    ngOnChanges() { }
+}

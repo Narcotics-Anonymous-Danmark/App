@@ -3,13 +3,19 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-
         <ion-title>
             {{'GRC' | translate}}
         </ion-title>
     </ion-toolbar>
 </ion-header>
 
+<ion-item>
+    <ion-label>Opl&aelig;sning:</ion-label>
+    <ion-select [(ngModel)]="selectedReading" (ionChange)="showReading(selectedReading)" interface="popover" placeholder="V&aelig;lg venligst">
+        <ion-select-option *ngFor="let selectedReading of readings" [value]="selectedReading">{{selectedReading.title}}</ion-select-option>
+    </ion-select>
+</ion-item>
+
 <ion-content>
-    <app-pdf-viewer pdfPath="./assets/pdf/01_DK_GRC_Hvem er en addict.pdf"></app-pdf-viewer>
+    <app-pdf-viewer [pdfPath]="selectedReading.fileName"></app-pdf-viewer>
 </ion-content>
