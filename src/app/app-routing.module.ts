@@ -42,13 +42,18 @@ const routes: Routes = [
   {
     path: 'virt-tabs',
     loadChildren: () => import('./pages/virt-tabs/virt-tabs.module').then( m => m.VirtTabsPageModule)
-  },  {
+  },
+  {
     path: 'coming-soon',
-    loadChildren: () => import('./coming-soon/coming-soon.module').then( m => m.ComingSoonPageModule)
+    loadChildren: () => import('./pages/coming-soon/coming-soon.module').then( m => m.ComingSoonPageModule)
   },
   {
     path: 'jft',
-    loadChildren: () => import('./jft/jft.module').then( m => m.JftPageModule)
+    loadChildren: () => import('./pages/jft/jft.module').then( m => m.JftPageModule)
+  },
+  {
+    path: 'grc',
+    loadChildren: () => import('./pages/grc/grc.module').then( m => m.GrcPageModule)
   }
 
 ];
