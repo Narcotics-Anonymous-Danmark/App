@@ -15,7 +15,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "www",
-            "baseHref": "/app/testing/",
+            //"baseHref": "/app/testing/",
+            "baseHref": "/",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -45,10 +46,44 @@
           },
           "configurations": {
             "production": {
+              "outputPath": "www/prod",
+              "baseHref": "/app/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "src/app/app.component.ts",
+                  "with": "./app.component.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json"
+            },
+            "unstable": {
+              "outputPath": "www/unstable",
+              "baseHref": "/forsmag/",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.unstable.ts"
                 }
               ],
               "optimization": true,
