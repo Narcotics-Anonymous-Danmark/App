@@ -1,7 +1,10 @@
 {
-  "name": "BMLTSearch3",
+  "name": "nadanmarkapp",
   "integrations": {
     "cordova": {}
   },
-  "type": "angular"
+  "type": "angular",
+  "hooks": {
+    "build:before": "./build-before.js"
+  }
 }
