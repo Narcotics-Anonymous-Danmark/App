@@ -50,9 +50,15 @@
                     <ion-icon name="globe" item-left></ion-icon>
                     <ion-button (click)='openLink(sourceBugs)'>Fejlrapporter</ion-button>
                 </ion-item>
+                <ion-item text-wrap>
+                    Buildtype: {{currentConfiguration}}<br />
+                    Version: {{currentVersion}}
+                </ion-item>
             </ion-list>
         </ion-card-content>
     </ion-card>
+
+
 
     <ion-card>
         <ion-card-content>

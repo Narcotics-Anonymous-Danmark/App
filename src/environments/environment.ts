@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+    production: false,
+    currentVersion: "0.0.41+201128211509",
+    configuration: 'development',
+    baseHref: "/"
 };
 
 /*

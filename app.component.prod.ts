@@ -44,11 +44,11 @@ export class AppComponent implements OnInit {
             url: 'listfull',
             icon: 'list'
         },
-        {
-            title: 'NACC',
-            url: 'coming-soon',
-            icon: 'hourglass'
-        },
+        //{
+        //    title: 'NACC',
+        //    url: 'coming-soon',
+        //    icon: 'hourglass'
+        //},
         //{
         //  title: 'VIRTUAL_MEETINGS',
         //  url: 'virt-tabs',
@@ -59,26 +59,26 @@ export class AppComponent implements OnInit {
         //  url: 'do-i-have-the-bmlt',
         //  icon: 'help'
         //},
-        {
-            title: 'NEWS',
-            url: 'coming-soon',
-            icon: 'bulb'
-        },
-        {
-            title: 'EVENTS',
-            url: 'coming-soon',
-            icon: 'calendar'
-        },
+        //{
+        //    title: 'NEWS',
+        //    url: 'coming-soon',
+        //    icon: 'bulb'
+        //},
+        //{
+        //    title: 'EVENTS',
+        //    url: 'coming-soon',
+        //    icon: 'calendar'
+        //},
         //{
         //    title: 'AUDIOBOOKS',
         //    url: 'audiobooks',
         //    icon: 'book'
         //},
-        {
-            title: 'SPEAKS',
-            url: 'coming-soon',
-            icon: 'chatbox-ellipses'
-        },
+        //{
+        //    title: 'SPEAKS',
+        //    url: 'coming-soon',
+        //    icon: 'chatbox-ellipses'
+        //},
         {
             title: 'GRC',
             url: 'grc',
