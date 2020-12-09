@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { VirtFormatsService } from './virt-formats.service';
+import { VirtFormatsProvider } from './virt-formats.service';
 
-describe('VirtFormatsService', () => {
-  let service: VirtFormatsService;
+describe('VirtFormatsProvider', () => {
+    let service: VirtFormatsProvider;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(VirtFormatsService);
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(VirtFormatsProvider);
+    });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
 });

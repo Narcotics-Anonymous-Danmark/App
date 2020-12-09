@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ServiceGroupsService } from './service-groups.service';
+import { ServiceGroupsProvider } from './service-groups.service';
 
-describe('ServiceGroupsService', () => {
-  let service: ServiceGroupsService;
+describe('ServiceGroupsProvider', () => {
+    let service: ServiceGroupsProvider;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ServiceGroupsService);
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(ServiceGroupsProvider);
+    });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
 });

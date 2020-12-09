@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GeolocateService } from './geolocate.service';
+import { GeolocateProvider } from './geolocate.service';
 
-describe('GeolocateService', () => {
-  let service: GeolocateService;
+describe('GeolocateProvider', () => {
+    let service: GeolocateProvider;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(GeolocateService);
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(GeolocateProvider);
+    });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
 });

@@ -103,6 +103,7 @@ export class MeetingListComponent implements OnInit, OnChanges {
 
 
     formatMeetingList() {
+        debugger;
         for (let i = 0; i < 7; i++) {
             this.dayCount[i] = this.meetingList.filter(list => parseInt(list.weekday_tinyint, 10) === i + 1).length;
         }
