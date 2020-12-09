@@ -46,7 +46,7 @@
           "configurations": {
             "production": {
               "outputPath": "www/prod",
-              "baseHref": "/app/",
+              "baseHref": "/iu-udvikling/app/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -78,7 +78,7 @@
             },
             "unstable": {
               "outputPath": "www/unstable",
-              "baseHref": "/forsmag/",
+              "baseHref": "/iu-udvikling/forsmag/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -87,7 +87,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
               "aot": true,

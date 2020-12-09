@@ -6,18 +6,23 @@ module.exports = (ctx) => {
     console.log(ctx);
 
     if (ctx.build && ctx.build.configuration && (ctx.build.configuration === "production" || ctx.build.configuration === "unstable")) {
-        console.log("Production or unstable build: performing version bump...");
 
         // update package.json:
         let packageJSON = JSON.parse(fs.readFileSync('package.json', 'utf-8').toString());
         let versionArray = packageJSON.version.split(".");
-        versionArray[2] = (parseInt(versionArray[2]) + 1).toString(); //parseInt removes "+123456"
+
+
         if (ctx.build.configuration === "production") {
+            console.log("Production build: performing version bump ...");
+            versionArray[2] = (parseInt(versionArray[2]) + 1).toString(); //parseInt removes "+123456"
             packageJSON.version = versionArray.join(".");
         }
         else {
+            console.log("Unstable build: updating timestamp ...");
+            versionArray[2] = (parseInt(versionArray[2])).toString(); //parseInt removes "+123456"
             packageJSON.version = versionArray.join(".") + "+" + ts;
         }
+
         console.log("New version: " + packageJSON.version);
         fs.writeFileSync('package.json', JSON.stringify(packageJSON, null, "\t"), 'utf-8');
         console.log("package.json app version updated");

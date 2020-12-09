@@ -18,6 +18,7 @@ export class ContactPage {
 
     currentVersion = environment.currentVersion;
     currentConfiguration = environment.configuration;
+    naApproved = environment.na_approved;
 
     //appName = this.appVersion.getAppName();
     //packageName = this.appVersion.getPackageName();

@@ -1,4 +1,4 @@
-<ion-content>
+﻿<ion-content>
     <ion-header>
         <ion-toolbar>
             <ion-buttons slot="start">
@@ -9,6 +9,41 @@
             </ion-title>
         </ion-toolbar>
     </ion-header>
+
+    <ion-card *ngIf="naApproved==false">
+        <ion-card-content>
+            <ion-card-title>Denne app er [endnu] ikke godkendt!</ion-card-title>
+            <ion-list>
+                <ion-item text-wrap>
+                    Dette er en prøveversion. Indtil den er blevet godkendt af det danske fællesskab, bør den ikke tages i brug for alvor. Den er kun gjort tilgængelig her, for at vi kan indhente input og feedback fra medlemmerne.
+                </ion-item>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+        <ion-card-content>
+            <ion-card-title>Kendte fejl og mangler</ion-card-title>
+            <ion-list>
+                <ion-item text-wrap>
+                    <ul>
+                        <li>
+                            Danske uger starter med en mandag, ikke en søndag. Som det fremgår af siden med indstillinger, er vi i gang med dette, men det virker ikke endnu.
+                        </li>
+                        <li>
+                            Mødelisterne skal skjule midlertidigt lukkede møder, ligesom vi gør på hjemmesiden.
+                        </li>
+                        <li>
+                            Tider skal vises i 24-timers format, ikke AM/PM.
+                        </li>
+                        <li>
+                            Billedet af dagens tekst lader ikke brugeren zoome ind på en Android.
+                        </li>
+                    </ul>
+                </ion-item>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
 
     <ion-card>
         <ion-card-content>
@@ -58,17 +93,14 @@
         </ion-card-content>
     </ion-card>
 
-
-
     <ion-card>
         <ion-card-content>
             <ion-card-title>Det med sm&aring;t</ion-card-title>
             <ion-list>
                 <ion-item text-wrap>
-                    NA-logoet er et registreret varem&aelig;rke og brugt i overstemmelse med Fellowshop Intellectual Property Trust (FIPT).
+                    NA-logoet er et registreret varem&aelig;rke og brugt i overstemmelse med Fellowship Intellectual Property Trust (FIPT).
                 </ion-item>
             </ion-list>
         </ion-card-content>
     </ion-card>
-
 </ion-content>
