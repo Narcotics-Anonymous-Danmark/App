@@ -1,0 +1,328 @@
+﻿{
+  "events": [
+    {
+      "event_name": "Københavns Områdekonvent - KOKNA",
+      "event_type": "CONVENTION",
+      "recordings": [
+        {
+          "title": "Anders og Rick, KOKNA I - 1994",
+          "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/anders_rick_ kokna1_1994.mp3",
+          "duration": "38:54",
+          "languages": [
+            { "name": "DANISH" },
+            { "name": "ENGLISH" }
+          ],
+          "speakers": [
+            {
+              "name": "Anders"
+            },
+            {
+              "name": "Rick"
+            }
+          ]
+        },
+        {
+          "title": "Keld og Anne-Grethe, KOKNA III - 1996",
+          "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/keld_annegrethe_kokna3_1996.mp3",
+          "duration": "55:06",
+          "languages": [
+            {
+              "name": "DANISH"
+            }
+          ],
+          "tags": [
+            {
+              "name": "MAIN_SPEAKER"
+            },
+            {
+              "name": "STEPS"
+            }
+          ],
+          "speakers": [
+            {
+              "name": "Keld"
+            },
+            {
+              "name": "Anne-Grethe"
+            }
+          ]
+        },
+        {
+          "title": "Gert og Marion, KOKNA XI - 2004",
+          "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/gert_marion_kokna11_2004.mp3",
+          "duration": "58:08",
+          "languages": [
+            {
+              "name": "DANISH"
+            }
+          ],
+          "tags": [
+            {
+              "name": "OPENING_SPEAKER"
+            },
+            {
+              "name": "STEPS"
+            }
+          ],
+          "speakers": [
+            {
+              "name": "Gert"
+            },
+            {
+              "name": "Marion"
+            }
+          ]
+        },
+        {
+          "title": "Jens E., KOKNA XIII - 2006",
+          "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/kokna_13_2006 afs_speak_jens.E mp3",
+          "duration": "50:56",
+          "languages": [
+            {
+              "name": "DANISH"
+            }
+          ],
+          "tags": [
+            {
+              "name": "CLOSING_SPEAKER"
+            },
+            {
+              "name": "STEPS"
+            },
+            {
+              "name": "NA_HISTORY"
+            }
+          ],
+          "speakers": [
+            {
+              "name": "Jens E."
+            }
+          ]
+        },
+        {
+          "title": "Catherine, KOKNA XVI - 2009",
+          "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Catherine afslutningsspeak kokna16.mp3",
+          "languages": [
+            {
+              "name": "DANISH"
+            }
+          ],
+          "tags": [
+            {
+              "name": "CLOSING_SPEAKER"
+            }
+          ]
+        },
+        {
+          "title": "Lars D., KOKNA XXII - 2015",
+          "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/LarsD_aabningspeak_kokna_22_2015.mp3",
+          "languages": [
+            {
+              "name": "DANISH"
+            }
+          ],
+          "tags": [
+            {
+              "name": "OPENING_SPEAKER"
+            }
+          ]
+        },
+        {
+          "title": "Helle B., KOKNA XXII - 2015",
+          "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/afslutningsspeak_helle.B_aalborg_kokna_22.mp3",
+          "languages": [
+            {
+              "name": "DANISH"
+            }
+          ],
+          "tags": [
+            {
+              "name": "CLOSING_SPEAKER"
+            }
+          ]
+        },
+        {
+          "title": "Dan, KOKNA XXIII - 2016",
+          "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Dan-CPH.DK-KOKNA23.Dansk.mp3",
+          "languages": [
+            {
+              "name": "DANISH"
+            }
+          ]
+        },
+        {
+          "title": "Lene, KOKNA XXIV - 2017",
+          "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/KOKNA24.2017.Afslutnings-speak-Lene.mp3",
+          "languages": [
+            {
+              "name": "DANISH"
+            }
+          ]
+        },
+        {
+          "title": "Mette W., KOKNA XXVI - 2019",
+          "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Mette afslutningsspeak KOKNA 26.mp3",
+          "languages": [
+            {
+              "name": "DANISH"
+            }
+          ],
+          "tags": [
+            {
+              "name": "CLOSING_SPEAKER"
+            }
+          ]
+        },
+        {
+          "title": "Michael S., KOKNA XXVI - 2019",
+          "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Michael Hovedspeak KOKNA 26.mp3",
+          "languages": [
+            {
+              "name": "DANISH"
+            }
+          ],
+          "tags": [
+            {
+              "name": "MAIN_SPEAKER"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "event_name": "Nordjyllands Områdekonvent (Aalborg) - NOKNA",
+      "event_type": "CONVENTION",
+      "recordings": [
+        {
+          "title": "Mette W., NOKNA XIV - 2009",
+          "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/abningsspeak Mette Aalborg konvent.mp3",
+          "languages": [
+            {
+              "name": "DANISH"
+            }
+          ],
+          "tags": [
+            { "name": "OPENING_SPEAKER" }
+          ]
+        },
+        {
+          "title": "Helle H., NOKNA XVI - 2011",
+          "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/HelleH-Nokna2011.MP3",
+          "languages": [
+            {
+              "name": "DANISH"
+            }
+          ]
+
+        },
+        {
+          "title": "Torben, Åbningsspeak - Fredericia",
+          "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/aabnings speak Torben Fredericua.mp3",
+          "tags": [
+            { "name": "OPENING_SPEAKER" },
+            {
+              "name": "Trin"
+            },
+            {
+              "name": "Traditioner"
+            }
+          ]
+        },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/aabningsspeak konvent og camp 2009 skanderborg - Dorrit.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Aabningsspeak konvent og camp Claire 2010.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Aabningsspeak konvent og camp Claire.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/aabningsspeak Skanderborg Helle 2016.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/afslutningsspeak Esbjerg jens, Carsten og gert 7 feb 2010.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/afslutningsspeak janeaarhus esbjergkonvent 09.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Alice_na.Vordingborg. Nokna 21 mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/ANDY-aabningsspeak.2013_N.O.K.N.A-18.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Bjarke Skanderborg2013.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Brian.A.Survivor.Gruppen.Esbjerg.09-10-2015.MP3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Camilla_how_and_why_20aars_foedselsdags_speak.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Carsten_aabningsspeak esbjerg09.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Carsten_H_hovedspeak_skanderborg_2017.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/david aabningsspeak kokno16.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Debbie Speak julemoedet aarhus 2010.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/dorrit.NOKNA.20.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Ellen bningsspeak KOKNA 26.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Elsebeth Hovedspeak NA's 20 ars fodselsdag Fredericia.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Eric G Speak How and Why 21.03.2011.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Gary.A-UK-KOKNA23.English.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/gert_flying_free_april98.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Gert_speak_april12.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Heidi. rhus-Nokna 24.m4a" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/HI_&_OI_Speak_Liz_&_Thomas_B.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Hovedspeak Henning Konvent og camp 01.08.2010.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Hovedspeak konvent og camp skanderborg 2009 - Lars D.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Hovedspeak Michelle KOKNA 25.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Hovedspeak Skanderborg Dorte 2016 (1).mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Hovedspeak.Andy AAlborg BOKNA.15.2015.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Indiana_Joe_Esbjerg_2015.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Jack-Nokna2011.MP3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Jacob. Speak Power of Love 2019.m4a" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Jeanette - Stof til eftertanke - Thisted 15.06.2012.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/John Loerdagsmoedets 1 aars foedselsdag d. 11.04.2009.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Johnny KBH. Nokna 24-2019.m4a" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Karrie.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Karrie_aabnings_skanderborg17.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Kims speak Aalborg 2012.m4a" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Lars skanderborg 2013 copy 1.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Lars skanderborg 2013.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Liz_Skanderborg_04_08_2018.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Lona Speak 23-02-2011.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Louise Konvent_Skanderborg-02.08.19.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/MIA.Thisted  NOKNA 24.  2019.m4a" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Michael.B-CPH.DK.Dansk.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Michael.Berring.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/michael_flying_free_april96.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Morten Esbjerg Konvent 2014.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Morten Konvent_Skanderborg 03.08.19.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Morten S How and Why gruppen 18.06.12.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/na_historie_indiana_joe_esbjerg_2015.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/oldtimer  NOKNA 20.m4a" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Per speak NA's 20 †rs fodselsdag.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Peter Speak how and why gruppen17-01-2011.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Ronni_C.speak_Grib_Nuet-gruppen_Silkeborg_Seb.2017.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Sigi Hovedspeak esbjerg 2010.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Skanderborg 2015 Helle.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Speak Jens langkniv. ANDY 2018.m4a" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Steff B - Speak - Grib Nuet, Silkeborg - 21-02-2012.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Steff_BOKNA_2017.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Steff_Thisted.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/SOREN-Aalborg.m4a" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Thomas B How and Why Gruppen 20-12-2010.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Thomas B Speak Thisted 30.03.2011.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Thomas B Speak Vejle 6.7.2012.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Thomas B. Sammen kan vi rhus 18 †rs fodselsdag.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Thomas C, Speak, Stof til eftertanke, Thisted, d 17-8-2012.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Thomas O Skanderborg Konvent 2014.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Thomas Skanderborg Konvent 2014.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/thomas_aalborg_speak.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/thomas_bornholm.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Torben How and Why 18 aars dec12.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Yadigar Skanderborg Konvent 2014.mp3" },
+        { "fileName": "https://www.nadanmark.dk/wp-content/uploads/Danske%20Speaks/Yeadigar_KBH.mp3" }
+      ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "Åbningsspeak",
+      "desc": "Handler om et eller flere af NA's Tolv Trin"
+    },
+    {
+      "name": "Afslutningsspeak",
+      "desc": "Handler om et eller flere af NA's Tolv Trin"
+    },
+
+    {
+      "name": "Trin",
+      "desc": "Handler om et eller flere af NA's Tolv Trin"
+    },
+    {
+      "name": "Traditioner",
+      "desc": "Handler om en eller flere af NA's Tolv Traditioner"
+
+    }
+  ]
+}

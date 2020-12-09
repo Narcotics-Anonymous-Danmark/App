@@ -1,0 +1,55 @@
+﻿<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            {{'SPEAKS' | translate}}
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list #scheduleList [hidden]="shownSessions === 0">
+        <ion-item-group *ngFor="let event of events">
+            <!--[hidden]="group.hide"-->
+            <ion-item-divider sticky>
+                <ion-label>
+                    {{event.event_type | translate}}:<br/>{{event.event_name}}
+                </ion-label>
+            </ion-item-divider>
+            <ion-item-sliding *ngFor="let recording of event.recordings" #slidingItem>
+                <ion-item>
+                    <ion-label>
+                        <div *ngIf="recording.languages" class="recording_meta">
+                            {{'LANGUAGE(S)' | translate}}:
+                            <span *ngFor="let language of recording.languages">
+                                {{language.name | translate}}
+                            </span>
+                        </div>
+                        <div *ngIf="recording.tags" class="recording_meta">
+                            {{'TAGS' | translate}}:
+                            <span *ngFor="let tag of recording.tags">
+                                {{tag.name | translate}}
+                            </span>
+                        </div>
+                            <ion-button expand="block" (click)="openWithInAppBrowser(recording.fileName)">
+                                <ion-ripple-effect></ion-ripple-effect>
+                                {{ recording.title ? recording.title : recording.fileName }}
+                            </ion-button>
+                    </ion-label>
+                </ion-item>
+                <ion-item-options>
+                    <ion-item-option color="favorite" (click)="addFavorite(slidingItem, session)" *ngIf="segment === 'all'">
+                        Favorite
+                    </ion-item-option>
+                    <ion-item-option color="danger" (click)="removeFavorite(slidingItem, session, 'Remove Favorite')"
+                                     *ngIf="segment === 'favorites'">
+                        Remove
+                    </ion-item-option>
+                </ion-item-options>
+            </ion-item-sliding>
+        </ion-item-group>
+    </ion-list>
+
+</ion-content>
