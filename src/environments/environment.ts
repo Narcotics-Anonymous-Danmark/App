@@ -5,7 +5,7 @@
 export const environment = {
     production: false,
     na_approved: false,
-    currentVersion: "0.1.1+201209142420",
+    currentVersion: "0.1.1",
     configuration: 'development',
     //baseHref is configured in angular.json
     //baseHref: "/",
