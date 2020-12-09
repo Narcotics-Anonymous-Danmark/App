@@ -54,6 +54,14 @@ const routes: Routes = [
   {
     path: 'grc',
     loadChildren: () => import('./pages/grc/grc.module').then( m => m.GrcPageModule)
+  },
+  {
+    path: 'speaks',
+    loadChildren: () => import('./pages/speaks/speaks.module').then( m => m.SpeaksPageModule)
+  },
+  {
+    path: 'cleantime-counter',
+    loadChildren: () => import('./pages/cleantime-counter/cleantime-counter.module').then( m => m.CleantimeCounterPageModule)
   }
 
 ];

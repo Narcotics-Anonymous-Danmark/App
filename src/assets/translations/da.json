@@ -17,17 +17,19 @@
   "MAP": "Kørselsvejledning",
   "SETTINGS": "Indstillinger",
   "SEARCHRANGESETTING": "Standard søgeradius",
+  "FIRSTDAYOFWEEKSETTING": "Ugen starter med",
+  "SHOWOWNREGIONONTOPSETTING": "Vis Danmark øverst på fuld mødeliste",
   "HOME_TITLE": "Narcotics Anonymous Danmark",
   "HOME_MESSAGE": "Helpline: 70 20 01 85",
   "CONTACT": "Om denne app / Kontakt",
   "LANGUAGE": "Sprog",
-  "ENGLISH": "English",
-  "ITALIAN": "Italiano",
-  "SPANISH": "Español",
+  "ENGLISH": "Engelsk",
+  "ITALIAN": "Italiensk",
+  "SPANISH": "Spansk",
   "DANISH": "Dansk",
-  "POLISH": "Polskie",
-  "PORTUGUESE": "Português",
-  "RUSSIAN": "Русский",
+  "POLISH": "Polsk",
+  "PORTUGUESE": "Portugisisk",
+  "RUSSIAN": "Russisk",
   "ADDRESSSEARCH": "Adressesøgning",
   "DOIHAVETHEBMLT": "Har jeg BMLT?",
   "MAPRANGE": "Standard søgeradius",
@@ -75,7 +77,7 @@
   "LIST": "Vis liste",
   "SEARCH": "Søg",
   "VISIT": "Besøg",
-  "WEEKDAYS": "Hverdage",
+  "WEEKDAYS": "Alle dage",
   "VIRTUAL_NA": "Virtual NA er en international serviceressource, hvis hovedformål det er at drive en søgemaskine til NA-møder. Den dækker både online- og telefonmøder fra forskellige lande rundt om i verden.",
 
   "HOME_MESSAGE_2": "Hvis du har et problem med stoffer,",
@@ -90,5 +92,16 @@
   "GRC": "Gruppeoplæsninger",
 
   "COMING_SOON": "Kommer snart.",
-  "COMING_SOON_BODY": "Vi arbejder på det .."
+  "COMING_SOON_BODY": "Vi arbejder på det ..",
+
+  "MONDAY_IS_FIRST_DAY_OF_WEEK": true,
+
+  "LANGUAGE(S)": "Sprog",
+  "CONVENTION": "Konvent",
+  "OPENING_SPEAKER": "Åbningsspeak",
+  "MAIN_SPEAKER": "Hovedspeak",
+  "CLOSING_SPEAKER": "Afslutningsspeak",
+  "STEPS": "Trin",
+  "TRADITIONS": "Traditioner",
+  "NA_HISTORY": "NA's historie"
 }

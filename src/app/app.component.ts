@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
         },
         {
             title: 'NACC',
-            url: 'coming-soon',
+            url: 'cleantime-counter',
             icon: 'hourglass'
         },
         //{
@@ -76,7 +76,7 @@ export class AppComponent implements OnInit {
         //},
         {
             title: 'SPEAKS',
-            url: 'coming-soon',
+            url: 'speaks',
             icon: 'chatbox-ellipses'
         },
         {
