@@ -1,0 +1,57 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            {{'DATETIME' | translate}}
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-item>
+        <ion-label>{{'ENTERCLEANDATE' | translate}}-> </ion-label>
+        <ion-datetime displayFormat="DD MMM YYYY"
+                      [monthShortNames]="monthShortNames"
+                      [monthNames]="monthNames"
+                      [cancelText]="cancelText"
+                      [doneText]="doneText"
+                      [(ngModel)]="myDate"
+                      (ionChange)=getCleanTime()>
+        </ion-datetime>
+    </ion-item>
+
+    <div *ngIf="tag != 'none'">
+        <ion-card>
+            <ion-card-header>{{'BIRTHDAY' | translate}}</ion-card-header>
+            <ion-card-content>
+                <h1>{{ tagTime }} {{ tag | translate }}</h1>
+                <ion-img [src]='keytagImage'></ion-img>
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+    <ion-card>
+        <ion-card-header>{{'CLEANTIMEINDAYS' | translate }}</ion-card-header>
+        <ion-card-content>
+            <h1>{{ cleanTimeInDays }} {{'DAYS' | translate}}</h1>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+        <ion-card-header>{{'CLEANTIMEINWEEKS' | translate }}</ion-card-header>
+        <ion-card-content>
+            <h1>{{ cleanTimeInWeeks }} {{'WEEKS' | translate}}</h1>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+        <ion-card-header>{{'CLEANTIMEINYEARS' | translate }}</ion-card-header>
+        <ion-card-content>
+            <h1>{{ cleanTimeInYears }}&nbsp;{{'YEARS' | translate}}</h1>
+        </ion-card-content>
+    </ion-card>
+
+</ion-content>
