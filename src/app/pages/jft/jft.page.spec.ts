@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { JftPage } from './jft.page';
 
@@ -10,7 +11,7 @@ describe('JftPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ JftPage ],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot(), TranslateModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(JftPage);

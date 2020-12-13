@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { NoSanitizePipe } from '../../pipes/no-sanitize.pipe';
 
 import { PdfViewerComponent } from './pdf-viewer.component';
 
@@ -8,8 +9,8 @@ describe('PdfViewerComponent', () => {
   let fixture: ComponentFixture<PdfViewerComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ PdfViewerComponent ],
+      TestBed.configureTestingModule({
+          declarations: [PdfViewerComponent, NoSanitizePipe],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

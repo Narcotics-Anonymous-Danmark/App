@@ -22,16 +22,15 @@ export class SpeaksPage implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.loadingCtrl.present('Loading Speakers...');
         this.getAllSpeakers();
     }
 
     getAllSpeakers() {
+        this.loadingCtrl.present('Loading Speakers...');
         this.audioProvider.load().subscribe((data) => {
             this.events = Array.of(data.events)[0];
-            //debugger;
-            this.loadingCtrl.dismiss();
         });
+        this.loadingCtrl.dismiss();
     }
 
     openWithInAppBrowser(url: string) {

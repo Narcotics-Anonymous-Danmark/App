@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { ComingSoonPage } from './coming-soon.page';
 
@@ -10,7 +11,7 @@ describe('ComingSoonPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ComingSoonPage ],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot(), TranslateModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ComingSoonPage);

@@ -1,24 +1,35 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
+import { TranslateService } from '@ngx-translate/core';
+import { StorageMock } from '../../../testing/storage.mock';
+import { TranslatePipeMock } from '../../../testing/translate.pipe.mock';
 
 import { CleantimeCounterPage } from './cleantime-counter.page';
 
 describe('CleantimeCounterPage', () => {
-  let component: CleantimeCounterPage;
-  let fixture: ComponentFixture<CleantimeCounterPage>;
+    let component: CleantimeCounterPage;
+    let fixture: ComponentFixture<CleantimeCounterPage>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ CleantimeCounterPage ],
-      imports: [IonicModule.forRoot()]
-    }).compileComponents();
+    let storageSpy;
+    let translateServiceSpy;
 
-    fixture = TestBed.createComponent(CleantimeCounterPage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [CleantimeCounterPage, TranslatePipeMock],
+            imports: [IonicModule.forRoot()],
+            providers: [
+                { provide: Storage, useClass: StorageMock },
+                { provide: TranslateService, useValue: translateServiceSpy },
+]
+        }).compileComponents();
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+        fixture = TestBed.createComponent(CleantimeCounterPage);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    }));
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });
