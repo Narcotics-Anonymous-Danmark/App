@@ -10,8 +10,8 @@ import { environment } from '../../../environments/environment';
 
 export class ContactPage {
 
-    sourceCodeLink = 'https://github.com/JonasServicekonto/BMLTSearch3DK';
-    sourceBugs = 'https://github.com/JonasServicekonto/BMLTSearch3DK/issues';
+    sourceCodeLink = 'https://github.com/Narcotics-Anonymous-Danmark/App';
+    sourceBugs = 'https://github.com/Narcotics-Anonymous-Danmark/App/issues';
     bmltLink = 'https://bmlt.app/';
     fbGroupLink = 'https://www.facebook.com/groups/149214049107349/';
     meetinglistServantLink = 'mailto:modelisteansvarlig@nadanmark.dk';

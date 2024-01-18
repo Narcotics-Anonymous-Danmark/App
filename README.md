@@ -14,7 +14,7 @@ or clone this project:
 git clone https://github.com/Narcotics-Anonymous-Danmark/App.git
 ```
 
-2. Install nvm (v0.39.3) so we can use node.js (vv10.13.0) and npm (v6.4.1)
+2. Install nvm (v0.39.3) so we can use node.js (v10.13.0) and npm (v6.4.1)
 
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
@@ -53,7 +53,7 @@ ionic cordova plugin add cordova-plugin-browsersync
 3. Install Cordova/PhoneGap plugins (Cordova Plugins package.json branch dependencies)
 
 ```
-ionic cordova prepare
+ANDROID_SDK_ROOT=/home/mcd/AndroidSDK ionic cordova build browser
 ```
 
 4. Run the app using the browser
@@ -79,7 +79,7 @@ ionic cordova plugin add cordova-plugin-browsersync
 3. Install Cordova/PhoneGap plugins (Cordova Plugins package.json branch dependencies)
 
 ```
-ANDROID_SDK_ROOT=/home/mcd/AndroidSDK ionic cordova emulate android
+ANDROID_SDK_ROOT=/home/mcd/AndroidSDK ionic cordova build android
 ```
 
 4. Install Android SDK and Emulator
@@ -92,10 +92,16 @@ androidsdk "system-images;android-28;google_apis_playstore;x86"
 ~/AndroidSDK/tools/bin/avdmanager create avd -n test -k "system-images;android-28;google_apis_playstore;x86"
 ```
 
-5. Run the app using the android emulator
+5. Start android emulator
 
 ```
-ionic cordova emulate android
+ANDROID_SDK_ROOT=/home/mcd/AndroidSDK emulator @test
+```
+
+6. Run the app using the android emulator
+
+```
+ANDROID_SDK_ROOT=/home/mcd/AndroidSDK ionic cordova run android --livereload-url=http://10.0.2.2:8100 -l
 ```
 
 
