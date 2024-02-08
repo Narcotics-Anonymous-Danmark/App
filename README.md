@@ -119,6 +119,12 @@ ANDROID_SDK_ROOT=~/AndroidSDK emulator @test
 ANDROID_SDK_ROOT=~/AndroidSDK ionic cordova run android --livereload-url=http://10.0.2.2:8100 -l
 ```
 
+or if you have issues with "Application Error // There was a network error. (IP:ADDRESS)" or "Application Error // net::ERR_CONNECTION_REFUSED (IP:ADDRESS)" try:
+
+```
+ANDROID_SDK_ROOT=~/AndroidSDK ionic cordova run android --emulator --target=test --livereload --debug --verbose --external --host=0.0.0.0 --port=8100
+```
+
 
 ## Apple iphone/ipad app link
 
