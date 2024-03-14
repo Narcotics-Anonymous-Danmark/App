@@ -24,15 +24,10 @@ export class AppComponent implements OnInit {
             url: 'home',
             icon: 'home'
         },
-        //{
-        //  title: 'MAP_SEARCH',
-        //  url: 'map-search',
-        //  icon: 'map'
-        //},
         {
-            title: 'JFT',
-            url: 'jft',
-            icon: 'albums'
+         title: 'MAP_SEARCH',
+         url: 'map-search',
+         icon: 'map'
         },
         {
             title: 'LOCATIONSEARCH',
@@ -45,6 +40,11 @@ export class AppComponent implements OnInit {
             icon: 'list'
         },
         {
+            title: 'JFT',
+            url: 'jft',
+            icon: 'albums'
+        },
+        {
             title: 'NACC',
             url: 'cleantime-counter',
             icon: 'hourglass'
@@ -53,11 +53,6 @@ export class AppComponent implements OnInit {
         //  title: 'VIRTUAL_MEETINGS',
         //  url: 'virt-tabs',
         //  icon: 'globe-outline'
-        //},
-        //{
-        //  title: 'DOIHAVETHEBMLT',
-        //  url: 'do-i-have-the-bmlt',
-        //  icon: 'help'
         //},
         {
             title: 'NEWS',

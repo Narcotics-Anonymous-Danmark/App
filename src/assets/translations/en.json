@@ -75,5 +75,6 @@
     "LIST"              : "List",
     "SEARCH"            : "Search",
     "VISIT"             : "Visit",
-    "WEEKDAYS"          : "Weekdays"
+    "WEEKDAYS"          : "Weekdays",
+    "mapsearch.search"  : "Search"
 }

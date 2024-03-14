@@ -51,14 +51,16 @@ export class LocationSearchPage  {
           this.storage.get('savedAddressLng').then(value => {
             if (value) {
               this.addressLongitude = value;
-              this.storage.get('savedAddress').then(value => {
-                if (value) {
-                  this.currentAddress = value;
-                  this.getAllMeetings();
-                } else {
-                  this.locatePhone();
-                }
-              });
+              this.getAllMeetings();
+              // Do not use address
+              // this.storage.get('savedAddress').then(value => {
+              //   if (value) {
+              //     this.currentAddress = value;
+              //     this.getAllMeetings();
+              //   } else {
+              //     this.locatePhone();
+              //   }
+              // });
             } else {
               this.locatePhone();
             }
@@ -102,19 +104,9 @@ export class LocationSearchPage  {
       this.storage.set('savedAddressLat', this.addressLatitude);
       this.storage.set('savedAddressLng', this.addressLongitude);
 
-      this.GeolocateProvider.convertLatLong(this.addressLatitude, this.addressLongitude).subscribe((json) => {
-        this.currentAddress = json;
-        if (this.currentAddress.results[0]) {
-          this.currentAddress = this.currentAddress.results[0].formatted_address;
-          this.storage.set('savedAddress', this.currentAddress);
+      this.dismissLoader();
 
-          this.dismissLoader();
-          this.getAllMeetings();
-        } else {
-          this.dismissLoader();
-          this.currentAddress = 'Location not found';
-        }
-      });
+      this.getAllMeetings();
 
     }).catch((error) => {
       console.log('Error getting location', error);
