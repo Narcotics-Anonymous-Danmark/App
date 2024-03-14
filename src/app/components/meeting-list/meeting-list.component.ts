@@ -34,9 +34,8 @@ export class MeetingListComponent implements OnInit, OnChanges {
     loader = null;
     isLoaded = false;
 
-    firstday = '';
-    //days = ['WEEKDAYS', 'SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
-    days = ['WEEKDAYS'];
+    firstday = 'mo';
+    days = ['WEEKDAYS', 'MONDAY', 'SUNDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
     hourRangeValues = {
         upper: 23,
         lower: 0
@@ -164,6 +163,11 @@ export class MeetingListComponent implements OnInit, OnChanges {
         });
 
         meetingList = groupedByGroupingOneAsArray;
+        
+        if(groupingOption == "weekday_tinyint" && this.firstday === "mo" && meetingList.length > 0 && meetingList[0][0][groupingOption] === "1"){
+            meetingList.push(meetingList.shift());
+        }
+
         return meetingList;
     }
 

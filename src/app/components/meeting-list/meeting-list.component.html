@@ -1,10 +1,10 @@
 <div>
   <ion-list>
-    <ion-item>
+    <!-- <ion-item>
       <ion-text>
         <p class="ion-1x">&nbsp; {{ selectedDay | translate }} : {{ displayLower }} - {{ displayUpper }} </p>
       </ion-text>
-    </ion-item>
+    </ion-item> -->
     <ion-item class="ion-1x">
       <ion-select [(ngModel)]="selectedDay" (ionChange)=setDay() interface="popover" cancelText="{{'CANCEL' | translate}}">
         <ion-select-option *ngFor="let selectedDay of days" [value]="selectedDay" >{{ selectedDay | translate }}</ion-select-option>
@@ -18,7 +18,7 @@
         step="1" 
         snaps="true" 
         pin="true" 
-        debounce="350">
+        debounce="350" style="padding-top: 0; padding-bottom: 0;">
         <ion-icon slot="start" name="time-outline"></ion-icon>
         <ion-icon slot="end" name="time-outline"></ion-icon>
       </ion-range>

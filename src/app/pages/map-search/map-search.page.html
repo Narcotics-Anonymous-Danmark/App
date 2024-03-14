@@ -7,7 +7,7 @@
       {{'MAP_SEARCH' | translate}}
     </ion-title>
   </ion-toolbar>
-  <ion-searchbar no-padding [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" placeholder="search">
+  <ion-searchbar no-padding [(ngModel)]="autocomplete.input" (ionInput)="updateSearchResults()" [placeholder]='"mapsearch.search" | translate'>
   </ion-searchbar>
 </ion-header>
 

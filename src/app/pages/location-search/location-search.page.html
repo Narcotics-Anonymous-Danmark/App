@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content>
-  <div ngSwitch="{{ currentAddress }}">
+  <div ngSwitch="{{ addressMeetingList }}">
 
     <div *ngSwitchCase="''"></div>
 
@@ -30,16 +30,16 @@
 <ion-footer no-padding>
   <ion-toolbar no-padding>
 
-    <ion-item text-wrap>
-      <b>{{radius}} {{'MEETINGS_NEAREST' | translate}} {{ currentAddress }}</b>
-    </ion-item>
-    <ion-item text-wrap>
-      <ion-button expand="full" color="primary" id="LocationButton" (click)="locatePhone()" class="col text-center text-wrap">
+    <!-- <ion-item text-wrap>
+      <b>{{radius}} {{'MEETINGS_NEAREST' | translate}}</b>
+    </ion-item> -->
+    <ion-item text-center>
+      <ion-button expand="full" color="primary" id="LocationButton" (click)="locatePhone()" class="col text-center text-wrap" style="margin: auto;">
         <ion-icon name="locate-outline"></ion-icon>&nbsp;{{'LOCATIONSEARCH' | translate }}
       </ion-button>
     </ion-item>
 
-    <ion-range id="RadiusRange" min="5" max="50" [(ngModel)]="radius" (ionChange)="getAllMeetings()" color="danger" pin="true" debounce="500">
+    <ion-range id="RadiusRange" min="5" max="50" [(ngModel)]="radius" (ionChange)="getAllMeetings()" color="danger" pin="true" debounce="500" style="padding-top: 0; padding-bottom: 0;">
       <ion-label slot="start">5 {{'MEETINGS' | translate}}</ion-label>
       <ion-label slot="end">50 {{'MEETINGS' | translate}}</ion-label>
     </ion-range>

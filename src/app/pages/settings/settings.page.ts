@@ -36,7 +36,7 @@ export class SettingsPage implements OnInit {
                 if (firstdayValue) {
                     this.firstdayofweek = firstdayValue;
                 } else {
-                    this.firstdayofweek = 'su';
+                    this.firstdayofweek = 'mo';
                 }
             });
 

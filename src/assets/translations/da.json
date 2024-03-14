@@ -11,7 +11,7 @@
   "TAGS": "Tags",
   "CATEGORY": "Kategori",
   "MENUS": "Menuer",
-  "MAP_SEARCH": "Kortsøgning",
+  "MAP_SEARCH": "Kort",
   "MAP_SEARCH_DESC": " møder nærmest den røde markør. Træk den røde markør for at flytte søgningen.",
   "MEETINGS": " Møder",
   "MAP": "Kørselsvejledning",
@@ -48,7 +48,7 @@
   "DIRECTIONS": "Kørselsvejledning",
   "MILES": "miles",
   "KMS": "km",
-  "MEETINGS_NEAREST": "møder nærmest på ",
+  "MEETINGS_NEAREST": "møder nærmest",
   "MARKER_INSTR": "Træk markør for at indstille position",
   "NOTHING_FOUND": "Intet fundet",
   "BUS": "Note",
@@ -103,5 +103,6 @@
   "CLOSING_SPEAKER": "Afslutningsspeak",
   "STEPS": "Trin",
   "TRADITIONS": "Traditioner",
-  "NA_HISTORY": "NA's historie"
+  "NA_HISTORY": "NA's historie",
+  "mapsearch.search": "Søg"
 }

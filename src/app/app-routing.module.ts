@@ -12,10 +12,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/contact/contact.module').then( m => m.ContactPageModule)
   },
   {
-    path: 'do-i-have-the-bmlt',
-    loadChildren: () => import('./pages/do-i-have-the-bmlt/do-i-have-the-bmlt.module').then( m => m.DoIHaveTheBmltPageModule)
-  },
-  {
     path: 'home',
     loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
   },
