@@ -35,7 +35,7 @@ export class MeetingListComponent implements OnInit, OnChanges {
     isLoaded = false;
 
     firstday = 'mo';
-    days = ['WEEKDAYS', 'MONDAY', 'SUNDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+    days = ['WEEKDAYS', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
     hourRangeValues = {
         upper: 23,
         lower: 0
@@ -290,8 +290,13 @@ export class MeetingListComponent implements OnInit, OnChanges {
 
         //  Filter by Day
         if (this.days.indexOf(this.selectedDay) > 0) {
+            var days = this.days.map((x) => x);
+            if(this.firstday === "mo"){
+                days.splice(1, 0, days.pop());
+            }
+            
             tempMeetingListGroupedByDay = tempMeetingListGroupedByDay.filter(
-                meeting => parseInt(meeting.weekday_tinyint, 10) === this.days.indexOf(this.selectedDay)
+                meeting => parseInt(meeting.weekday_tinyint, 10) === days.indexOf(this.selectedDay)
             );
         }
 
