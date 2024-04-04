@@ -88,7 +88,7 @@
   "SPEAKS": "Speaks",
   "JFT": "Dagens tekst",
   "AUDIOBOOKS": "Lydbøger",
-  "NACC": "Cleantime counter",
+  "NACC": "Cleantimeberegner",
   "GRC": "Gruppeoplæsninger",
 
   "COMING_SOON": "Kommer snart.",
@@ -104,5 +104,20 @@
   "STEPS": "Trin",
   "TRADITIONS": "Traditioner",
   "NA_HISTORY": "NA's historie",
-  "mapsearch.search": "Søg"
+  "mapsearch.search": "Søg",
+
+  "DATETIME": "Cleantimeberegner",
+  "ENTERCLEANDATE": "Første clean dag",
+  "CLEANTIMEINDAYS": "Clean dage",
+  "DAYS": "dage",
+  "CLEANTIMEINWEEKS": "Clean uger",
+  "WEEKS": "uger",
+  "CLEANTIMEINYEARS": "Clean år",
+  "YEARS": "år",
+  "BIRTHDAY": "Mærkedag",
+  "DAYCLEAN": "dag",
+  "DAYSCLEAN": "dage",
+  "MONTHSCLEAN": "måneder",
+  "YEARCLEAN": "år",
+  "YEARSCLEAN": "år"
 }

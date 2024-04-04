@@ -76,5 +76,20 @@
     "SEARCH"            : "Search",
     "VISIT"             : "Visit",
     "WEEKDAYS"          : "Weekdays",
-    "mapsearch.search"  : "Search"
+    "mapsearch.search"  : "Search",
+
+    "DATETIME": "Cleantime counter",
+    "ENTERCLEANDATE": "First clean day",
+    "CLEANTIMEINDAYS": "Clean days",
+    "DAYS": "days",
+    "CLEANTIMEINWEEKS": "Clean weeks",
+    "WEEKS": "weeks",
+    "CLEANTIMEINYEARS": "Clean years",
+    "YEARS": "years",
+    "BIRTHDAY": "Cleanday",
+    "DAYCLEAN": "day",
+    "DAYSCLEAN": "days",
+    "MONTHSCLEAN": "months",
+    "YEARCLEAN": "year",
+    "YEARSCLEAN": "years"
 }

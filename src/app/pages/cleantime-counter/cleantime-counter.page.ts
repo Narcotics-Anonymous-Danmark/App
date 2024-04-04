@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-cleantime-counter',
@@ -16,14 +17,16 @@ export class CleantimeCounterPage implements OnInit {
     todayYear;
 
     cleanTimeDate;
-    cleanTimeInMilliseconds = 0;
 
     cleanDay;
     cleanMonth;
     cleanYear;
     cleanTimeInDays = 0;
     cleanTimeInWeeks = 0;
+    cleanTimeInMonths = 0;
+    cleanTimeInMonthsPrecise = 0;
     cleanTimeInYears = 0;
+    cleanTimeInYearsPrecise = 0;
 
     tag;
     tagTime;
@@ -39,15 +42,17 @@ export class CleantimeCounterPage implements OnInit {
     constructor(private storage: Storage) { }
 
     ngOnInit() {
-        console.log('ngOnInit');
         let cleanDate;
+        let cleanDateMoment;
         this.storage.ready().then(() => {
             this.storage.get('cleanDate')
                 .then(value => {
                     if (value) {
-                        cleanDate = new Date(value).toISOString();
-                    } else {
-                        cleanDate = new Date().toISOString();
+                        cleanDateMoment = moment(value, "YYYY-MM-DD");
+                    }
+
+                    if(!cleanDateMoment.isValid()){
+                        cleanDateMoment = moment();
                     }
 
                     this.todayDate = new Date();
@@ -58,7 +63,7 @@ export class CleantimeCounterPage implements OnInit {
                     this.todayMonth = this.todayDate.getMonth();
                     this.todayYear = this.todayDate.getFullYear();
 
-                    this.myDate = cleanDate.substring(0, 10);
+                    this.myDate = cleanDateMoment.format("MM-DD-YYYY");
 
                     this.tag = 'none';
                     this.wait = false;
@@ -104,8 +109,6 @@ export class CleantimeCounterPage implements OnInit {
         //    });
         //});
 
-        console.log(this.monthNames);
-
         //this.translate.get('JAN').subscribe(value1 => {
         //    this.monthShortNames.push(value1);
         //    this.translate.get('FEB').subscribe(value2 => {
@@ -142,7 +145,6 @@ export class CleantimeCounterPage implements OnInit {
         //        });
         //    });
         //});
-        console.log(this.monthShortNames);
 
         //this.translate.get('CANCEL').subscribe(value => {
         //    this.cancelText = value;
@@ -155,24 +157,25 @@ export class CleantimeCounterPage implements OnInit {
 
     getCleanTime() {
         if (!this.wait) {
-            console.log('Calling getCleanTime');
-            const oneDay = 1000 * 60 * 60 * 24;
-            const oneWeek = oneDay * 7;
-            const oneYear = oneDay * 365;
-
             const cleanDateInMilliseconds = Date.parse(this.myDate);
-            console.log('Setting cleanDate in storage to ', cleanDateInMilliseconds);
-            this.storage.set('cleanDate', cleanDateInMilliseconds);
+            const cleanDateStr = moment(cleanDateInMilliseconds).format("YYYY-MM-DD");
+            this.storage.set('cleanDate', cleanDateStr);
 
             this.cleanTimeDate = new Date(cleanDateInMilliseconds);
             this.cleanDay = this.cleanTimeDate.getDate();
             this.cleanMonth = this.cleanTimeDate.getMonth();
             this.cleanYear = this.cleanTimeDate.getFullYear();
 
-            this.cleanTimeInMilliseconds = (this.todayInMilliseconds - cleanDateInMilliseconds) + oneDay; // ??
-            this.cleanTimeInDays = Math.floor(this.cleanTimeInMilliseconds / oneDay);
-            this.cleanTimeInWeeks = Math.floor(this.cleanTimeInMilliseconds / oneWeek);
-            this.cleanTimeInYears = Math.floor(this.cleanTimeInMilliseconds / oneYear);
+            let todayMoment = moment(moment().format("YYYY-MM-DD"), "YYYY-MM-DD");
+            let cleanDayMoment = moment(cleanDateInMilliseconds);
+
+            this.cleanTimeInDays = Math.floor(todayMoment.diff(cleanDayMoment, 'days', true));
+            this.cleanTimeInWeeks = Math.floor(todayMoment.diff(cleanDayMoment, 'weeks', true));
+            this.cleanTimeInMonthsPrecise = todayMoment.diff(cleanDayMoment, 'months', true);
+            this.cleanTimeInMonths = Math.floor(this.cleanTimeInMonthsPrecise);
+            this.cleanTimeInYearsPrecise = todayMoment.diff(cleanDayMoment, 'years', true);
+            this.cleanTimeInYears = Math.floor(this.cleanTimeInYearsPrecise);
+
 
             if (this.cleanTimeInDays !== 0) {
                 this.cleanTimeTag();
@@ -206,45 +209,37 @@ export class CleantimeCounterPage implements OnInit {
             this.keytagImage = './assets/keytags/90-days.png';
 
             // 6 months
-            // TODO: FIX THIS
-        } else if (this.cleanTimeInDays === 182) {
+        } else if (this.cleanTimeInMonthsPrecise === 6) {
             this.tagTime = '6';
             this.tag = 'MONTHSCLEAN';
             this.keytagImage = './assets/keytags/6-months.png';
 
             // 9 months
-            // TODO: FIX THIS
-        } else if (this.cleanTimeInDays === 274) {
+        } else if (this.cleanTimeInMonthsPrecise === 9) {
             this.tagTime = '9';
             this.tag = 'MONTHSCLEAN';
             this.keytagImage = './assets/keytags/9-months.png';
 
             // 1 year
-        } else if ((this.todayDay === this.cleanDay) &&
-            (this.todayMonth === this.cleanMonth) &&
-            ((this.todayYear - 1) === this.cleanYear)) {
+        } else if (this.cleanTimeInYearsPrecise === 1) {
             this.tagTime = '1';
             this.tag = 'YEARCLEAN';
             this.keytagImage = './assets/keytags/1-year.png';
 
             // 18 months
-            // TODO: Fix this
-        } else if (this.cleanTimeInDays === 547) {
+        } else if (this.cleanTimeInMonthsPrecise === 18) {
             this.tagTime = '18';
             this.tag = 'MONTHSCLEAN';
             this.keytagImage = './assets/keytags/18-months.png';
 
             // Multiple years
-        } else if ((this.todayDay === this.cleanDay) &&
-            (this.todayMonth === this.cleanMonth) &&
-            (this.cleanYear !== this.todayYear) &&
-            ((this.todayYear - this.cleanYear) > 1)) {
+        } else if (this.cleanTimeInYearsPrecise === this.cleanTimeInYears && this.cleanTimeInYears > 1) {
             this.tagTime = this.cleanTimeInYears;
             this.tag = 'YEARSCLEAN';
             this.keytagImage = './assets/keytags/x-years.png';
 
         } else {
-            // Not a clean time anniversary today
+            // Not a clean time anniversary today :(
             this.tag = 'none';
         }
         return this.tag;

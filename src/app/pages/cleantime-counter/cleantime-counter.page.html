@@ -12,7 +12,7 @@
 <ion-content>
 
     <ion-item>
-        <ion-label>{{'ENTERCLEANDATE' | translate}}-> </ion-label>
+        <ion-label>{{'ENTERCLEANDATE' | translate}}: </ion-label>
         <ion-datetime displayFormat="DD MMM YYYY"
                       [monthShortNames]="monthShortNames"
                       [monthNames]="monthNames"
@@ -28,7 +28,7 @@
             <ion-card-header>{{'BIRTHDAY' | translate}}</ion-card-header>
             <ion-card-content>
                 <h1>{{ tagTime }} {{ tag | translate }}</h1>
-                <ion-img [src]='keytagImage'></ion-img>
+                <ion-img class="keytag-image" [src]='keytagImage'></ion-img>
             </ion-card-content>
         </ion-card>
     </div>
