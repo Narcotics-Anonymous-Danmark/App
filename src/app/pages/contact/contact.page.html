@@ -13,94 +13,62 @@
     <ion-card *ngIf="naApproved==false">
         <ion-card-content>
             <ion-card-title>Denne app er [endnu] ikke godkendt!</ion-card-title>
-            <ion-list>
-                <ion-item text-wrap>
-                    Dette er en prøveversion. Indtil den er blevet godkendt af det danske fællesskab, bør den ikke tages i brug for alvor. Den er kun gjort tilgængelig her, for at vi kan indhente input og feedback fra medlemmerne.
-                </ion-item>
-            </ion-list>
+            <br/>
+            Dette er en prøveversion. Indtil den er blevet godkendt af RSK, bør den ikke tages i brug for alvor.
         </ion-card-content>
     </ion-card>
 
     <ion-card>
         <ion-card-content>
             <ion-card-title>Kendte fejl og mangler</ion-card-title>
-            <ion-list>
-                <ion-item text-wrap>
-                    <ul>
-                        <li>
-                            Danske uger starter med en mandag, ikke en søndag. Som det fremgår af siden med indstillinger, er vi i gang med dette, men det virker ikke endnu.
-                        </li>
-                        <li>
-                            Mødelisterne skal skjule midlertidigt lukkede møder, ligesom vi gør på hjemmesiden.
-                        </li>
-                        <li>
-                            Tider skal vises i 24-timers format, ikke AM/PM.
-                        </li>
-                        <li>
-                            Billedet af dagens tekst lader ikke brugeren zoome ind på en Android.
-                        </li>
-                    </ul>
-                </ion-item>
-            </ion-list>
+            <ul>
+                <li>
+                    Mødelisterne skal skjule midlertidigt lukkede møder, ligesom vi gør på hjemmesiden.
+                </li>
+                <li>
+                    Tider skal vises i 24-timers format, ikke AM/PM.
+                </li>
+                <li>
+                    Billedet af dagens tekst lader ikke brugeren zoome ind på en Android.
+                </li>
+            </ul>
         </ion-card-content>
     </ion-card>
 
     <ion-card>
         <ion-card-content>
             <ion-card-title>&AElig;ndringer til m&oslash;delisten</ion-card-title>
-            <ion-list>
-                <ion-item text-wrap>
-                    <ion-icon name="mail" item-left></ion-icon>
-                    <ion-button (click)="openLink(meetinglistServantLink)">Skriv til m&oslash;delisteansvarlig</ion-button>
-                </ion-item>
-            </ion-list>
+            <br/>
+            <ion-button expand="block" (click)="openLink(meetinglistServantLink)">Skriv til m&oslash;delisteansvarlig</ion-button>
         </ion-card-content>
     </ion-card>
 
     <ion-card>
         <ion-card-content>
             <ion-card-title>Narcotics Anonymous p&aring; nettet</ion-card-title>
-            <ion-list>
-                <ion-item text-wrap>
-                    <ion-icon name="globe" item-left></ion-icon>
-                    <ion-button (click)="openLink(fbGroupLink)">nadanmark.dk</ion-button>
-                </ion-item>
-                <ion-item text-wrap>
-                    <ion-icon name="globe" item-left></ion-icon>
-                    <ion-button (click)="openLink(bmltLink)">na.org</ion-button>
-                </ion-item>
-            </ion-list>
+            <br/>
+            <ion-button expand="block" (click)="openLink(fbGroupLink)">nadanmark.dk</ion-button>
+            <ion-button expand="block" (click)="openLink(bmltLink)">na.org</ion-button>
         </ion-card-content>
     </ion-card>
 
     <ion-card>
         <ion-card-content>
             <ion-card-title>Om denne app</ion-card-title>
-            <ion-list>
-                <ion-item text-wrap>
-                    <ion-icon name="globe" item-left></ion-icon>
-                    <ion-button (click)='openLink(sourceCodeLink)'>Kildekode</ion-button>
-                </ion-item>
-                <ion-item text-wrap>
-                    <ion-icon name="globe" item-left></ion-icon>
-                    <ion-button (click)='openLink(sourceBugs)'>Fejlrapporter</ion-button>
-                </ion-item>
-                <ion-item text-wrap>
-                    Buildtype: {{currentConfiguration}}<br />
-                    Version: {{currentVersion}}
-                </ion-item>
-            </ion-list>
+            <br />
+            <ion-button expand="block" (click)='openLink(sourceCodeLink)'>Kildekode</ion-button>
+            <ion-button expand="block" (click)='openLink(sourceBugs)'>Fejlrapporter</ion-button>
+            <br />
+            Buildtype: {{currentConfiguration}}<br />
+            Version: {{currentVersion}}
         </ion-card-content>
     </ion-card>
 
     <ion-card>
         <ion-card-content>
             <ion-card-title>Det med sm&aring;t</ion-card-title>
-            <ion-list>
-                <ion-item text-wrap>
-                    NA-logoet er et registreret varem&aelig;rke og brugt i overstemmelse med Fellowship Intellectual Property Trust (FIPT).
-                </ion-item>
-            </ion-list>
+            <br/>
+            NA-logoet er et registreret varem&aelig;rke og brugt i overstemmelse med Fellowship Intellectual Property Trust (FIPT).
         </ion-card-content>
     </ion-card>
 </ion-content>

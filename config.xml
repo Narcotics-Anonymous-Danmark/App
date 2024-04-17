@@ -3,7 +3,7 @@
     <name>NA Danmark</name>
     <description>Narcotics Anonymous Danmark</description>
     <author email="app@nadanmark.dk" href="https://nadanmark.dk/">Internetudvalget</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.0.102:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
