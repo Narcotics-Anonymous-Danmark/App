@@ -16,15 +16,19 @@ export class ListfullPage {
 
   serviceGroups: any;
   serviceGroupHierarchy: any = [];
+  meetingListCounties;
+  uniqueCounties;
   shownDay = null;
   shownGroupL1 = null;
   shownGroupL2 = null;
   shownGroupL3 = null;
   shownGroupL4 = null;
-  HTMLGrouping = 'areas';
+  HTMLGrouping = 'counties';
   loader = null;
   meetingListArea: any = [];
+  meetingListCounty: any = [];
   areaName: any = '';
+  countyName: any = '';
   isLoaded = false;
 
   constructor(
@@ -37,104 +41,51 @@ export class ListfullPage {
 
     this.translate.get('FINDING_MTGS').subscribe(value => { this.presentLoader(value); })
 
-    this.serviceGroupsProvider.getAllServiceGroups().subscribe((serviceGroupData) => {
-      this.serviceGroups = serviceGroupData;
-      this.serviceGroups.sort(firstBy('parent_id').thenBy('name').thenBy('id'));
-      this.serviceGroupHierarchy = this.getServiceHierarchy(this.serviceGroups, 0);
-      this.showServiceStructure();
-      this.dismissLoader();
-    });
-  }
-
-  getServiceHierarchy(flatServiceGroups, parent) {
-    const serviceGroupHierarchy = [];
-    for (const i in flatServiceGroups) {
-      if (flatServiceGroups[i].parent_id == parent) {
-        const childServiceGroup = this.getServiceHierarchy(flatServiceGroups, flatServiceGroups[i].id);
-        if (childServiceGroup.length) {
-          flatServiceGroups[i].childServiceGroup = childServiceGroup;
-        }
-        serviceGroupHierarchy.push(flatServiceGroups[i]);
-      }
-    }
-    return serviceGroupHierarchy;
-  }
-
-  toggleDay(day: any) {
-    if (this.isDayShown(day)) {
-      this.shownDay = null;
-    } else {
-      this.shownDay = day;
-    }
-  }
-
-  toggleL1Group(L1group) {
-    if (this.isL1GroupShown(L1group)) {
-      this.shownGroupL1 = null;
-    } else {
-      this.shownGroupL1 = L1group;
-      this.shownGroupL2 = null;
-      this.shownGroupL3 = null;
-      this.shownGroupL4 = null;
-    }
-  }
-
-  toggleL2Group(L2group) {
-    if (this.isL2GroupShown(L2group)) {
-      this.shownGroupL2 = null;
-    } else {
-      this.shownGroupL2 = L2group;
-      this.shownGroupL3 = null;
-      this.shownGroupL4 = null;
-    }
-  }
-
-  toggleL3Group(L3group) {
-    if (this.isL3GroupShown(L3group)) {
-      this.shownGroupL3 = null;
-    } else {
-      this.shownGroupL3 = L3group;
-      this.shownGroupL4 = null;
-    }
-  }
-
-  toggleL4Group(L4group) {
-    if (this.isL4GroupShown(L4group)) {
-      this.shownGroupL4 = null;
-    } else {
-      this.shownGroupL4 = L4group;
-    }
-  }
-
-  isDayShown(day) { return this.shownDay === day; }
-  isL1GroupShown(L1group) { return this.shownGroupL1 === L1group; }
-  isL2GroupShown(L2group) { return this.shownGroupL2 === L2group; }
-  isL3GroupShown(L3group) { return this.shownGroupL3 === L3group; }
-  isL4GroupShown(L4group) { return this.shownGroupL4 === L4group; }
-
-  getMeetingsByArea(areaID, areaName) {
-    this.translate.get('FINDING_MTGS').subscribe(value => { this.presentLoader(value); });
-    this.HTMLGrouping = 'meetings';
-    this.areaName = areaName;
-    this.meetingListProvider.getMeetingsByAreaProvider(areaID).subscribe((data) => {
+    this.meetingListProvider.getCounties().subscribe((data) => {
 
       if (JSON.stringify(data) === '{}') {  // empty result set!
         this.meetingListArea = JSON.parse('[]');
       } else {
-        this.meetingListArea = data;
+        this.meetingListCounties = data;
+        this.isLoaded = true;
+        for (let i = 0; i < this.meetingListCounties.length; i++) {
+          if (this.meetingListCounties[i].location_municipality == "" || this.meetingListCounties[i].location_municipality == "Online møde" || this.meetingListCounties[i].location_municipality == "Viborg online" || this.meetingListCounties[i].location_municipality == "Viborg.") {
+            this.meetingListCounties[i].location_municipality = "Online";
+          }
+        }
+        this.uniqueCounties =( [...new Set(this.meetingListCounties.map(({location_municipality})=>location_municipality))]);
+      }
+      this.dismissLoader();
+    });
+
+  }
+
+  getMeetingsByCounty(countyName) {
+    this.translate.get('FINDING_MTGS').subscribe(value => { this.presentLoader(value); });
+    this.HTMLGrouping = 'meetings';
+    this.countyName = countyName;
+    this.meetingListProvider.getAllMeetings().subscribe((data) => {
+
+      if (JSON.stringify(data) === '{}') {  // empty result set!
+        this.meetingListCounty = JSON.parse('[]');
+      } else {
+        this.meetingListCounty = data;
+        if (countyName == "Online") {
+          this.meetingListCounty = this.meetingListCounty.filter(meeting => meeting.location_municipality == "");
+        } else {
+          this.meetingListCounty = this.meetingListCounty.filter(meeting => meeting.location_municipality == countyName);
+        }
         this.isLoaded = true;
       }
       this.dismissLoader();
     });
   }
 
-
   presentLoader(loaderText: any) {
     if (!this.loader) {
       this.loader = this.loaderCtrl.present(loaderText);
     }
   }
-
 
   dismissLoader() {
     if (this.loader) {
@@ -143,10 +94,9 @@ export class ListfullPage {
     }
   }
 
-
-  showServiceStructure() {
-    this.HTMLGrouping = 'areas';
-    this.areaName = '';
+  showCountyStructure() {
+    this.HTMLGrouping = 'counties';
+    this.countyName = '';
     this.shownDay = null;
   }
 

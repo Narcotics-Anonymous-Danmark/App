@@ -86,10 +86,15 @@
     "WEEKS": "weeks",
     "CLEANTIMEINYEARS": "Clean years",
     "YEARS": "years",
+    "CLEANTIMEINMONTHS": "Clean months",
+    "MONTHS": "months",
     "BIRTHDAY": "Cleanday",
     "DAYCLEAN": "day",
     "DAYSCLEAN": "days",
     "MONTHSCLEAN": "months",
     "YEARCLEAN": "year",
-    "YEARSCLEAN": "years"
+    "YEARSCLEAN": "years",
+
+    "OR": "OR",
+    "BACK": "Back"
 }

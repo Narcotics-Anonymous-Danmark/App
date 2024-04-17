@@ -5,10 +5,12 @@ import { HTTP } from '@ionic-native/http/ngx';
 @Injectable()
 export class MeetingListProvider {
 
+  denmarkBMLT = 'https://www.nadanmark.dk/main_server/client_interface/json/';
   tomatoBMLT = 'https://tomato.bmltenabled.org/main_server/client_interface/json/';
   virtualBMLT = 'https://bmlt.virtual-na.org/main_server/client_interface/json/';
   getApiUrlVirt = 'https://bmlt.virtual-na.org/main_server/client_interface/json/?switcher=GetSearchResults&sort_keys=weekday_tinyint,start_time';
   getAllVirtMtgs = 'https://bmlt.virtual-na.org/main_server/client_interface/json/?switcher=GetSearchResults&data_field_key=location_postal_code_1,duration_time,start_time,time_zone,weekday_tinyint,service_body_bigint,longitude,latitude,location_province,location_municipality,location_street,location_info,location_text,location_neighborhood,formats,format_shared_id_list,comments,meeting_name,location_sub_province,worldid_mixed,root_server_uri,id_bigint,meeting_name,location_text,formatted_address,formatted_location_info,formatted_comments,contact_name_1,contact_phone_1,contact_email_1,contact_name_2,contact_phone_2,contact_email_2&services[]=4&recursive=1&sort_keys=start_time';
+  getApiUrlDay: string = this.denmarkBMLT + '?switcher=GetSearchResults&sort_keys=weekday_tinyint,start_time';
 
   constructor(
     private http: HttpClient,
@@ -108,4 +110,13 @@ export class MeetingListProvider {
     return this.http.get(getSingleMeetingByIDURL);
   }
 
+  getCounties() {
+    const getCountiesURL: string = this.denmarkBMLT
+      + '?switcher=GetSearchResults&services[]=1&services[]=3&services[]=5&services[]=2&services[]=4&data_field_key=location_municipality&sort_keys=location_municipality';
+    return this.http.get(getCountiesURL);
+  }
+
+  getAllMeetings() {
+    return this.http.get(this.getApiUrlDay);
+  }
 }

@@ -114,10 +114,15 @@
   "WEEKS": "uger",
   "CLEANTIMEINYEARS": "Clean år",
   "YEARS": "år",
+  "CLEANTIMEINMONTHS": "Clean måneder",
+  "MONTHS": "måneder",
   "BIRTHDAY": "Mærkedag",
   "DAYCLEAN": "dag",
   "DAYSCLEAN": "dage",
   "MONTHSCLEAN": "måneder",
   "YEARCLEAN": "år",
-  "YEARSCLEAN": "år"
+  "YEARSCLEAN": "år",
+
+  "OR": "ELLER",
+  "BACK": "Tilbage"
 }

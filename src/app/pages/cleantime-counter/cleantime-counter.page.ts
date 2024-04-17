@@ -28,6 +28,18 @@ export class CleantimeCounterPage implements OnInit {
     cleanTimeInYears = 0;
     cleanTimeInYearsPrecise = 0;
 
+    cleanTimeInYears1 = 0;
+
+    cleanTimeInMonths1 = 0;
+    cleanTimeInMonths2 = 0;
+
+    cleanTimeInDays1 = 0;
+    cleanTimeInDays2 = 0;
+    cleanTimeInDays3 = 0;
+
+    years;
+    months;
+    days;
     tag;
     tagTime;
     keytagImage;
@@ -66,6 +78,9 @@ export class CleantimeCounterPage implements OnInit {
                     this.myDate = cleanDateMoment.format("MM-DD-YYYY");
 
                     this.tag = 'none';
+                    this.years = 'YEARS'
+                    this.months = 'MONTHS'
+                    this.days = 'DAYS'
                     this.wait = false;
                     this.getCleanTime();
                 });
@@ -176,9 +191,35 @@ export class CleantimeCounterPage implements OnInit {
             this.cleanTimeInYearsPrecise = todayMoment.diff(cleanDayMoment, 'years', true);
             this.cleanTimeInYears = Math.floor(this.cleanTimeInYearsPrecise);
 
+            // View 1 - days / months/ years
+            let viewDate1 = moment(cleanDayMoment);
+            this.cleanTimeInYears1 = Math.floor(todayMoment.diff(viewDate1, 'years', true));
+            viewDate1.add(this.cleanTimeInYears1, "years");
+            this.cleanTimeInMonths1 = Math.floor(todayMoment.diff(viewDate1, 'months', true));
+            viewDate1.add(this.cleanTimeInMonths1, "months");
+            this.cleanTimeInDays1 = Math.floor(todayMoment.diff(viewDate1, 'days', true));
+
+            // View 2 - days / months
+            let viewDate2 = moment(cleanDayMoment);
+            this.cleanTimeInMonths2 = Math.floor(todayMoment.diff(viewDate2, 'months', true));
+            viewDate2.add(this.cleanTimeInMonths2, "months");
+            this.cleanTimeInDays2 = Math.floor(todayMoment.diff(viewDate2, 'days', true));
+
+            // View 3 - days
+            this.cleanTimeInDays3 = this.cleanTimeInDays;
+
 
             if (this.cleanTimeInDays !== 0) {
                 this.cleanTimeTag();
+                if(this.cleanTimeInDays === 1){
+                    this.days = 'DAY';
+                }
+                if(this.cleanTimeInDays === 1){
+                    this.days = 'DAY';
+                }
+                if(this.cleanTimeInDays === 1){
+                    this.days = 'DAY';
+                }
             }
         }
     }

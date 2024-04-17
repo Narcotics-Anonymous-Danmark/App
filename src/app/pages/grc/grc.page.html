@@ -10,7 +10,6 @@
 </ion-header>
 
 <ion-item>
-    <ion-label>Opl&aelig;sning:</ion-label>
     <ion-select [(ngModel)]="selectedReading" (ionChange)="showReading(selectedReading)" interface="popover" placeholder="V&aelig;lg venligst">
         <ion-select-option *ngFor="let selectedReading of readings" [value]="selectedReading">{{selectedReading.title}}</ion-select-option>
     </ion-select>
