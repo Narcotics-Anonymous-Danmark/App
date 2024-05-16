@@ -9,6 +9,7 @@ import * as moment from 'moment';
 })
 export class CleantimeCounterPage implements OnInit {
     myDate: any;
+    maxDate: any;
 
     todayInMilliseconds: any;
     todayDate;
@@ -56,6 +57,7 @@ export class CleantimeCounterPage implements OnInit {
     ngOnInit() {
         let cleanDate;
         let cleanDateMoment;
+        this.maxDate = moment().toISOString();
         this.storage.ready().then(() => {
             this.storage.get('cleanDate')
                 .then(value => {

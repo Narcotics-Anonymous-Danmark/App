@@ -1,20 +1,97 @@
-<ion-header>
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-menu-button></ion-menu-button>
-        </ion-buttons>
-        <ion-title>
-            {{'GRC' | translate}}
-        </ion-title>
-    </ion-toolbar>
-</ion-header>
+<ion-content [ngClass]="'selected-reading-' + selectedReading.id">
+    <ion-header>
+        <ion-toolbar>
+            <ion-buttons slot="start">
+                <ion-menu-button></ion-menu-button>
+            </ion-buttons>
+            <ion-title>
+                {{'GRC' | translate}}
+            </ion-title>
+        </ion-toolbar>
+    </ion-header>
 
-<ion-item>
-    <ion-select [(ngModel)]="selectedReading" (ionChange)="showReading(selectedReading)" interface="popover" placeholder="V&aelig;lg venligst">
-        <ion-select-option *ngFor="let selectedReading of readings" [value]="selectedReading">{{selectedReading.title}}</ion-select-option>
-    </ion-select>
-</ion-item>
+    <ion-item>
+        <ion-select [(ngModel)]="selectedReading" (ionChange)="showReading(selectedReading)" interface="popover" placeholder="V&aelig;lg venligst">
+            <ion-select-option *ngFor="let selectedReading of readings" [value]="selectedReading">{{selectedReading.title}}</ion-select-option>
+        </ion-select>
+    </ion-item>
 
-<ion-content>
-    <app-pdf-viewer [pdfPath]="selectedReading.fileName"></app-pdf-viewer>
+    <ion-card style="border-radius: 0; border-color:#000000; border-width: 2px;">
+        <ion-card-content *ngIf="selectedReading.id == 0" style="background-color: #9AD9E8; border:2px solid #000000; margin:5px;">
+            <p style="font-size:24px; font-weight:400;text-align:center;color:#000000;">Hvem er en addict?</p>
+            <p style="margin-top:10px;text-indent: 20px;font-size:16px; color:#000000;">De fleste af os behøver ikke tænke to gange over dette spørgsmål. Vi ved det! Hele vores liv og tankegang var centreret om stoffer i en eller anden form – at skaffe, at bruge og finde måder og metoder til at skaffe mere. Vi levede for at bruge og brugte for at leve. Helt enkelt, en addict er en mand eller kvinde, hvis liv er styret af stoffer. Vi er mennesker, fanget af en vedvarende og fremadskridende sygdom, hvis endeligt altid er det samme: Fængsler, institutioner og død.</p>
+        </ion-card-content>
+        <ion-card-content *ngIf="selectedReading.id == 1" style="background-color: #F8E937; border:2px solid #000000; margin:5px;">
+            <p style="font-size:24px; font-weight:400;text-align:center;color:#000000;">Hvad er Narcotics Anonymous’ program?</p>
+            <p style="margin-top:10px;text-indent: 20px;font-size:16px; color:#000000;">NA er et ikke-kommercielt fællesskab eller samfund af mænd og kvinder, for hvem stoffer var blevet et væsentligt problem. Vi er addicts i bedring, der mødes regelmæssigt for at hjælpe hinanden med at forblive clean. Dette er et program for total afholdenhed fra alle stoffer. Der er kun én forudsætning for medlemskab, ønsket om at stoppe med at bruge. Vi foreslår, at du forholder dig åbensindet og giver dig selv en chance. Vores program er et sæt principper skrevet så enkelt, at vi kan følge dem i vores hverdag. Det vigtigste ved dem er, at de virker.</p>
+            <p style="text-indent: 20px;font-size:16px; color:#000000;">Der er ingen betingelser knyttet til NA. Vi er ikke tilknyttet andre organisationer. Vi har ikke noget indmeldelsesgebyr eller kontingent, ingen forpligtelser at underskrive og ingen løfter at aflægge. Vi er ikke forbundet med politiske, religiøse eller retslige instanser og bliver aldrig overvåget. Enhver kan tilslutte sig os uanset alder, race, seksuel identitet, overbevisning, religion eller ingen religion.</p>
+            <p style="text-indent: 20px;font-size:16px; color:#000000;">Vi er ikke interesserede i, hvad eller hvor meget du brugte, hvem dine forbindelser var, hvad du har lavet før i tiden, hvor meget eller hvor lidt du ejer, men kun i hvad du vil gøre ved dit problem, og hvordan vi kan hjælpe. Nykommeren er den allervigtigste person på ethvert møde, fordi vi kun kan beholde det vi har, ved at give det videre. Vi har lært af vores gruppeerfaring, at de, som bliver ved med at komme regelmæssigt til vores møder, forbliver clean.</p>
+        </ion-card-content>
+        <ion-card-content *ngIf="selectedReading.id == 2" style="background-color: #F0E4AF; border:2px solid #000000; margin:5px;">
+            <p style="font-size:24px; font-weight:400;text-align:center;color:#000000;">Hvorfor er vi her?</p>
+            <p style="margin-top:10px;text-indent: 20px;font-size:16px; color:#000000;">Før vi kom til NAs fællesskab, kunne vi ikke håndtere vore liv. Vi kunne ikke leve og nyde livet, som andre mennesker gør. Vi var nødt til at have noget andet og troede, at vi havde fundet dette i stofferne. Vi placerede brugen af dem over vores familiers og koners, mænds og børns velfærd. Vi måtte have stoffer for enhver pris. Vi gjorde mange mennesker stor fortræd, men mest af alle gjorde vi os selv fortræd. På grund af vores manglende evne til at acceptere personligt ansvar, skabte vi i virkeligheden vores egne problemer. Vi syntes at være ude af stand til at stå ansigt til ansigt med livet på dets egne betingelser.</p>
+            <p style="text-indent: 20px;font-size:16px; color:#000000;">De fleste af os indså, at vi i vores addiction langsomt begik selvmord, men addiction er en så snedig fjende af livet, at vi havde mistet styrken til at gøre noget ved den. Mange af os endte i fængsel eller søgte hjælp gennem medicin, religion og psykiatri. Ingen af disse metoder var tilstrækkelige for os. Vores sygdom dukkede altid op igen eller fortsatte med at udvikle sig, indtil vi i desperation søgte hjælp hos hinanden i Narcotics Anonymous.</p>
+            <p style="text-indent: 20px;font-size:16px; color:#000000;">Vi indså, at vi var syge mennesker, efter vi var kommet til NA. Vi led af en sygdom, for hvilken der ikke er nogen kendt helbredelse. Den kan dog stoppes på et vist stadium, og så er bedring mulig.</p>
+        </ion-card-content>
+        <ion-card-content *ngIf="selectedReading.id == 3" style="background-color: #FFFFFF; border:2px solid #000000; margin:5px;">
+            <p style="font-size:24px; font-weight:400;text-align:center;color:#000000;">Sådan virker det</p>
+            <p style="margin-top:10px;text-indent: 20px;font-size:16px; color:#000000;">Hvis du vil have det, vi har at tilbyde og er villig til at gøre den indsats, der skal til for at få det, så er du klar til at tage visse trin. Disse er principperne, som gjorde vores bedring mulig.</p>
+            <ol style="text-indent:0; font-size:16px; color:#000000; margin:5px 0; padding:0 30px;">
+                <li style="padding-left: 10px;">Vi indrømmede, at vi var magtesløse over for vores addiction, at vores liv var blevet uhåndterlige.</li>
+                <li style="padding-left: 10px;">Vi kom til at tro på, at en Magt større end os selv kunne genskabe vores tilregnelighed.</li>
+                <li style="padding-left: 10px;">Vi tog en beslutning om at lægge vores vilje og vores liv over til omsorgen fra Gud, <i>som vi opfattede Ham</i>.</li>
+                <li style="padding-left: 10px;">Vi lavede en søgende og frygtløs moralsk status over os selv.</li>
+                <li style="padding-left: 10px;">Vi indrømmede for Gud, os selv og et andet menneske, vore fejls sande natur.</li>
+                <li style="padding-left: 10px;">Vi var fuldstændig parate til at lade Gud fjerne alle disse karakterdefekter.</li>
+                <li style="padding-left: 10px;">Vi bad Ham ydmygt om at fjerne vores utilstrækkeligheder.</li>
+                <li style="padding-left: 10px;">Vi lavede en liste over alle de mennesker, vi havde gjort fortræd og blev villige til at gøre det godt igen over for dem alle.</li>
+                <li style="padding-left: 10px;">Vi gjorde det godt igen direkte overfor disse mennesker, hvor det var muligt, undtagen når dette ville skade dem eller andre.</li>
+                <li style="padding-left: 10px;">Vi fortsatte med at gøre personlig status og når vi fejlede, indrømmede vi det straks.</li>
+                <li style="padding-left: 10px;">Vi søgte gennem bøn og meditation at forbedre vores bevidste kontakt med Gud, som vi opfattede Ham, idet vi bad kun om kendskab til Hans vilje med os og om styrken til at udføre den.</li>
+                <li style="padding-left: 10px;">Da vi havde haft en åndelig opvågnen som resultat af disse trin, forsøgte vi at bringe dette budskab til addicts og at praktisere disse principper i alt, hvad vi foretog os.</li>
+            </ol>
+            <p style="text-indent: 20px;font-size:16px; color:#000000;">Dette lyder som en stor opgave og vi kan ikke gøre det hele på én gang. Vi blev ikke addicterede på én dag, så husk – tag det roligt.</p>
+            <p style="text-indent: 20px;font-size:16px; color:#000000;">Der er en ting mere end noget andet, der kan besejre os i vores bedring: Det er en ligegyldig eller intolerant holdning til åndelige principper. Tre af disse er uundværlige: Ærlighed, et åbent sind og villighed. Med disse er vi godt på vej.</p>
+            <p style="text-indent: 20px;font-size:16px; color:#000000;">Vi føler, at vores fremgangsmåde over for sygdommen addiction er fuldstændig realistisk, for den terapeutiske værdi af én addict som hjælper en anden er uden sidestykke. Vi føler, at vores måde er praktisk, for en addict kan bedst forstå og hjælpe en anden addict. Vi tror på, at des hurtigere vi står ansigt til ansigt med vores daglige problemer i vores samfund, des hurtigere bliver vi acceptable, ansvarlige og produktive medlemmer af dette samfund.</p>
+            <p style="text-indent: 20px;font-size:16px; color:#000000;">Den eneste måde at undgå tilbagevenden til aktiv addiction er at undlade at tage det første stof. Hvis du er som os, ved du, at én er for mange og tusind aldrig nok. Vi lægger stor vægt på dette, for vi ved, at når vi bruger stoffer af hvilken som helst slags eller erstatter et med et andet, slipper vi vores addiction løs igen.</p>
+            <p style="text-indent: 20px;font-size:16px; color:#000000;">At tænke på alkohol, som anderledes end andre stoffer, harforårsaget tilbagefald for en hel del addicts. Før vi kom til NA, betragtede mange af os alkohol som værende anderledes, men vi har ikke råd til at være forvirrede på dette punkt. Alkohol er et stof. Vi er mennesker med sygdommen addiction, som må afstå fra alle stoffer for at opnå bedring.</p>
+        </ion-card-content>
+        <ion-card-content *ngIf="selectedReading.id == 4" style="background-color: #E0DAD8; border:2px solid #000000; margin:5px;">
+            <p style="font-size:24px; font-weight:400;text-align:center;color:#000000;">Narcotics Anonymous’ Tolv Traditioner</p>
+            <p style="margin-top:10px;text-indent: 20px;font-size:16px; color:#000000;">Kun ved årvågenhed kan vi beholde det vi har, og ligesom den enkeltes frihed kommer af de Tolv Trin, således udspringer gruppens frihed af vores traditioner.</p>
+            <p style="text-indent: 20px;font-size:16px; color:#000000;">Så længe de bånd, der knytter os sammen, er stærkere end de, der vil adskille os, vil alt være godt.</p>
+            <ol style="text-indent:0; font-size:16px; color:#000000; margin:5px 0; padding:0 30px;">
+                <li style="padding-left: 10px;">Vores fælles velfærd bør komme først, personlig bedring afhænger af NA-sammenhold.</li>
+                <li style="padding-left: 10px;">Angående vores gruppes formål er der kun én ultimativ autoritet – en kærlig Gud, som Han måtte udtrykke sig i vores gruppesamvittighed. Vores ledere er blot betroede tjenere. De bestemmer ikke.</li>
+                <li style="padding-left: 10px;">Den eneste forudsætning for medlemskab er et ønske om at stoppe med at bruge.</li>
+                <li style="padding-left: 10px;">Hver gruppe skal være selvstyrende, undtagen i sager der berører andre grupper eller NA som helhed.</li>
+                <li style="padding-left: 10px;">Hver gruppe har kun ét hovedformål – at bringe budskabet til den addict, der stadig lider.</li>
+                <li style="padding-left: 10px;">En NA-gruppe bør aldrig anbefale, finansiere eller lægge navn til nogen som helst beslægtet facilitet eller udenforstående foretagende, for at problemer med penge, ejendom eller prestige ikke skal a flede os fra vores hovedformål.</li>
+                <li style="padding-left: 10px;">Enhver NA-gruppe bør være fuldstændig selvforsynende og afslå bidrag udefra.</li>
+                <li style="padding-left: 10px;">Narcotics Anonymous skal altid forblive ikke-professionelt, men vores servicecentre kan beskæftige særlig arbejdskraft.</li>
+                <li style="padding-left: 10px;">NA som sådan bør aldrig organiseres, men vi kan nedsætte serviceorganer eller -komitéer, direkte ansvarlige over for dem, de tjener.</li>
+                <li style="padding-left: 10px;">Narcotics Anonymous har ingen holdning til udenforstående spørgsmål. NA’s navn bør derfor aldrig inddrages i offentlige kontroverser.</li>
+                <li style="padding-left: 10px;">Vores forhold til offentligheden er baseret på tiltrækning frem for agitation. Vi er nødt til altid at bevare personlig anonymitet, når det drejer sig om presse, radio og film.</li>
+                <li style="padding-left: 10px;">Anonymitet er det åndelige grundlag for alle vores traditioner, som altid minder os om at sætte principper før personligheder.</li>
+            </ol>
+            <p style="text-indent: 20px;font-size:16px; color:#000000;">Forståelsen af disse traditioner kommer langsomt over en vis periode. Vi samler oplysninger, når vi snakker med medlemmer og besøger forskellige grupper. Som regel er det ikke, før vi bliver involveret i service, at en eller anden påpeger, at ”personlig bedring afhænger af NA-sammenhold”, og at dette sammenhold afhænger af, hvor godt vi følger vores traditioner. NA’s Tolv Traditioner er ikke til forhandling. De er de retningslinjer, som holder vores fællesskab i live og uafhængigt.</p>
+            <p style="text-indent: 20px;font-size:16px; color:#000000;">Når vi følger disse retningslinjer i vores omgang med andre mennesker og samfundet i det hele taget, undgår vi mange problemer. Det betyder ikke, at vores traditioner fjerner alle problemer. Vi må stadig se vanskeligheder i øjnene, efterhånden som de opstår. Det være sig kommunikationsproblemer og meningsforskelle, interne kontroverser og problemer med enkeltpersoner og grupper uden for fællesskabet. Når vi alligevel anvender disse principper, undgår vi nogle af faldgruberne.</p>
+            <p style="text-indent: 20px;font-size:16px; color:#000000;">Mange af vores problemer er ligesom dem, vores forgængere måtte se i øjnene. Deres hårdt vundne erfaringer affødte traditionerne, og vores egne erfaringer har vist, at disse principper gælder lige så meget i dag, som dengang disse traditioner blev formuleret. Vores traditioner beskytter os mod interne og eksterne kræfter, der kan ødelægge os. De er i sandhed de bånd, der knytter os sammen. Det er kun gennem forståelse og anvendelse, at de virker.</p>
+        </ion-card-content>
+        <ion-card-content *ngIf="selectedReading.id == 5" style="background-color: #55CC80; border:2px solid #000000; margin:5px;">
+            <p style="font-size:24px; font-weight:400;text-align:center;color:#000000;">Vi kommer i bedring</p>
+            <p style="margin-top:10px;text-indent: 20px;font-size:16px; color:#000000;">Når vi ved vejs ende erkender, at vi ikke længere kan fungere som menneske med eller uden stoffer, står vi alle over for det samme dilemma. Hvad er der tilbage at gøre? Der synes at være dette valg: Enten at fortsætte så godt vi kan til den bitre ende – fængsler, institutioner eller død – eller at finde en ny måde at leve på. Tidligere har meget få addicts haft denne anden valgmulighed. De, der er addicterede i dag, er mere heldige. For første gang i menneskehedens samlede historie har en simpel måde vist sig at virke i mange addicts’ liv. Den er tilgængelig for os alle. Det er et enkelt åndeligt – ikke et religiøst – program, kendt som Narcotics Anonymous.</p>
+        </ion-card-content>
+        <ion-card-content *ngIf="selectedReading.id == 6" style="background-color: #D7B7D6; border:2px solid #000000; margin:5px;">
+            <p style="font-size:24px; font-weight:400;text-align:center;color:#000000;">Bare for i dag</p>
+            <p style="margin-top:20px;text-indent: 40px;font-size:16px; color:#000000;">Sig til dig selv:</p>
+            <p style="margin-top:10px; text-indent:-45px; margin-left:65px; font-size:16px; color:#000000;">BARE FOR I DAG vil mine tanker dreje sig om min bedring, at leve og nyde livet uden brug af stoffer.</p>
+            <p style="margin-top:10px; text-indent:-45px; margin-left:65px; font-size:16px; color:#000000;">BARE FOR I DAG vil mine tanker dreje sig om min bedring, at leve og nyde livet uden brug af stoffer.</p>
+            <p style="margin-top:10px; text-indent:-45px; margin-left:65px; font-size:16px; color:#000000;">BARE FOR I DAG vil jeg have tillid til nogen i NA, der tror på mig, og som ønsker at hjælpe mig i min bedring.</p>
+            <p style="margin-top:10px; text-indent:-45px; margin-left:65px; font-size:16px; color:#000000;">BARE FOR I DAG vil jeg have et program. Jeg vil prøve at følge det, så godt jeg kan.</p>
+            <p style="margin-top:10px; text-indent:-45px; margin-left:65px; font-size:16px; color:#000000;">BARE FOR I DAG vil jeg ved hjælp af NA forsøge at få et bedre syn på mit liv.</p>
+            <p style="margin-top:10px; text-indent:-45px; margin-left:65px; font-size:16px; color:#000000;">BARE FOR I DAG vil jeg ikke være bange. Mine tanker vil være hos mine nye fæller, mennesker, som ikke bruger, og som har fundet en ny måde at leve på. Så længe jeg følger denne vej, har jeg intet at frygte.</p>
+        </ion-card-content>
+    </ion-card>
+
 </ion-content>
