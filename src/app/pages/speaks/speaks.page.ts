@@ -28,7 +28,7 @@ export class SpeaksPage implements OnInit {
     getAllSpeakers() {
         this.loadingCtrl.present('Loading Speakers...');
         this.audioProvider.load().subscribe((data) => {
-            this.events = Array.of(data.events)[0];
+            this.events = Array.of(data)[0];
         });
         this.loadingCtrl.dismiss();
     }
