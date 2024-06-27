@@ -61,7 +61,7 @@ export class AppComponent implements OnInit {
         },
         {
             title: 'EVENTS',
-            url: 'coming-soon',
+            url: 'events',
             icon: 'calendar'
         },
         //{
