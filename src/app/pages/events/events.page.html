@@ -1,0 +1,26 @@
+﻿<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            {{'EVENTS' | translate}}
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list #scheduleList>
+        <ion-item-sliding *ngFor="let event of events" #slidingItem>
+            <ion-item>
+                <ion-label>
+                        <ion-button size="default" class="ion-text-wrap event-button" expand="block" (click)="openWithInAppBrowser(event.url)">
+                            <ion-ripple-effect></ion-ripple-effect>
+                            {{ event.event_name }}
+                        </ion-button>
+                </ion-label>
+            </ion-item>
+        </ion-item-sliding>
+    </ion-list>
+
+</ion-content>

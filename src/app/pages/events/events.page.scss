@@ -3,11 +3,11 @@
     font-size: 12px;
 }
 
-ion-button.speak-button {
+ion-button.event-button {
     height: auto;
 }
 
-ion-button.speak-button::part(native) {
+ion-button.event-button::part(native) {
     height: auto;
     min-height: 46px;
     padding-top: 5px;

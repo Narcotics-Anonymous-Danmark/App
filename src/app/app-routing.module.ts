@@ -56,6 +56,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/speaks/speaks.module').then( m => m.SpeaksPageModule)
   },
   {
+    path: 'events',
+    loadChildren: () => import('./pages/events/events.module').then( m => m.EventsPageModule)
+  },
+  {
     path: 'cleantime-counter',
     loadChildren: () => import('./pages/cleantime-counter/cleantime-counter.module').then( m => m.CleantimeCounterPageModule)
   }
