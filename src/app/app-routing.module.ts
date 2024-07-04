@@ -62,6 +62,10 @@ const routes: Routes = [
   {
     path: 'cleantime-counter',
     loadChildren: () => import('./pages/cleantime-counter/cleantime-counter.module').then( m => m.CleantimeCounterPageModule)
+  },
+  {
+    path: 'basic-text',
+    loadChildren: () => import('./pages/basic-text/basic-text.module').then( m => m.BasicTextPageModule)
   }
 
 ];

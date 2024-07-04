@@ -54,15 +54,20 @@ export class AppComponent implements OnInit {
         //  url: 'virt-tabs',
         //  icon: 'globe-outline'
         //},
-        {
-            title: 'NEWS',
-            url: 'coming-soon',
-            icon: 'bulb'
-        },
+        // {
+        //     title: 'NEWS',
+        //     url: 'coming-soon',
+        //     icon: 'bulb'
+        // },
         {
             title: 'EVENTS',
             url: 'events',
             icon: 'calendar'
+        },
+        {
+            title: 'BASIC_TEXT',
+            url: 'basic-text',
+            icon: 'book'
         },
         //{
         //    title: 'AUDIOBOOKS',
