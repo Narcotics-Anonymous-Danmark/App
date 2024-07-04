@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -13,6 +13,9 @@ import { IonicStorageModule } from '@ionic/storage';
 import { HTTP } from '@ionic-native/http/ngx';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { registerLocaleData } from '@angular/common';
+import localeDa from '@angular/common/locales/da';
+registerLocaleData(localeDa);
 //import { AppVersion } from '@ionic-native/app-version/ngx';
 
 export function createTranslateLoader(http: HttpClient) {
@@ -44,7 +47,8 @@ export function createTranslateLoader(http: HttpClient) {
         //AppVersion,
         HTTP,
         SplashScreen,
-        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        { provide: LOCALE_ID, useValue: 'da-DK'},
     ],
     bootstrap: [AppComponent]
 })
