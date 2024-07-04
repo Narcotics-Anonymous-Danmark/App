@@ -96,5 +96,14 @@
     "YEARSCLEAN": "years",
 
     "OR": "OR",
-    "BACK": "Back"
+    "BACK": "Back",
+
+    "NEWS": "News",
+    "EVENTS": "Events",
+    "BASIC_TEXT": "Basic Text",
+    "SPEAKS": "Speaks",
+    "JFT": "Just for today",
+    "AUDIOBOOKS": "Audiobooks",
+    "NACC": "Cleantime calculator",
+    "GRC": "Group readings"
 }
