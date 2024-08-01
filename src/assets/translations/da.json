@@ -124,6 +124,10 @@
   "YEARCLEAN": "år",
   "YEARSCLEAN": "år",
 
+  "CLEANTIMEUNITSORT": "Cleantime sortering",
+  "DMY": "dage - måneder - år",
+  "YMD": "år - måneder - dage",
+
   "OR": "ELLER",
   "BACK": "Tilbage"
 }

@@ -34,62 +34,59 @@
         </ion-card>
     </div>
 
-    <ion-card>
-        <ion-card-header>{{'CLEANTIMEINDAYS' | translate }}</ion-card-header>
-        <ion-card-content>
-            <h1>{{ cleanTimeInDays1 }} {{ days | translate}}</h1>
-        </ion-card-content>
-    </ion-card>
+    <div>
+        <div *ngFor="let group of cleanTimeElements; last as isLast">
+            <div *ngFor="let element of group">
+                <ion-card *ngIf="element === 'days1'">
+                    <ion-card-header>{{'CLEANTIMEINDAYS' | translate }}</ion-card-header>
+                    <ion-card-content>
+                        <h1>{{ cleanTimeInDays1 }} {{ days | translate}}</h1>
+                    </ion-card-content>
+                </ion-card>
 
-    <ion-card>
-        <ion-card-header>{{'CLEANTIMEINMONTHS' | translate }}</ion-card-header>
-        <ion-card-content>
-            <h1>{{ cleanTimeInMonths1 }} {{ months | translate}}</h1>
-        </ion-card-content>
-    </ion-card>
+                <ion-card *ngIf="element === 'months1'">
+                    <ion-card-header>{{'CLEANTIMEINMONTHS' | translate }}</ion-card-header>
+                    <ion-card-content>
+                        <h1>{{ cleanTimeInMonths1 }} {{ months | translate}}</h1>
+                    </ion-card-content>
+                </ion-card>
 
-    <ion-card>
-        <ion-card-header>{{'CLEANTIMEINYEARS' | translate }}</ion-card-header>
-        <ion-card-content>
-            <h1>{{ cleanTimeInYears1 }}&nbsp;{{ years | translate}}</h1>
-        </ion-card-content>
-    </ion-card>
+                <ion-card *ngIf="element === 'years1'">
+                    <ion-card-header>{{'CLEANTIMEINYEARS' | translate }}</ion-card-header>
+                    <ion-card-content>
+                        <h1>{{ cleanTimeInYears1 }}&nbsp;{{ years | translate}}</h1>
+                    </ion-card-content>
+                </ion-card>
 
-    <ion-row class="ion-justify-content-center">
-        <ion-col>
-            <div class="ion-text-center">
-                <b>- {{ 'OR' | translate}} -</b>
+                <ion-card *ngIf="element === 'days2'">
+                    <ion-card-header>{{'CLEANTIMEINDAYS' | translate }}</ion-card-header>
+                    <ion-card-content>
+                        <h1>{{ cleanTimeInDays2 }} {{ days | translate}}</h1>
+                    </ion-card-content>
+                </ion-card>
+            
+                <ion-card *ngIf="element === 'months2'">
+                    <ion-card-header>{{'CLEANTIMEINMONTHS' | translate }}</ion-card-header>
+                    <ion-card-content>
+                        <h1>{{ cleanTimeInMonths2 }}&nbsp;{{ months | translate}}</h1>
+                    </ion-card-content>
+                </ion-card>
+
+                <ion-card *ngIf="element === 'days3'">
+                    <ion-card-header>{{'CLEANTIMEINDAYS' | translate }}</ion-card-header>
+                    <ion-card-content>
+                        <h1>{{ cleanTimeInDays3 }} {{ days | translate}}</h1>
+                    </ion-card-content>
+                </ion-card>
             </div>
-        </ion-col>
-    </ion-row>
-
-    <ion-card>
-        <ion-card-header>{{'CLEANTIMEINDAYS' | translate }}</ion-card-header>
-        <ion-card-content>
-            <h1>{{ cleanTimeInDays2 }} {{ days | translate}}</h1>
-        </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-        <ion-card-header>{{'CLEANTIMEINMONTHS' | translate }}</ion-card-header>
-        <ion-card-content>
-            <h1>{{ cleanTimeInMonths2 }}&nbsp;{{ months | translate}}</h1>
-        </ion-card-content>
-    </ion-card>
-
-    <ion-row class="ion-justify-content-center">
-        <ion-col>
-            <div class="ion-text-center">
-                <b>- {{ 'OR' | translate}} -</b>
-            </div>
-        </ion-col>
-    </ion-row>
-
-    <ion-card>
-        <ion-card-header>{{'CLEANTIMEINDAYS' | translate }}</ion-card-header>
-        <ion-card-content>
-            <h1>{{ cleanTimeInDays3 }} {{ days | translate}}</h1>
-        </ion-card-content>
-    </ion-card>
+            <ion-row class="ion-justify-content-center" *ngIf="!isLast">
+                <ion-col>
+                    <div class="ion-text-center">
+                        <b>- {{ 'OR' | translate}} -</b>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </div>
+    </div>
 
 </ion-content>

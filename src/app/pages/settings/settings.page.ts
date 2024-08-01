@@ -13,6 +13,7 @@ export class SettingsPage implements OnInit {
     firstdayofweek: string;
     theme: string;
     searchRange: number;
+    cleanTimeUnitSort: string;
 
     constructor(
         private storage: Storage,
@@ -48,6 +49,15 @@ export class SettingsPage implements OnInit {
                     this.searchRange = 25;
                 }
             });
+
+        this.storage.get('cleanTimeUnitSort')
+            .then(cleanTimeUnitSortValue => {
+                if (cleanTimeUnitSortValue) {
+                    this.cleanTimeUnitSort = cleanTimeUnitSortValue;
+                } else {
+                    this.cleanTimeUnitSort = "ymd";
+                }
+            });
     }
 
     selectLanguage() {
@@ -68,6 +78,10 @@ export class SettingsPage implements OnInit {
 
     selectSearchRange() {
         this.storage.set('searchRange', this.searchRange);
+    }
+
+    selectCleanTimeUnitSort() {
+        this.storage.set('cleanTimeUnitSort', this.cleanTimeUnitSort);
     }
 
 }
