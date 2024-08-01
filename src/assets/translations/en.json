@@ -98,6 +98,10 @@
     "OR": "OR",
     "BACK": "Back",
 
+    "CLEANTIMEUNITSORT": "Cleantime sorting",
+    "DMY": "days - months - years",
+    "YMD": "years - months - days",
+
     "NEWS": "News",
     "EVENTS": "Events",
     "BASIC_TEXT": "Basic Text",

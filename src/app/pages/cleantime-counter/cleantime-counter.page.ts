@@ -49,13 +49,14 @@ export class CleantimeCounterPage implements OnInit {
     monthNames = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
     monthShortNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sept', 'Okt', 'Nov', 'Dec'];
 
+    cleanTimeElements = [["years1", "months1", "days1"], ["months2", "days2"], ["days3"]];
+
     cancelText = "Annuller";
     doneText = "Ok";
 
     constructor(private storage: Storage) { }
 
     ngOnInit() {
-        let cleanDate;
         let cleanDateMoment;
         this.maxDate = moment().toISOString();
         this.storage.ready().then(() => {
@@ -86,90 +87,14 @@ export class CleantimeCounterPage implements OnInit {
                     this.wait = false;
                     this.getCleanTime();
                 });
+
+            this.storage.get('cleanTimeUnitSort')
+                .then(value => {
+                    if (value === "dmy") {
+                        this.cleanTimeElements.forEach(e => e.reverse());
+                    }
+                });
         });
-
-        //this.monthNames = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
-        //this.translate.get('JANUARY').subscribe(value1 => {
-        //    this.monthNames.push(value1);
-        //    this.translate.get('FEBRUARY').subscribe(value2 => {
-        //        this.monthNames.push(value2);
-        //        this.translate.get('MARCH').subscribe(value3 => {
-        //            this.monthNames.push(value3);
-        //            this.translate.get('APRIL').subscribe(value4 => {
-        //                this.monthNames.push(value4);
-        //                this.translate.get('MAYL').subscribe(value5 => {
-        //                    this.monthNames.push(value5);
-        //                    this.translate.get('JUNE').subscribe(value6 => {
-        //                        this.monthNames.push(value6);
-        //                        this.translate.get('JULY').subscribe(value7 => {
-        //                            this.monthNames.push(value7);
-        //                            this.translate.get('AUGUST').subscribe(value8 => {
-        //                                this.monthNames.push(value8);
-        //                                this.translate.get('SPETEMBER').subscribe(value9 => {
-        //                                    this.monthNames.push(value9);
-        //                                    this.translate.get('OCTOBER').subscribe(value10 => {
-        //                                        this.monthNames.push(value10);
-        //                                        this.translate.get('NOVEMBER').subscribe(value11 => {
-        //                                            this.monthNames.push(value11);
-        //                                            this.translate.get('DECEMBER').subscribe(value12 => {
-        //                                                this.monthNames.push(value12);
-        //                                            });
-        //                                        });
-        //                                    });
-        //                                });
-        //                            });
-        //                        });
-        //                    });
-        //                });
-        //            });
-        //        });
-        //    });
-        //});
-
-        //this.translate.get('JAN').subscribe(value1 => {
-        //    this.monthShortNames.push(value1);
-        //    this.translate.get('FEB').subscribe(value2 => {
-        //        this.monthShortNames.push(value2);
-        //        this.translate.get('MAR').subscribe(value3 => {
-        //            this.monthShortNames.push(value3);
-        //            this.translate.get('APR').subscribe(value4 => {
-        //                this.monthShortNames.push(value4);
-        //                this.translate.get('MAYS').subscribe(value5 => {
-        //                    this.monthShortNames.push(value5);
-        //                    this.translate.get('JUN').subscribe(value6 => {
-        //                        this.monthShortNames.push(value6);
-        //                        this.translate.get('JUL').subscribe(value7 => {
-        //                            this.monthShortNames.push(value7);
-        //                            this.translate.get('AUG').subscribe(value8 => {
-        //                                this.monthShortNames.push(value8);
-        //                                this.translate.get('SEP').subscribe(value9 => {
-        //                                    this.monthShortNames.push(value9);
-        //                                    this.translate.get('OCT').subscribe(value10 => {
-        //                                        this.monthShortNames.push(value10);
-        //                                        this.translate.get('NOV').subscribe(value11 => {
-        //                                            this.monthShortNames.push(value11);
-        //                                            this.translate.get('DEC').subscribe(value12 => {
-        //                                                this.monthShortNames.push(value12);
-        //                                            });
-        //                                        });
-        //                                    });
-        //                                });
-        //                            });
-        //                        });
-        //                    });
-        //                });
-        //            });
-        //        });
-        //    });
-        //});
-
-        //this.translate.get('CANCEL').subscribe(value => {
-        //    this.cancelText = value;
-        //});
-
-        //this.translate.get('DONE').subscribe(value => {
-        //    this.doneText = value;
-        //});
     }
 
     getCleanTime() {

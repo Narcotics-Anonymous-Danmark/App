@@ -34,6 +34,14 @@
         </ion-item>
 
         <ion-item>
+            <ion-label>{{'CLEANTIMEUNITSORT' | translate}}</ion-label>
+            <ion-select [(ngModel)]="cleanTimeUnitSort" (ionChange)=selectCleanTimeUnitSort() cancelText="{{'CANCEL' | translate}}">
+                <ion-select-option value="ymd">{{'YMD' | translate}}</ion-select-option>
+                <ion-select-option value="dmy">{{'DMY' | translate}}</ion-select-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item>
             <div>
                 <ion-label>{{'SEARCHRANGESETTING' | translate}} = {{searchRange}} {{'MEETINGS' | translate }}</ion-label>
             </div>
