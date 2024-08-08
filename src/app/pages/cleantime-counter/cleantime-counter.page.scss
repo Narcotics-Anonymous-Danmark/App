@@ -5,3 +5,28 @@
     object-fit: contain;
     object-position: center;
 }
+
+ion-toolbar.profile-toolbar {
+    border-top: 1px solid #aaaaaa;
+}
+
+ion-select.profile-select {
+    width: 100%;
+}
+
+ion-buttons.profile-buttons {
+    margin-inline-start: 10px;
+    -webkit-margin-start: 10px;
+    margin-left: 10px;
+}
+
+ion-button.profile-button {
+    height: auto;
+}
+
+ion-button.profile-button::part(native) {
+    height: auto;
+    padding: 5px;
+    font-size: 10px;
+    border-radius: 5px;
+}

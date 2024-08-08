@@ -7,10 +7,26 @@
             {{'DATETIME' | translate}}
         </ion-title>
     </ion-toolbar>
+    <ion-toolbar class="profile-toolbar">
+        <ion-select class="profile-select" [(ngModel)]="activeProfile" okText="Vælg" cancelText="Afbryd" *ngIf="refreshed">
+            <ion-select-option *ngFor="let profile of profiles; index as i" value="{{ i }}">
+                {{ profile.name }}
+            </ion-select-option>
+        </ion-select>
+        <ion-buttons class="profile-buttons" slot="end">
+            <ion-button (click)="addProfile()" class="profile-button" fill="solid" size="small" color="success">
+                <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+            </ion-button>
+            <ion-button (click)="editProfile()" class="profile-button" fill="solid" size="small" color="primary">
+                <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+            </ion-button>
+            <ion-button (click)="deleteProfile()" class="profile-button" fill="solid" size="small" color="danger">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
-
 <ion-content>
-
     <ion-item>
         <ion-label>{{'ENTERCLEANDATE' | translate}}: </ion-label>
         <ion-datetime displayFormat="DD MMM YYYY"
