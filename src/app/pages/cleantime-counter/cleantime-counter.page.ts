@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 
@@ -8,6 +9,10 @@ import * as moment from 'moment';
     styleUrls: ['./cleantime-counter.page.scss'],
 })
 export class CleantimeCounterPage implements OnInit {
+    activeProfile = "0";
+    profiles = [];
+    refreshed = true;
+
     myDate: any;
     maxDate: any;
 
@@ -54,9 +59,13 @@ export class CleantimeCounterPage implements OnInit {
     cancelText = "Annuller";
     doneText = "Ok";
 
-    constructor(private storage: Storage) { }
+    constructor(
+        private storage: Storage,
+        private alertController: AlertController
+    ) { }
 
     ngOnInit() {
+        this.ensureOneProfile();
         let cleanDateMoment;
         this.maxDate = moment().toISOString();
         this.storage.ready().then(() => {
@@ -95,6 +104,107 @@ export class CleantimeCounterPage implements OnInit {
                     }
                 });
         });
+    }
+
+    ensureOneProfile() {
+        if (this.profiles.length < 1){
+            this.profiles.push({
+                name: "Profil 1",
+                cleandate: ""
+            });
+            this.activeProfile = "0";
+        }
+    }
+
+    async addProfile() {
+        const alert = await this.alertController.create({
+            header: 'Ny profil',
+            inputs: [
+                {
+                    name: 'name',
+                    type: 'text',
+                    placeholder: 'Ny profilnavn her'
+                }
+            ],
+            buttons: [
+                {
+                    text: 'Afbryd',
+                    role: 'cancel',
+                    cssClass: 'primary'
+                },
+                {
+                    text: 'Opret',
+                    cssClass: 'primary',
+                    handler: (data) => {
+                        this.profiles.push({
+                            name: data.name,
+                            cleandate: ""
+                        });
+                        this.activeProfile = (parseInt(this.activeProfile)+1).toString();
+                    }
+                }
+            ]
+        });
+        await alert.present();
+    }
+
+    async editProfile() {
+        const alert = await this.alertController.create({
+            header: 'Omdøb profil',
+            inputs: [
+                {
+                    name: 'name',
+                    type: 'text',
+                    placeholder: this.profiles[parseInt(this.activeProfile)].name
+                }
+            ],
+            buttons: [
+                {
+                    text: 'Afbryd',
+                    role: 'cancel',
+                    cssClass: 'primary'
+                },
+                {
+                    text: 'Omdøb',
+                    cssClass: 'primary',
+                    handler: (data) => {
+                        this.profiles[parseInt(this.activeProfile)].name = data.name;
+                        this.refreshed = false;
+                        setTimeout(()=>{
+                            this.refreshed = true;
+                        });
+                    }
+                }
+            ]
+        });
+        await alert.present();
+    }
+
+    async deleteProfile() {
+        const alert = await this.alertController.create({
+            header: 'Er du sikker?',
+            buttons: [
+                {
+                    text: 'Afbryd',
+                    role: 'cancel',
+                    cssClass: 'primary'
+                },
+                {
+                    text: 'Slet',
+                    cssClass: 'danger',
+                    handler: () => {
+                        this.profiles.splice(parseInt(this.activeProfile), 1);
+                        this.activeProfile = "0";
+                        this.ensureOneProfile();
+                        this.refreshed = false;
+                        setTimeout(()=>{
+                            this.refreshed = true;
+                        });
+                    }
+                }
+            ]
+        });
+        await alert.present();
     }
 
     getCleanTime() {

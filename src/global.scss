@@ -28,3 +28,7 @@
 ion-popover [popover]:not(:popover-open):not(dialog[open]) {
     display: contents;
 }
+
+button.alert-button.danger {
+    color: #ff0000;
+}
