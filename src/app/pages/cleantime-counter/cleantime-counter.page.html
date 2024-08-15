@@ -29,13 +29,14 @@
 <ion-content>
     <ion-item>
         <ion-label>{{'ENTERCLEANDATE' | translate}}: </ion-label>
-        <ion-datetime displayFormat="DD MMM YYYY"
+        <ion-datetime *ngIf="profiles[parseInt(activeProfile)]"
+                      displayFormat="DD MMM YYYY"
                       [monthShortNames]="monthShortNames"
                       [monthNames]="monthNames"
                       [cancelText]="cancelText"
                       [doneText]="doneText"
                       [max]="maxDate"
-                      [(ngModel)]="myDate"
+                      [(ngModel)]="profiles[parseInt(activeProfile)].cleandate"
                       (ionChange)=getCleanTime()>
         </ion-datetime>
     </ion-item>
