@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
@@ -40,8 +41,18 @@ export class CleantimeCounterPage implements OnInit {
     cancelText = "Annuller";
     doneText = "Ok";
 
+    newProfile = "";
+    newProfileNameHere = "";
+    cancelButton = "";
+    addButton = "";
+    renameProfile = "";
+    rename = "";
+    areYouSure = "";
+    delete = "";
+
     constructor(
         private storage: Storage,
+        private translate: TranslateService,
         private alertController: AlertController
     ) { }
 
@@ -79,6 +90,15 @@ export class CleantimeCounterPage implements OnInit {
                         this.cleanTimeElements.forEach(e => e.reverse());
                     }
                 });
+
+            this.translate.get('NEWPROFILE').subscribe(value => { this.newProfile = value; });
+            this.translate.get('NEWPROFILENAMEHERE').subscribe(value => { this.newProfileNameHere = value; });
+            this.translate.get('CANCELBUTTON').subscribe(value => { this.cancelButton = value; });
+            this.translate.get('ADDBUTTON').subscribe(value => { this.addButton = value; });
+            this.translate.get('RENAMEPROFILE').subscribe(value => { this.renameProfile = value; });
+            this.translate.get('RENAME').subscribe(value => { this.rename = value; });
+            this.translate.get('AREYOUSURE').subscribe(value => { this.areYouSure = value; });
+            this.translate.get('DELETE').subscribe(value => { this.delete = value; });
         });
     }
 
@@ -94,22 +114,22 @@ export class CleantimeCounterPage implements OnInit {
 
     async addProfile() {
         const alert = await this.alertController.create({
-            header: 'Ny profil',
+            header: '',
             inputs: [
                 {
                     name: 'name',
                     type: 'text',
-                    placeholder: 'Ny profilnavn her'
+                    placeholder: this.newProfileNameHere
                 }
             ],
             buttons: [
                 {
-                    text: 'Afbryd',
+                    text: this.cancelButton,
                     role: 'cancel',
                     cssClass: 'primary'
                 },
                 {
-                    text: 'Opret',
+                    text: this.addButton,
                     cssClass: 'primary',
                     handler: (data) => {
                         this.profiles.push({
@@ -127,7 +147,7 @@ export class CleantimeCounterPage implements OnInit {
 
     async editProfile() {
         const alert = await this.alertController.create({
-            header: 'Omdøb profil',
+            header: this.renameProfile,
             inputs: [
                 {
                     name: 'name',
@@ -137,12 +157,12 @@ export class CleantimeCounterPage implements OnInit {
             ],
             buttons: [
                 {
-                    text: 'Afbryd',
+                    text: this.cancelButton,
                     role: 'cancel',
                     cssClass: 'primary'
                 },
                 {
-                    text: 'Omdøb',
+                    text: this.rename,
                     cssClass: 'primary',
                     handler: (data) => {
                         this.profiles[parseInt(this.activeProfile)].name = data.name;
@@ -160,15 +180,15 @@ export class CleantimeCounterPage implements OnInit {
 
     async deleteProfile() {
         const alert = await this.alertController.create({
-            header: 'Er du sikker?',
+            header: this.areYouSure,
             buttons: [
                 {
-                    text: 'Afbryd',
+                    text: this.cancelButton,
                     role: 'cancel',
                     cssClass: 'primary'
                 },
                 {
-                    text: 'Slet',
+                    text: this.delete,
                     cssClass: 'danger',
                     handler: () => {
                         this.profiles.splice(parseInt(this.activeProfile), 1);
@@ -234,55 +254,55 @@ export class CleantimeCounterPage implements OnInit {
         if (cleanTimeInDays === 1) {
             this.tagTime = '1';
             this.tag = 'DAYCLEAN';
-            this.keytagImage = './assets/keytags/1-day.png';
+            this.keytagImage = './assets/keytags/da/1-day.png';
 
             // 30 days
         } else if (cleanTimeInDays === 30) {
             this.tagTime = '30';
             this.tag = 'DAYSCLEAN';
-            this.keytagImage = './assets/keytags/30-days.png';
+            this.keytagImage = './assets/keytags/da/30-days.png';
 
             // 60 days
         } else if (cleanTimeInDays === 60) {
             this.tagTime = '60';
             this.tag = 'DAYSCLEAN';
-            this.keytagImage = './assets/keytags/60-days.png';
+            this.keytagImage = './assets/keytags/da/60-days.png';
 
             // 90 days
         } else if (cleanTimeInDays === 90) {
             this.tagTime = '90';
             this.tag = 'DAYSCLEAN';
-            this.keytagImage = './assets/keytags/90-days.png';
+            this.keytagImage = './assets/keytags/da/90-days.png';
 
             // 6 months
         } else if (cleanTimeInMonthsPrecise === 6) {
             this.tagTime = '6';
             this.tag = 'MONTHSCLEAN';
-            this.keytagImage = './assets/keytags/6-months.png';
+            this.keytagImage = './assets/keytags/da/6-months.png';
 
             // 9 months
         } else if (cleanTimeInMonthsPrecise === 9) {
             this.tagTime = '9';
             this.tag = 'MONTHSCLEAN';
-            this.keytagImage = './assets/keytags/9-months.png';
+            this.keytagImage = './assets/keytags/da/9-months.png';
 
             // 1 year
         } else if (cleanTimeInYearsPrecise === 1) {
             this.tagTime = '1';
             this.tag = 'YEARCLEAN';
-            this.keytagImage = './assets/keytags/1-year.png';
+            this.keytagImage = './assets/keytags/da/1-year.png';
 
             // 18 months
         } else if (cleanTimeInMonthsPrecise === 18) {
             this.tagTime = '18';
             this.tag = 'MONTHSCLEAN';
-            this.keytagImage = './assets/keytags/18-months.png';
+            this.keytagImage = './assets/keytags/da/18-months.png';
 
             // Multiple years
         } else if (cleanTimeInYearsPrecise === cleanTimeInYears && cleanTimeInYears > 1) {
             this.tagTime = cleanTimeInYears;
             this.tag = 'YEARSCLEAN';
-            this.keytagImage = './assets/keytags/x-years.png';
+            this.keytagImage = './assets/keytags/da/x-years.png';
 
         } else {
             // Not a clean time anniversary today :(

@@ -130,5 +130,14 @@
   "YMD": "år - måneder - dage",
 
   "OR": "ELLER",
-  "BACK": "Tilbage"
+  "BACK": "Tilbage",
+
+  "NEWPROFILE": "Ny profil",
+  "NEWPROFILENAMEHERE": "Ny profilnavn her",
+  "CANCELBUTTON": "Afbryd",
+  "ADDBUTTON": "Opret",
+  "RENAMEPROFILE": "Omdøb profil",
+  "RENAME": "Omdøb",
+  "AREYOUSURE": "Er du sikker?",
+  "DELETE": "Slet"
 }
