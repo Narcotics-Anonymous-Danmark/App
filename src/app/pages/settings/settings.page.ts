@@ -46,7 +46,7 @@ export class SettingsPage implements OnInit {
                 if (searchValue) {
                     this.searchRange = searchValue;
                 } else {
-                    this.searchRange = 25;
+                    this.searchRange = 15;
                 }
             });
 

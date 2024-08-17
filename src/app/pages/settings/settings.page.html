@@ -15,21 +15,16 @@
         <ion-item>
             <ion-label>{{'LANGUAGE' | translate}}</ion-label>
             <ion-select [(ngModel)]="language" (ionChange)=selectLanguage() cancelText="{{'CANCEL' | translate}}">
-                <ion-select-option value="en">{{'ENGLISH' | translate}}</ion-select-option>
-                <ion-select-option value="it">{{'ITALIAN' | translate}}</ion-select-option>
-                <ion-select-option value="es">{{'SPANISH' | translate}}</ion-select-option>
                 <ion-select-option value="da">{{'DANISH' | translate}}</ion-select-option>
-                <ion-select-option value="pl">{{'POLISH' | translate}}</ion-select-option>
-                <ion-select-option value="pt">{{'PORTUGUESE' | translate}}</ion-select-option>
-                <ion-select-option value="ru">{{'RUSSIAN' | translate}}</ion-select-option>
+                <ion-select-option value="en">{{'ENGLISH' | translate}}</ion-select-option>
             </ion-select>
         </ion-item>
 
         <ion-item>
             <ion-label>{{'FIRSTDAYOFWEEKSETTING' | translate}}</ion-label>
             <ion-select [(ngModel)]="firstdayofweek" (ionChange)=selectFirstDayOfWeek() cancelText="{{'CANCEL' | translate}}">
-                <ion-select-option value="su">{{'SUNDAY' | translate}}</ion-select-option>
                 <ion-select-option value="mo">{{'MONDAY' | translate}}</ion-select-option>
+                <ion-select-option value="su">{{'SUNDAY' | translate}}</ion-select-option>
             </ion-select>
         </ion-item>
 
