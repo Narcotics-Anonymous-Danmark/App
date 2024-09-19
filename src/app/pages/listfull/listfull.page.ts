@@ -54,6 +54,7 @@ export class ListfullPage {
           }
         }
         this.uniqueCounties =( [...new Set(this.meetingListCounties.map(({location_municipality})=>location_municipality))]);
+        this.uniqueCounties.sort((a,b) => a === "Online" ? 1 : (b === "Online" ? -1 : 0));
       }
       this.dismissLoader();
     });

@@ -9,6 +9,7 @@ import { GoogleMaps, GoogleMap, GoogleMapOptions, GoogleMapsEvent, MarkerCluster
          LocationService, MyLocation, Geocoder, GeocoderResult } from '@ionic-native/google-maps/ngx';
 import { ModalPage } from '../modal/modal.page';
 import { Base64 } from '@ionic-native/base64/ngx';
+import * as moment from 'moment';
 
 declare const google: any;
 @Component({
@@ -542,7 +543,11 @@ export class MapSearchPage implements OnInit {
     console.log('openMeetingModal()');
     this.meetingListProvider.getSingleMeetingByID(meetingID).subscribe((meeting) => {
       this.meeting = meeting;
-      this.meeting.filter((i) => i.start_time_raw = this.convertTo12Hr(i.start_time));
+      this.meeting.filter((i) => i.start_time_raw = moment({
+        hour: i.start_time.split(':')[0],
+        minute: i.start_time.split(':')[1],
+        second: 0
+    }).isoWeekday(parseInt(i.weekday_tinyint, 10) === 1 ? 7 : parseInt(i.weekday_tinyint, 10) - 1).format('HH:mm'));
       this.openModal(this.meeting);
     });
   }
@@ -564,14 +569,6 @@ export class MapSearchPage implements OnInit {
 
   public openMapsLink(destLatitude: string, destLongitude: string) {
     window.open('https://www.google.com/maps/search/?api=1&query=' + destLatitude + '%2C' + destLongitude + ')', '_system');
-  }
-
-  public convertTo12Hr(timeString) {
-    const H = +timeString.substr(0, 2);
-    const h = H % 12 || 12;
-    const ampm = (H < 12 || H === 24) ? ' am' : ' pm';
-    timeString = h + timeString.substr(2, 3) + ampm;
-    return timeString;
   }
 
 }

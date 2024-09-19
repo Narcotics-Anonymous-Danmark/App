@@ -1,1 +1,19 @@
 .ion-1x { font-size: 15px !important;}
+
+ion-range::part(pin) {
+    width: 20px;
+    height: 20px;
+    min-width: auto;
+    min-height: auto;
+    padding: 3px 0px;
+    transform: translate3d(0px, 0px, 0px) scale(0.01);
+}
+
+ion-range.range-pressed::part(pin)
+{
+    transform: translate3d(0px, -12px, 0px) scale(1) !important;
+}
+
+ion-range::part(pin):before {
+    display: none;
+}

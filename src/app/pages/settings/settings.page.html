@@ -14,7 +14,7 @@
 
         <ion-item>
             <ion-label>{{'LANGUAGE' | translate}}</ion-label>
-            <ion-select [(ngModel)]="language" (ionChange)=selectLanguage() cancelText="{{'CANCEL' | translate}}">
+            <ion-select [(ngModel)]="language" (ionChange)=selectLanguage() cancelText="{{'CANCEL' | translate}}" *ngIf="refreshed">
                 <ion-select-option value="da">{{'DANISH' | translate}}</ion-select-option>
                 <ion-select-option value="en">{{'ENGLISH' | translate}}</ion-select-option>
             </ion-select>
@@ -22,7 +22,7 @@
 
         <ion-item>
             <ion-label>{{'FIRSTDAYOFWEEKSETTING' | translate}}</ion-label>
-            <ion-select [(ngModel)]="firstdayofweek" (ionChange)=selectFirstDayOfWeek() cancelText="{{'CANCEL' | translate}}">
+            <ion-select [(ngModel)]="firstdayofweek" (ionChange)=selectFirstDayOfWeek() cancelText="{{'CANCEL' | translate}}" *ngIf="refreshed">
                 <ion-select-option value="mo">{{'MONDAY' | translate}}</ion-select-option>
                 <ion-select-option value="su">{{'SUNDAY' | translate}}</ion-select-option>
             </ion-select>
@@ -30,7 +30,7 @@
 
         <ion-item>
             <ion-label>{{'CLEANTIMEUNITSORT' | translate}}</ion-label>
-            <ion-select [(ngModel)]="cleanTimeUnitSort" (ionChange)=selectCleanTimeUnitSort() cancelText="{{'CANCEL' | translate}}">
+            <ion-select [(ngModel)]="cleanTimeUnitSort" (ionChange)=selectCleanTimeUnitSort() cancelText="{{'CANCEL' | translate}}" *ngIf="refreshed">
                 <ion-select-option value="ymd">{{'YMD' | translate}}</ion-select-option>
                 <ion-select-option value="dmy">{{'DMY' | translate}}</ion-select-option>
             </ion-select>
