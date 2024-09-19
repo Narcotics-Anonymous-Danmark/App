@@ -4,25 +4,25 @@
   <ion-card-header>
     <div ngSwitch="{{ meeting.weekday_tinyint }}">
       <div *ngSwitchCase="'1'" [ngClass]="'one'">
-        <ion-badge color="sunday"><b>{{'SUNDAY' | translate}}   {{ meeting.start_time_raw  }} </b></ion-badge>
+        <ion-badge><b>{{'SUNDAY' | translate}}   {{ meeting.start_time_raw  }} </b></ion-badge>
       </div>
       <div *ngSwitchCase="'2'" [ngClass]="'one'">
-        <ion-badge color="monday"><b>{{'MONDAY' | translate}}   {{ meeting.start_time_raw }} </b></ion-badge>
+        <ion-badge><b>{{'MONDAY' | translate}}   {{ meeting.start_time_raw }} </b></ion-badge>
       </div>
       <div *ngSwitchCase="'3'" [ngClass]="'one'">
-        <ion-badge color="tuesday"><b>{{'TUESDAY' | translate}}   {{ meeting.start_time_raw }} </b></ion-badge>
+        <ion-badge><b>{{'TUESDAY' | translate}}   {{ meeting.start_time_raw }} </b></ion-badge>
       </div>
       <div *ngSwitchCase="'4'" [ngClass]="'one'">
-        <ion-badge color="wednesday"><b>{{'WEDNESDAY' | translate}}   {{ meeting.start_time_raw }} </b></ion-badge>
+        <ion-badge><b>{{'WEDNESDAY' | translate}}   {{ meeting.start_time_raw }} </b></ion-badge>
       </div>
       <div *ngSwitchCase="'5'" [ngClass]="'one'">
-        <ion-badge color="thursday"><b>{{'THURSDAY' | translate}}   {{ meeting.start_time_raw }} </b></ion-badge>
+        <ion-badge><b>{{'THURSDAY' | translate}}   {{ meeting.start_time_raw }} </b></ion-badge>
       </div>
       <div *ngSwitchCase="'6'" [ngClass]="'one'">
-        <ion-badge color="friday"><b>{{'FRIDAY' | translate}}   {{ meeting.start_time_raw }} </b></ion-badge>
+        <ion-badge><b>{{'FRIDAY' | translate}}   {{ meeting.start_time_raw }} </b></ion-badge>
       </div>
       <div *ngSwitchCase="'7'" [ngClass]="'one'">
-        <ion-badge color="saturday"><b>{{'SATURDAY' | translate}}   {{ meeting.start_time_raw  }} </b></ion-badge>
+        <ion-badge><b>{{'SATURDAY' | translate}}   {{ meeting.start_time_raw  }} </b></ion-badge>
       </div>
 
       <div *ngSwitchDefault>Nothing Found.</div>

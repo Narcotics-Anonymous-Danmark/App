@@ -112,7 +112,7 @@ export class MeetingListProvider {
 
   getCounties() {
     const getCountiesURL: string = this.denmarkBMLT
-      + '?switcher=GetSearchResults&services[]=1&services[]=3&services[]=5&services[]=2&services[]=4&data_field_key=location_municipality&sort_keys=location_municipality';
+      + '?switcher=GetSearchResults&data_field_key=location_municipality&sort_keys=location_municipality';
     return this.http.get(getCountiesURL);
   }
 

@@ -207,7 +207,7 @@ export class MeetingListComponent implements OnInit, OnChanges {
                 );
 
                 meeting.start_time_moment = startTimeRaw;
-                meeting.start_time_raw = startTimeRaw.format('HH:mm (h:mm a)');
+                meeting.start_time_raw = startTimeRaw.format('HH:mm');
 
                 const timeZoneName = moment.tz.guess();
                 meeting.start_time_raw += ' (' + timeZoneName + ' )';
@@ -218,7 +218,7 @@ export class MeetingListComponent implements OnInit, OnChanges {
                     second: 0
                 }).isoWeekday(parseInt(meeting.weekday_tinyint, 10) === 1 ? 7 : parseInt(meeting.weekday_tinyint, 10) - 1);
 
-                meeting.start_time_raw = this.convertTo12Hr(meeting.start_time);
+                meeting.start_time_raw = meeting.start_time_moment.format('HH:mm');
             }
         }
     }
@@ -247,15 +247,6 @@ export class MeetingListComponent implements OnInit, OnChanges {
         }
 
         return meetingDateTimeObj;
-    }
-
-
-    public convertTo12Hr(timeString) {
-        const H = +timeString.substr(0, 2);
-        const h = H % 12 || 12;
-        const ampm = (H < 12 || H === 24) ? ' am' : ' pm';
-        timeString = h + timeString.substr(2, 3) + ampm;
-        return timeString;
     }
 
 

@@ -5,7 +5,7 @@
         <p class="ion-1x">&nbsp; {{ selectedDay | translate }} : {{ displayLower }} - {{ displayUpper }} </p>
       </ion-text>
     </ion-item> -->
-    <ion-item class="ion-1x">
+    <ion-item class="ion-1x" style="overflow:visible;">
       <ion-select [(ngModel)]="selectedDay" (ionChange)=setDay() interface="popover" cancelText="{{'CANCEL' | translate}}">
         <ion-select-option *ngFor="let selectedDay of days" [value]="selectedDay" >{{ selectedDay | translate }}</ion-select-option>
       </ion-select>

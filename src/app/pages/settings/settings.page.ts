@@ -14,6 +14,7 @@ export class SettingsPage implements OnInit {
     theme: string;
     searchRange: number;
     cleanTimeUnitSort: string;
+    refreshed = true;
 
     constructor(
         private storage: Storage,
@@ -64,6 +65,10 @@ export class SettingsPage implements OnInit {
         this.storage.set('language', this.language);
         this.translate.setDefaultLang(this.language);
         this.translate.use(this.language);
+        this.refreshed = false;
+        setTimeout(()=>{
+            this.refreshed = true;
+        });
     }
 
     selectFirstDayOfWeek() {
