@@ -21,16 +21,16 @@ export class MapSearchPage implements OnInit {
   meetingList: any = [];
   loader = null;
   zoom = 8;
-  mapLatitude: any = 34.2359855;
-  mapLongitude: any = -118.5656689;
+  mapLatitude: any = 55.476224;
+  mapLongitude: any = 8.4606976;
 
   eagerMapLat: number;
   eagerMapLng: number;
 
-  origLocation = { lat: 51.899, lng: -8.474 };
+  origLocation = { lat: 55.476, lng: 8.460 };
   origZoom = 10;
 
-  targLocation = { lat: 51.899, lng: -8.474 };
+  targLocation = { lat: 55.476, lng: 8.460 };
   targZoom = 10;
 
   formattedAddress = '';
@@ -147,12 +147,18 @@ export class MapSearchPage implements OnInit {
     });
 
     if (LocationService.hasPermission()) {
+      let locationTimeout = setTimeout(()=>{
+        this.drawMap();
+        this.dismissLoader();
+      }, 10000);
       LocationService.getMyLocation().then((myLocation: MyLocation) => {
+        clearTimeout(locationTimeout);
         this.mapLatitude = this.eagerMapLat = myLocation.latLng.lat;
         this.mapLongitude = this.eagerMapLng = myLocation.latLng.lng;
         this.drawMap();
         this.dismissLoader();
       }, (reason) => {
+        clearTimeout(locationTimeout);
         this.eagerMapLat = this.mapLatitude;
         this.eagerMapLng = this.mapLongitude;
         this.drawMap();
