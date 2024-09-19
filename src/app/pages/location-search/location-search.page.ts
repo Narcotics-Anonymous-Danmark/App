@@ -97,7 +97,11 @@ export class LocationSearchPage  {
 
   locatePhone() {
     this.translate.get('LOCATING').subscribe(value => { this.presentLoader(value); });
+    let locationTimeout = setTimeout(()=>{
+      this.dismissLoader();
+    }, 10000);
     this.geolocation.getCurrentPosition().then((resp) => {
+      clearTimeout(locationTimeout);
       this.addressLatitude = resp.coords.latitude;
       this.addressLongitude = resp.coords.longitude;
 
@@ -109,8 +113,7 @@ export class LocationSearchPage  {
       this.getAllMeetings();
 
     }).catch((error) => {
-      console.log('Error getting location', error);
-
+      clearTimeout(locationTimeout);
       this.currentAddress = 'Location not found';
       this.dismissLoader();
     });
