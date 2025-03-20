@@ -7,8 +7,6 @@ import { LocationSearchPage } from './location-search.page';
 import { TranslateModule } from '@ngx-translate/core';
 import { MeetingListProvider } from 'src/app/providers/meeting-list.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { GeolocateProvider } from 'src/app/providers/geolocate.service';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { ComponentModule } from '../../components/component/component.module';
 import { HTTP } from '@ionic-native/http/ngx';
@@ -29,8 +27,6 @@ import { HTTP } from '@ionic-native/http/ngx';
   providers: [
     InAppBrowser,
     MeetingListProvider,
-    GeolocateProvider,
-    Geolocation,
     HTTP
   ]
 })
