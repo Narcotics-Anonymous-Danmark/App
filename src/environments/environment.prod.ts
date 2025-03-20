@@ -1,7 +1,7 @@
 export const environment = {
     production: true,
     na_approved: true,
-    currentVersion: "0.1.2+201209144434",
+    currentVersion: "1.0.5",
     configuration: 'production',
     //baseHref is configured in angular.json
     //baseHref: "/iu-udvikling/app/",

@@ -11,9 +11,9 @@ import { environment } from '../../../environments/environment';
 export class ContactPage {
 
     sourceCodeLink = 'https://github.com/Narcotics-Anonymous-Danmark/App';
-    sourceBugs = 'https://github.com/Narcotics-Anonymous-Danmark/App/issues';
-    bmltLink = 'https://bmlt.app/';
-    fbGroupLink = 'https://www.facebook.com/groups/149214049107349/';
+    sourceBugs = 'mailto:app@nadanmark.dk';
+    bmltLink = 'https://na.org/';
+    fbGroupLink = 'https://nadanmark.dk/';
     meetinglistServantLink = 'mailto:modelisteansvarlig@nadanmark.dk';
 
     currentVersion = environment.currentVersion;
