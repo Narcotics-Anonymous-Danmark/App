@@ -5,8 +5,8 @@
 export const environment = {
     production: false,
     na_approved: true,
-    currentVersion: "0.1.2+201209144434",
-    configuration: 'development',
+    currentVersion: "1.0.6",
+    configuration: 'production',
     //baseHref is configured in angular.json
     //baseHref: "/",
     speakersApiUrl:"nadanmark.dk/api/speaks"
