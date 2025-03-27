@@ -1,11 +1,6 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { firstBy } from 'thenby';
 import { Storage } from '@ionic/storage';
-import { TranslateService } from '@ngx-translate/core';
-import { VirtFormatsProvider } from '../../providers/virt-formats.service';
-import { TomatoFormatsService } from '../../providers/tomato-formats.service';
-import { MeetingListProvider } from '../../providers/meeting-list.service';
-import { LoadingService } from 'src/app/providers/loading.service';
 import * as moment from 'moment';
 import 'moment-timezone';
 
@@ -27,12 +22,7 @@ export class MeetingListComponent implements OnInit, OnChanges {
     timeDisplay;
     localMeetingType;
     dayCount = [0, 0, 0, 0, 0, 0, 0];
-    formats;
-    formatLanguage = 'en';
-    language = 'english';
     selectedDay = 'WEEKDAYS';
-    loader = null;
-    isLoaded = false;
 
     firstday = 'mo';
     days = ['WEEKDAYS', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
@@ -41,17 +31,11 @@ export class MeetingListComponent implements OnInit, OnChanges {
         lower: 0
     };
 
-    ///TODO: Swap these
     displayUpper = '00:00 (12:00 am)';
     displayLower = '23:59 (11:59 pm)';
 
     constructor(
         private storage: Storage,
-        private translate: TranslateService,
-        private virtFormatsProvider: VirtFormatsProvider,
-        private meetingListProvider: MeetingListProvider,
-        private tomatoFormatsService: TomatoFormatsService,
-        private loaderCtrl: LoadingService
     ) {
 
         this.storage.ready().then(() => {
@@ -61,7 +45,7 @@ export class MeetingListComponent implements OnInit, OnChanges {
                     if (firstdayValue) {
                         this.firstday = firstdayValue;
                     } else {
-                        this.firstday = 'su';
+                        this.firstday = 'mo';
                     }
                 })
                 .then(() => {
@@ -81,24 +65,10 @@ export class MeetingListComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        this.storage.get('language').then((value) => {
-            if (value) {
-                this.formatLanguage = value;
-            }
-        });
-
         this.meetingList = this.data;
         this.localMeetingType = this.meetingType;
 
-        if (this.localMeetingType === 'virt') {
-            // Get the formats
-            this.virtFormatsProvider.getAllVirtFormats().then((serviceGroupData) => {
-                this.formats = serviceGroupData;
-                this.formatMeetingList();
-            });
-        } else {
-            this.formatMeetingList();
-        }
+        this.formatMeetingList();
     }
 
 
@@ -107,7 +77,6 @@ export class MeetingListComponent implements OnInit, OnChanges {
             this.dayCount[i] = this.meetingList.filter(list => parseInt(list.weekday_tinyint, 10) === i + 1).length;
         }
         this.meetingListGroupedByDay = this.meetingList.concat();
-        this.explodeFormats();
         this.setRawStartTime();
         this.meetingListGroupedByDay.sort((a, b) => a.weekday_tinyint.localeCompare(b.weekday_tinyint));
         this.savedList = this.meetingListGroupedByDay;
@@ -115,33 +84,6 @@ export class MeetingListComponent implements OnInit, OnChanges {
         for (let i of this.meetingListGroupedByDay) {
             i.sort(firstBy('weekday_tinyint').thenBy('start_time_raw')
             );
-        }
-    }
-
-
-    explodeFormats() {
-        if (this.localMeetingType === 'virt') {
-
-            for (let i of this.meetingListGroupedByDay) {
-                const splitFormats = i.formats.split(',');
-                i.formats_exploded = '';
-                for (let j of splitFormats) {
-                    const longFormat = this.formats.filter(data => data.key_string === j);
-                    if (longFormat[0]) {
-                        i.formats_exploded += longFormat[0].name_string + '. ';
-                    } else {
-                        i.formats_exploded += j + '. ';
-                    }
-                }
-            }
-        } else {
-            if (this.localMeetingType === 'regular') {
-                for (let meeting of this.meetingListGroupedByDay) {
-                    this.tomatoFormatsService.getFormatByID(meeting.format_shared_id_list, this.formatLanguage).then((formatData) => {
-                        meeting.formats_exploded = formatData;
-                    });
-                }
-            }
         }
     }
 
@@ -315,20 +257,6 @@ export class MeetingListComponent implements OnInit, OnChanges {
 
         // Overwrite the display list with the newly filtered list
         this.meetingListGroupedByDay = tempMeetingListGroupedByDay;
-    }
-
-    public presentLoader(loaderText: any) {
-        if (!this.loader) {
-            this.loader = this.loaderCtrl.present(loaderText);
-        }
-    }
-
-
-    public dismissLoader() {
-        if (this.loader) {
-            this.loader = this.loaderCtrl.dismiss();
-            this.loader = null;
-        }
     }
 
 }

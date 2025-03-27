@@ -18,8 +18,7 @@ export class LocationSearchPage  {
   shownGroup = null;
   loader = null;
   isLoaded = false;
-  radius: number;
-  radiusMeters = 10000;
+  radius = 25;
 
   currentLatitude: any = 55.476224;
   currentLongitude: any = 8.4606976;
@@ -31,7 +30,6 @@ export class LocationSearchPage  {
     this.meetingsListGrouping = 'weekday_tinyint';
 
     this.storage.ready().then(() => {
-
       this.storage.get('searchRange')
         .then(searchValue => {
           if (searchValue) {
@@ -39,15 +37,16 @@ export class LocationSearchPage  {
           } else {
             this.radius = 25;
           }
+          this.locatePhone();
         });
-
-        this.locatePhone();
     });
 
   }
 
   getAllMeetings() {
-    this.translate.get('FINDING_MTGS').subscribe(value => { this.presentLoader(value); });
+    this.translate.get('FINDING_MTGS').subscribe(value => {
+      this.presentLoader(value);
+    });
     this.MeetingListProvider.getAddressMeetings(this.currentLatitude, this.currentLongitude, this.radius).subscribe((data) => {
       this.addressMeetingList = data;
       this.isLoaded = true;
@@ -69,27 +68,34 @@ export class LocationSearchPage  {
   }
 
   locatePhone() {
-    this.translate.get('LOCATING').subscribe(value => { this.presentLoader(value); });
+    this.translate.get('LOCATING').subscribe(value => {
+      this.presentLoader(value);
+    });
     if (LocationService.hasPermission()) {
       let locationTimeout = setTimeout(()=>{
-        this.dismissLoader();
-        this.getAllMeetings();
+        this.dismissLoaderAndLoadMeetings();
       }, 10000);
       LocationService.getMyLocation().then((myLocation: MyLocation) => {
         clearTimeout(locationTimeout);
         this.currentLatitude = myLocation.latLng.lat;
         this.currentLongitude = myLocation.latLng.lng;
-        this.dismissLoader();
-        this.getAllMeetings();
+        this.dismissLoaderAndLoadMeetings();
       }, (reason) => {
         clearTimeout(locationTimeout);
-        this.dismissLoader();
-        this.getAllMeetings();
+        this.dismissLoaderAndLoadMeetings();
       });
     } else {
-      this.dismissLoader();
-      this.getAllMeetings();
+      this.dismissLoaderAndLoadMeetings();
     }
+  }
+
+  dismissLoaderAndLoadMeetings() {
+    this.loaderCtrl.getTop().then(loader => {
+      loader.onDidDismiss().then(() => {
+        this.getAllMeetings();
+      });
+    });
+    this.dismissLoader();
   }
 
 }

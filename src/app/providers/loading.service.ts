@@ -28,4 +28,8 @@ export class LoadingService {
     this.isLoading = false;
     return await this.loadingController.dismiss();
   }
+
+  async getTop() {
+    return await this.loadingController.getTop();
+  }
 }
