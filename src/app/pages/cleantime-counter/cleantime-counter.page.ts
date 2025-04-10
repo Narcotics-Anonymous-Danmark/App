@@ -82,6 +82,7 @@ export class CleantimeCounterPage implements OnInit {
                     } else {
                         this.activeProfile = "0";
                     }
+                    this.getCleanTime();
                     this.refreshed = false;
                     setTimeout(()=>{
                         this.refreshed = true;

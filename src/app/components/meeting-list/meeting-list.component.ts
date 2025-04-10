@@ -150,9 +150,11 @@ export class MeetingListComponent implements OnInit, OnChanges {
 
                 meeting.start_time_moment = startTimeRaw;
                 meeting.start_time_raw = startTimeRaw.format('HH:mm');
+                meeting.end_time_raw = meeting.start_time_moment.add(moment.duration(meeting.duration_time)).format('HH:mm');
 
                 const timeZoneName = moment.tz.guess();
                 meeting.start_time_raw += ' (' + timeZoneName + ' )';
+                meeting.end_time_raw += ' (' + timeZoneName + ' )';
             } else {
                 meeting.start_time_moment = moment({
                     hour: meeting.start_time.split(':')[0],
@@ -161,6 +163,7 @@ export class MeetingListComponent implements OnInit, OnChanges {
                 }).isoWeekday(parseInt(meeting.weekday_tinyint, 10) === 1 ? 7 : parseInt(meeting.weekday_tinyint, 10) - 1);
 
                 meeting.start_time_raw = meeting.start_time_moment.format('HH:mm');
+                meeting.end_time_raw = meeting.start_time_moment.add(moment.duration(meeting.duration_time)).format('HH:mm');
             }
         }
     }

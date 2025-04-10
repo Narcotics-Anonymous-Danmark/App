@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>
+          {{'HOW_AND_WHY' | translate}}
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="player-container" style="text-align: center; padding: 15px 0 0 0;" [hidden]="!activeChapter">
+    <audio id="audio-book-player" autoplay controls controlsList="nodownload noplaybackrate" src="{{ activeChapter ? activeChapter.url : '' }}"></audio>
+  </div>
+  <ion-list class="chapters" #scheduleList>
+    <ion-item-sliding *ngFor="let chapter of chapters" #slidingItem>
+      <ion-item (click)="playChapter(chapter)" [ngClass]="{active: activeChapter === chapter}">
+        <ion-label class="ion-text-wrap">{{ chapter.title }}</ion-label>
+        <ion-note slot="end">{{ chapter.duration }}</ion-note>
+      </ion-item>
+    </ion-item-sliding>
+  </ion-list>
+
+</ion-content>

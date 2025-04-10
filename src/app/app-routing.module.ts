@@ -66,6 +66,14 @@ const routes: Routes = [
   {
     path: 'basic-text',
     loadChildren: () => import('./pages/basic-text/basic-text.module').then( m => m.BasicTextPageModule)
+  },
+  {
+    path: 'how-and-why',
+    loadChildren: () => import('./pages/how-and-why/how-and-why.module').then( m => m.HowAndWhyPageModule)
+  },
+  {
+    path: 'step-working-guides',
+    loadChildren: () => import('./pages/step-working-guides/step-working-guides.module').then( m => m.StepWorkingGuidesPageModule)
   }
 
 ];

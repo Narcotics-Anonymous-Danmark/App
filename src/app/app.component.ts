@@ -70,6 +70,16 @@ export class AppComponent implements OnInit {
             url: 'basic-text',
             icon: 'book'
         },
+        {
+            title: 'HOW_AND_WHY',
+            url: 'how-and-why',
+            icon: 'book'
+        },
+        {
+            title: 'STEP_WORKING_GUIDES',
+            url: 'step-working-guides',
+            icon: 'book'
+        },
         //{
         //    title: 'AUDIOBOOKS',
         //    url: 'audiobooks',
