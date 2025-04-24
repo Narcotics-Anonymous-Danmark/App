@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { BasicTextService } from 'src/app/providers/basic-text.service';
+import { Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-basic-text',
@@ -16,9 +17,14 @@ export class BasicTextPage implements OnInit {
   activeChapter: any;
 
   constructor(
-    private translate: TranslateService,
-    private basicTextProvider: BasicTextService
-  ) { }
+    private basicTextProvider: BasicTextService,
+    private platform: Platform,
+    private router: Router
+  ) {
+      this.platform.backButton.subscribeWithPriority(1, () => {
+        this.router.navigate(['/audiobooks']);
+      });
+  }
 
   ngOnInit() {
     this.getTodayJft();

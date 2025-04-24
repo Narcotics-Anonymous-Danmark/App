@@ -1,0 +1,58 @@
+﻿<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            {{'AUDIOBOOKS' | translate}}
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list #scheduleList>
+        <ion-item-sliding #slidingItem>
+            <ion-item [routerDirection]="'root'" [routerLink]="'/basic-text'">
+                <ion-thumbnail slot="start">
+                    <img src="./assets/img/audiobooks/basic-text.png">
+                </ion-thumbnail>
+                <ion-label>
+                    <h3>{{ 'BASIC_TEXT' | translate }}</h3>
+                    <p style="vertical-align: middle; color:#888888;">
+                        <ion-icon name="time-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                        13:53:58
+                    </p>
+                </ion-label>
+            </ion-item>
+        </ion-item-sliding>
+        <ion-item-sliding #slidingItem>
+            <ion-item [routerDirection]="'root'" [routerLink]="'/how-and-why'">
+                <ion-thumbnail slot="start">
+                    <img src="./assets/img/audiobooks/how-and-why.png">
+                </ion-thumbnail>
+                <ion-label>
+                    <h3>{{ 'HOW_AND_WHY' | translate }}</h3>
+                    <p style="vertical-align: middle; color:#888888;">
+                        <ion-icon name="time-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                        06:11:37
+                    </p>
+                </ion-label>
+            </ion-item>
+        </ion-item-sliding>
+        <ion-item-sliding #slidingItem>
+            <ion-item [routerDirection]="'root'" [routerLink]="'/step-working-guides'">
+                <ion-thumbnail slot="start">
+                    <img src="./assets/img/audiobooks/step-working-guides.png">
+                </ion-thumbnail>
+                <ion-label>
+                    <h3>{{ 'STEP_WORKING_GUIDES' | translate }}</h3>
+                    <p style="vertical-align: middle; color:#888888;">
+                        <ion-icon name="time-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                        05:03:49
+                    </p>
+                </ion-label>
+            </ion-item>
+        </ion-item-sliding>
+    </ion-list>
+
+</ion-content>

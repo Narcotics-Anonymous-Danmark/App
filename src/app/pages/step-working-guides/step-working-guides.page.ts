@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { StepWorkingGuidesService } from 'src/app/providers/step-working-guides.service'
+import { Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-step-working-guides',
@@ -16,9 +18,14 @@ export class StepWorkingGuidesPage implements OnInit {
   activeChapter: any;
 
   constructor(
-    private translate: TranslateService,
-    private howAndWhyProvider: StepWorkingGuidesService
-  ) { }
+    private howAndWhyProvider: StepWorkingGuidesService,
+    private platform: Platform,
+    private router: Router
+  ) {
+      this.platform.backButton.subscribeWithPriority(1, () => {
+        this.router.navigate(['/audiobooks']);
+      });
+  }
 
   ngOnInit() {
     this.getTodayJft();

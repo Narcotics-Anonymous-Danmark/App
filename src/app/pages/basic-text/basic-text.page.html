@@ -6,10 +6,16 @@
       <ion-title>
           {{'BASIC_TEXT' | translate}}
       </ion-title>
+      <ion-buttons slot="end">
+        <ion-button color="primary" slot="end" size="small" [routerDirection]="'root'" [routerLink]="'/audiobooks'">{{ 'BACK' | translate }}</ion-button>
+      </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <div class="player-header" style="text-align:center;">
+    <img style="width:150px; height:150px; text-align:center;" src="./assets/img/audiobooks/basic-text.png"/>
+  </div>
   <div class="player-container" style="text-align: center; padding: 15px 0 0 0;" [hidden]="!activeChapter">
     <audio id="audio-book-player" autoplay controls controlsList="nodownload noplaybackrate" src="{{ activeChapter ? activeChapter.url : '' }}"></audio>
   </div>
@@ -21,5 +27,4 @@
       </ion-item>
     </ion-item-sliding>
   </ion-list>
-
 </ion-content>

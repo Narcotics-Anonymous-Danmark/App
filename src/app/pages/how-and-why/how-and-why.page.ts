@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { HowAndWhyService } from 'src/app/providers/how-and-why.service';
+import { Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-how-and-why',
@@ -16,9 +17,14 @@ export class HowAndWhyPage implements OnInit {
   activeChapter: any;
 
   constructor(
-    private translate: TranslateService,
-    private howAndWhyProvider: HowAndWhyService
-  ) { }
+    private howAndWhyProvider: HowAndWhyService,
+    private platform: Platform,
+    private router: Router
+  ) {
+      this.platform.backButton.subscribeWithPriority(1, () => {
+        this.router.navigate(['/audiobooks']);
+      });
+  }
 
   ngOnInit() {
     this.getTodayJft();

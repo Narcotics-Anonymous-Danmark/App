@@ -64,6 +64,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/cleantime-counter/cleantime-counter.module').then( m => m.CleantimeCounterPageModule)
   },
   {
+    path: 'audiobooks',
+    loadChildren: () => import('./pages/audiobooks/audiobooks.module').then( m => m.AudioBooksPageModule)
+  },
+  {
     path: 'basic-text',
     loadChildren: () => import('./pages/basic-text/basic-text.module').then( m => m.BasicTextPageModule)
   },
