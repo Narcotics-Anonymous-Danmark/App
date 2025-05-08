@@ -133,3 +133,72 @@ TODO: link will be here after it will be published on AppStore
 ## Android phone/tablet link
 
 TODO: link will be here after it will be published on Google Play
+
+## Install Google Maps plugin #multiple_maps
+
+We need `cordova-fetch3.0.1`:
+
+```
+npm install cordova-fetch@3.0.1
+```
+
+We also need `properties-parser@0.5.1`
+
+```
+npm install properties-parser@0.5.1
+```
+
+Add `mapsplugin` plugin:
+
+```
+ionic cordova plugin add "git+ssh://git@github.com:mapsplugin/cordova-plugin-googlemaps.git#multiple_maps"
+```
+
+## Android Gradle issue
+
+```
+vim platforms/android/gradlew
+```
+
+remove `--illegal-access=permit`
+
+## Install android-version
+
+```
+npm install android-versions --save
+```
+
+## Fix voley@1.1.1
+
+```
+vim platforms/android/cordova-plugin-googlemaps/app-tbxml-android.gradle
+```
+
+change:
+
+```
+  implementation(name:'tbxml-android', ext:'aar')
+```
+
+with:
+
+```
+  implementation(name:'tbxml-android', ext:'aar') {
+    exclude group: 'com.android.volley'
+  }
+
+  implementation 'com.android.volley:volley:1.2.1'
+```
+
+## Cold start android emulator
+
+```
+emulator @test -no-snapshot-load
+```
+
+## Change location using Android Emulator
+
+Herning:
+```
+adb emu geo fix 8.9579 56.13504
+```
