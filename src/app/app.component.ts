@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
 import { environment } from '../environments/environment';
+import { Router } from '@angular/router';
 
 //import { AppVersion } from '@ionic-native/app-version/ngx';
 
@@ -102,11 +103,13 @@ export class AppComponent implements OnInit {
         private statusBar: StatusBar,
         private translate: TranslateService,
         private storage: Storage,
+        private router: Router
+        
         //private appVersion: AppVersion
     ) {
         this.initializeApp();
         this.translate.setDefaultLang('da');
-        storage.get('language').then((value) => {
+        this.storage.get('language').then((value) => {
             if (value) {
                 this.translate.use(value);
             } else {
@@ -137,6 +140,10 @@ export class AppComponent implements OnInit {
             //    });
 
             this.splashScreen.hide();
+
+            this.platform.backButton.subscribeWithPriority(0, () => {
+                this.router.navigate(['/home']);
+            });
         });
     }
 

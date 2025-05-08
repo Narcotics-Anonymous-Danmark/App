@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Storage } from '@ionic/storage';
 import { LoadingService } from '../../providers/loading.service';
-import { ServiceGroupsProvider } from '../../providers/service-groups.service';
 import { MeetingListProvider } from '../../providers/meeting-list.service';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { firstBy } from 'thenby';
+import { Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-listfull',
@@ -33,11 +31,10 @@ export class ListfullPage {
 
   constructor(
     private meetingListProvider: MeetingListProvider,
-    private serviceGroupsProvider: ServiceGroupsProvider,
     private loaderCtrl: LoadingService,
     private translate: TranslateService,
-    private storage: Storage,
-    private iab: InAppBrowser) {
+    private platform: Platform,
+    private router: Router) {
 
     this.translate.get('FINDING_MTGS').subscribe(value => { this.presentLoader(value); })
 
@@ -57,6 +54,14 @@ export class ListfullPage {
         this.uniqueCounties.sort((a,b) => a === "Online" ? 1 : (b === "Online" ? -1 : 0));
       }
       this.dismissLoader();
+    });
+
+    this.platform.backButton.subscribeWithPriority(1, () => {
+      if(this.countyName != "") {
+        this.showCountyStructure();
+      } else {
+        this.router.navigate(['/home']);
+      }
     });
 
   }
