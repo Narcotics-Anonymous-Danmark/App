@@ -1,0 +1,58 @@
+{
+    "bookTitle": "Vejledninger i Trinarbejde",
+    "bookEdition": "",
+    "bookAuhtor": "NA",
+    "chapters": [{
+        "title": "Forord",
+        "url": "https://www.nadanmark.dk/wp-content/uploads/2025/02/1.-Forord.mp3",
+        "duration": "4:46"
+    }, {
+        "title": "Trin 1",
+        "url": "https://www.nadanmark.dk/wp-content/uploads/2025/02/2.-Trin-1.mp3",
+        "duration": "25:15"
+    }, {
+        "title": "Trin 2",
+        "url": "https://www.nadanmark.dk/wp-content/uploads/2025/02/3.-Trin-2.mp3",
+        "duration": "25:27"
+    }, {
+        "title": "Trin 3",
+        "url": "https://www.nadanmark.dk/wp-content/uploads/2025/02/4.-Trin-3.mp3",
+        "duration": "26:25"
+    }, {
+        "title": "Trin 4",
+        "url": "https://www.nadanmark.dk/wp-content/uploads/2025/02/5.-trin-4.mp3",
+        "duration": "31:34"
+    }, {
+        "title": "Trin 5",
+        "url": "https://www.nadanmark.dk/wp-content/uploads/2025/02/6.-trin-5.mp3",
+        "duration": "21:05"
+    }, {
+        "title": "Trin 6",
+        "url": "https://www.nadanmark.dk/wp-content/uploads/2025/02/7.-Trin-6.mp3",
+        "duration": "18:35"
+    }, {
+        "title": "Trin 7",
+        "url": "https://www.nadanmark.dk/wp-content/uploads/2025/02/8.-Trin-7.mp3",
+        "duration": "17:29"
+    }, {
+        "title": "Trin 8",
+        "url": "https://www.nadanmark.dk/wp-content/uploads/2025/02/9.-Trin-8.mp3",
+        "duration": "25:43"
+    }, {
+        "title": "Trin 9",
+        "url": "https://www.nadanmark.dk/wp-content/uploads/2025/02/11.-Trin-9.mp3",
+        "duration": "21:57"
+    }, {
+        "title": "Trin 10",
+        "url": "https://www.nadanmark.dk/wp-content/uploads/2025/02/11.-Trin-10.mp3",
+        "duration": "28:53"
+    }, {
+        "title": "Trin 11",
+        "url": "https://www.nadanmark.dk/wp-content/uploads/2025/02/12.-Trin-11.mp3",
+        "duration": "28:15"
+    }, {
+        "title": "Trin 12",
+        "url": "https://www.nadanmark.dk/wp-content/uploads/2025/02/13.-Trin-12.mp3",
+        "duration": "28:25"
+    }]
+}

@@ -66,10 +66,25 @@ export class AppComponent implements OnInit {
             icon: 'calendar'
         },
         {
-            title: 'BASIC_TEXT',
-            url: 'basic-text',
+            title: 'AUDIOBOOKS',
+            url: 'audiobooks',
             icon: 'book'
         },
+        // {
+        //     title: 'BASIC_TEXT',
+        //     url: 'basic-text',
+        //     icon: 'book'
+        // },
+        // {
+        //     title: 'HOW_AND_WHY',
+        //     url: 'how-and-why',
+        //     icon: 'book'
+        // },
+        // {
+        //     title: 'STEP_WORKING_GUIDES',
+        //     url: 'step-working-guides',
+        //     icon: 'book'
+        // },
         //{
         //    title: 'AUDIOBOOKS',
         //    url: 'audiobooks',

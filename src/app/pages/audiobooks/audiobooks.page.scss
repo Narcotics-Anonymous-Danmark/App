@@ -1,0 +1,16 @@
+
+.recording_meta {
+    font-size: 12px;
+}
+
+ion-button.event-button {
+    height: auto;
+}
+
+ion-button.event-button::part(native) {
+    height: auto;
+    min-height: 46px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    line-height: 1.3;
+}

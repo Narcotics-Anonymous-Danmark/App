@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { BasicTextService } from 'src/app/providers/basic-text.service';
+import { HowAndWhyService } from 'src/app/providers/how-and-why.service';
 import { Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-basic-text',
-  templateUrl: './basic-text.page.html',
-  styleUrls: ['./basic-text.page.scss'],
+  selector: 'app-how-and-why',
+  templateUrl: './how-and-why.page.html',
+  styleUrls: ['./how-and-why.page.scss'],
 })
-export class BasicTextPage implements OnInit {
+export class HowAndWhyPage implements OnInit {
 
   bookTitle: any;
   bookEdition: any;
@@ -17,7 +17,7 @@ export class BasicTextPage implements OnInit {
   activeChapter: any;
 
   constructor(
-    private basicTextProvider: BasicTextService,
+    private howAndWhyProvider: HowAndWhyService,
     private platform: Platform,
     private router: Router
   ) {
@@ -31,7 +31,7 @@ export class BasicTextPage implements OnInit {
   }
 
   getTodayJft() {
-    this.basicTextProvider.load().subscribe((data) => {
+    this.howAndWhyProvider.load().subscribe((data) => {
         this.bookTitle = data.bookTitle;
         this.bookEdition = data.bookEdition;
         this.bookAuthor = data.bookAuthor;
