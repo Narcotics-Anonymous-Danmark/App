@@ -55,7 +55,6 @@
     <div *ngIf="meeting.train_lines">{{'TRAIN' | translate}}: {{meeting.train_lines | tidyDelimiter }}<br></div>
     <div *ngIf="meeting.bus_lines">{{'BUS' | translate}}: {{meeting.bus_lines | tidyDelimiter }}<br></div>
     <br>
-    <div *ngIf="meeting.formats_exploded"><i>{{'FORMATS' | translate}}:</i> {{meeting.formats_exploded }}<br></div>
 
     <div *ngIf="meetingType === 'regular'">
       <div *ngIf="!meeting.virtual_meeting_link || isHybrid(meeting) === 'HYBRID'">

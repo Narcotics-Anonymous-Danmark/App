@@ -7,10 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
 
 import { ModalPage } from './modal.page';
-import { TomatoFormatsService } from '../../providers/tomato-formats.service';
 import { StorageMock } from '../../../testing/storage.mock';
-import { NavParamsMock } from '../../../testing/navparams.mock';
-import { TomatoFormatsServiceMock } from '../../../testing/tomato-formats.service.mock';
 
 describe('ModalPage', () => {
     let component: ModalPage;
@@ -20,7 +17,7 @@ describe('ModalPage', () => {
     let iabSpy;
     let httpClientSpy, httpSpy;
     let storageSpy: { get: jasmine.Spy };
-    let tomatoFormatsServiceSpy, modalControllerSpy;
+    let modalControllerSpy;
 
     beforeEach(async(() => {
         storageSpy = jasmine.createSpyObj('Storage', ['get']);
@@ -40,7 +37,6 @@ describe('ModalPage', () => {
                 { provide: HttpClient, useValue: httpClientSpy },
                 { provide: HTTP, useValue: httpSpy },
                 { provide: Storage, useClass: StorageMock },
-                { provide: TomatoFormatsService, useClass: TomatoFormatsServiceMock },
                 { provide: ModalController, useValue: modalControllerSpy },
             ]
         }).compileComponents();
