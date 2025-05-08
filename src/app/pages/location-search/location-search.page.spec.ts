@@ -1,13 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { IonicModule } from '@ionic/angular';
-import { IonicStorageModule, Storage, StorageConfig } from '@ionic/storage';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { GeolocationMock } from '../../../testing/geolocation.mock';
+import { IonicStorageModule } from '@ionic/storage';
+import { TranslateService } from '@ngx-translate/core';
 import { LoadingServiceMock } from '../../../testing/loading.service.mock';
 import { TranslatePipeMock } from '../../../testing/translate.pipe.mock';
 import { TranslateServiceMock } from '../../../testing/translate.service.mock';
-import { GeolocateProvider } from '../../providers/geolocate.service';
 import { LoadingService } from '../../providers/loading.service';
 
 import { MeetingListProvider } from '../../providers/meeting-list.service';
@@ -19,9 +16,6 @@ describe('LocationSearchPage', () => {
 
     let meetingListProviderSpy;
     //let storageSpy;
-    let translateServiceSpy;
-    let geolocateProviderSpy;
-    let geolocationSpy;
 
     beforeEach(async(() => {
         //storageSpy = jasmine.createSpyObj('Storage', ['get', 'set', 'clear', 'remove', 'ready']);
@@ -37,8 +31,6 @@ describe('LocationSearchPage', () => {
                 { provide: MeetingListProvider, useValue: meetingListProviderSpy },
                 { provide: TranslateService, useClass: TranslateServiceMock },
                 { provide: LoadingService, useClass: LoadingServiceMock },
-                { provide: GeolocateProvider, useValue: geolocateProviderSpy },
-                { provide: Geolocation, useClass: GeolocationMock },
             ]
         }).compileComponents();
 

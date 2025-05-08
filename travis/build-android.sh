@@ -11,7 +11,6 @@ ionic cordova plugin add https://github.com/mapsplugin/cordova-plugin-googlemaps
 ionic cordova plugin add com-badrit-base64
 ionic cordova plugin add cordova-plugin-ionic-webview@latest
 ionic cordova plugin add cordova-plugin-inappbrowser
-ionic cordova plugin add cordova-plugin-geolocation
 ionic cordova plugin add cordova-plugin-advanced-http
 
 if [[ "$TRAVIS_BRANCH" != "master" ]]

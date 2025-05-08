@@ -15,7 +15,6 @@ then
     ionic cordova plugin rm com-badrit-base64
     ionic cordova plugin rm cordova-plugin-ionic-webview
     ionic cordova plugin rm cordova-plugin-inappbrowser
-    ionic cordova plugin rm cordova-plugin-geolocation
     ionic cordova plugin rm cordova-plugin-advanced-http
 
     rm -rf platform/*
@@ -30,7 +29,6 @@ then
     ionic cordova plugin add com-badrit-base64
     ionic cordova plugin add cordova-plugin-ionic-webview@latest
     ionic cordova plugin add cordova-plugin-inappbrowser
-    ionic cordova plugin add cordova-plugin-geolocation
     ionic cordova plugin add cordova-plugin-advanced-http
 fi
 
