@@ -202,3 +202,41 @@ Herning:
 ```
 adb emu geo fix 8.9579 56.13504
 ```
+
+
+## Release
+
+### Android
+
+First time:
+```
+keytool -v -genkey -v -keystore nadanmarkapp.keystore -alias nadanmarkapp -keyalg RSA -validity 10000
+```
+
+First time:
+```
+java -jar pepk.jar --keystore=nadanmarkapp.keystore --alias=nadanmarkapp --output=output.zip --include-cert --rsa-aes-encryption 
+--encryption-key-path=encryption_public_key.pem
+```
+
+Remember nadanmark.dk API credentials!!!
+
+Remember to change version number in config.xml: android-versionCode to next version and rest of the versions to previous version
+
+```
+ANDROID_SDK_ROOT=~/AndroidSDK ionic cordova build android --prod --release
+```
+
+```
+cd platforms/android/app/build/outputs/bundle/release/
+```
+
+```
+cp app-release.aab nadanmark.aab
+```
+
+```
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ../../../../../../../keys/nadanmarkapp.keystore nadanmark.aab nadanmarkapp
+```
+
+IUFormand's password
