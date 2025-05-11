@@ -221,7 +221,18 @@ java -jar pepk.jar --keystore=nadanmarkapp.keystore --alias=nadanmarkapp --outpu
 
 Remember nadanmark.dk API credentials!!!
 
-Remember to change version number in config.xml: android-versionCode to next version and rest of the versions to previous version
+Remember to change version number in:
+- config.xml: android-versionCode + version (new version - minor: 1)
+- package.json: version (new version - minor: 1)
+- package-lock.json: version
+- environment.unstable.ts: currentVersion
+- environment.prod.ts: currentVersion
+- environment.ts: currentVersion
+
+We need to make a regular build before a production build to make sure files are updated and ready
+```
+ANDROID_SDK_ROOT=~/AndroidSDK ionic cordova build android
+```
 
 ```
 ANDROID_SDK_ROOT=~/AndroidSDK ionic cordova build android --prod --release
@@ -240,3 +251,9 @@ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ../../../../../
 ```
 
 IUFormand's password
+
+Upload to Play Console
+
+Remember to check apk from Play Console:
+- Download apj after aab upload
+- adb install the download apk on emulator/device to test new release: version number + all changes
