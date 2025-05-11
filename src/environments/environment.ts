@@ -3,9 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    production: false,
+    production: true,
     na_approved: true,
-    currentVersion: "1.1.3",
+    currentVersion: "1.1.4",
     configuration: 'production',
     //baseHref is configured in angular.json
     //baseHref: "/",
