@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="1014000003" id="dk.nadanmark.app" version="1.1.4">
+<widget id="dk.nadanmark.ios.app" version="1.0.6">
     <name>NA Danmark</name>
     <description>Narcotics Anonymous Danmark</description>
     <author email="app@nadanmark.dk" href="https://nadanmark.dk/">Internetudvalget</author>
@@ -23,8 +23,7 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="GOOGLE_MAPS_ANDROID_API_KEY" value="AIzaSyDwPqrrBYFrtCIJ0IUL81tiIVwYJqUMKCw" />
-    <preference name="GOOGLE_MAPS_IOS_API_KEY" value="AIzaSyCeHYVhVc8bf3siRXIyU5dOaUfctEjzGlA" />
-    <preference name="GOOGLE_MAPS_PLAY_SERVICES_VERSION" value="17.0.0" />
+    <preference name="GOOGLE_MAPS_IOS_API_KEY" value="AIzaSyAtwUjsIB14f0aHgdLk_JYnUrI0jvczMXw" />
     <preference name="WKWebViewOnly" value="true" />
     <platform name="android">
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
@@ -35,11 +34,11 @@
         </edit-config>
         <resource-file src="resources/android/xml/network_security_config.xml" target="app/src/main/res/xml/network_security_config.xml" />
         <allow-intent href="market:*" />
-        <icon density="ldpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
-        <icon density="mdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
-        <icon density="hdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
-        <icon density="xhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
-        <icon density="xxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
+        <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
+        <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
+        <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
+        <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
+        <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
         <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
         <splash density="land-ldpi" src="resources/android/splash/drawable-land-ldpi-screen.png" />
         <splash density="land-mdpi" src="resources/android/splash/drawable-land-mdpi-screen.png" />
@@ -47,11 +46,11 @@
         <splash density="land-xhdpi" src="resources/android/splash/drawable-land-xhdpi-screen.png" />
         <splash density="land-xxhdpi" src="resources/android/splash/drawable-land-xxhdpi-screen.png" />
         <splash density="land-xxxhdpi" src="resources/android/splash/drawable-land-xxxhdpi-screen.png" />
-        <splash density="port-ldpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
-        <splash density="port-mdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
-        <splash density="port-hdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
-        <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
-        <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+        <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png" />
+        <splash density="port-mdpi" src="resources/android/splash/drawable-port-mdpi-screen.png" />
+        <splash density="port-hdpi" src="resources/android/splash/drawable-port-hdpi-screen.png" />
+        <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
+        <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
     <platform name="ios">
@@ -109,12 +108,13 @@
         <splash height="1792" src="resources/ios/splash/Default-1792h~iphone.png" width="828" />
         <splash height="828" src="resources/ios/splash/Default-Landscape-1792h~iphone.png" width="1792" />
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
-            <string>We use your location for full functionality of certain app features.</string>
+            <string>Location will be used to show NA meetings in your area, in the meeting list and on the map. Your location is only used locally on your device.</string>
         </edit-config>
     </platform>
     <plugin name="cordova-plugin-whitelist" spec="1.3.3" />
     <plugin name="cordova-plugin-device" spec="2.0.2" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
+    <plugin name="cordova-plugin-googlemaps" spec="git+ssh://git@github.com/mapsplugin/cordova-plugin-googlemaps.git#multiple_maps" />
     <allow-navigation href="http://localhost:8100" sessionid="49e806e1" />
     <allow-navigation href="http://192.168.0.102:8100" />
     <allow-navigation href="http://192.168.0.158:8100" />
