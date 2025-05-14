@@ -257,3 +257,40 @@ Upload to Play Console
 Remember to check apk from Play Console:
 - Download apj after aab upload
 - adb install the download apk on emulator/device to test new release: version number + all changes
+
+
+### iOS
+
+Replace/rename the following configuration files from android to ios:
+- config.ios.xml -> config.xml
+- package.ios.json -> package.json
+- package.lock.ios.json -> package.lock.json
+
+Remember nadanmark.dk API credentials!!!
+
+Remember to change version number in:
+- config.xml: version
+- package.json: version
+- package-lock.json: version
+- environment.unstable.ts: currentVersion
+- environment.prod.ts: currentVersion
+- environment.ts: currentVersion
+
+```
+ionic cordova build ios
+open -a Xcode platforms/ios
+```
+
+Build and test on simulator and real phone
+
+Create a new archive using Product -> Archive
+
+Validate and Distribute
+
+Login on Apple Store Connect
+
+Create a new version
+
+We are not using any special algorithm
+
+Submit to review

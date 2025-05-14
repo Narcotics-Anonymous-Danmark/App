@@ -1,6 +1,6 @@
 {
   "name": "nadanmark-app",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
@@ -1564,6 +1564,14 @@
         "@types/cordova": "^0.0.34"
       }
     },
+    "@ionic-native/geolocation": {
+      "version": "5.30.0",
+      "resolved": "https://registry.npmjs.org/@ionic-native/geolocation/-/geolocation-5.30.0.tgz",
+      "integrity": "sha512-4kvs8OCN0AxHX+564FO0/ipnpCl8rQGZhdasEHzd8DXhgMMC1CgqeX/okQFWeudXzXxiyF00+Fh6AWLlQXzn0w==",
+      "requires": {
+        "@types/cordova": "^0.0.34"
+      }
+    },
     "@ionic-native/google-maps": {
       "version": "5.5.0",
       "resolved": "https://registry.npmjs.org/@ionic-native/google-maps/-/google-maps-5.5.0.tgz",
@@ -2414,17 +2422,19 @@
       "dev": true
     },
     "android-versions": {
-      "version": "2.1.0",
-      "resolved": "https://registry.npmjs.org/android-versions/-/android-versions-2.1.0.tgz",
-      "integrity": "sha512-oCBvVs2uaL8ohQtesGs78/X7QvFDLbKgTosBRiOIBCss1a/yiakQm/ADuoG2k/AUaI0FfrsFeMl/a+GtEtjEeA==",
+      "version": "1.6.0",
+      "resolved": "https://registry.npmjs.org/android-versions/-/android-versions-1.6.0.tgz",
+      "integrity": "sha512-ojC2Ig7b/KJ6iNtR8e4bacmOsJyEkoERk3CKMIsnH7kJz5z6551NMbrVaRb7KXYavu1d74Uhml/bfcmqT3nAcg==",
+      "dev": true,
       "requires": {
-        "semver": "^7.5.2"
+        "semver": "^5.7.1"
       },
       "dependencies": {
         "semver": {
-          "version": "7.7.1",
-          "resolved": "https://registry.npmjs.org/semver/-/semver-7.7.1.tgz",
-          "integrity": "sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA=="
+          "version": "5.7.1",
+          "resolved": "https://registry.npmjs.org/semver/-/semver-5.7.1.tgz",
+          "integrity": "sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==",
+          "dev": true
         }
       }
     },
@@ -5033,6 +5043,146 @@
         }
       }
     },
+    "cordova-android": {
+      "version": "9.0.0",
+      "resolved": "https://registry.npmjs.org/cordova-android/-/cordova-android-9.0.0.tgz",
+      "integrity": "sha512-2ZEgApK4LPMYW0zh/mLAH3CabzCaKE0yxQTzA2wTf0Eo2HHTJnRtDCf9spGf3nPOkubyXS6+pvzz5QzNHpVTqQ==",
+      "dev": true,
+      "requires": {
+        "android-versions": "^1.5.0",
+        "cordova-common": "^4.0.1",
+        "execa": "^4.0.2",
+        "fs-extra": "^9.0.1",
+        "nopt": "^4.0.3",
+        "properties-parser": "^0.3.1",
+        "which": "^2.0.2"
+      },
+      "dependencies": {
+        "cross-spawn": {
+          "version": "7.0.3",
+          "resolved": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz",
+          "integrity": "sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==",
+          "dev": true,
+          "requires": {
+            "path-key": "^3.1.0",
+            "shebang-command": "^2.0.0",
+            "which": "^2.0.1"
+          }
+        },
+        "execa": {
+          "version": "4.1.0",
+          "resolved": "https://registry.npmjs.org/execa/-/execa-4.1.0.tgz",
+          "integrity": "sha512-j5W0//W7f8UxAn8hXVnwG8tLwdiUy4FJLcSupCg6maBYZDpyBvTApK7KyuI4bKj8KOh1r2YH+6ucuYtJv1bTZA==",
+          "dev": true,
+          "requires": {
+            "cross-spawn": "^7.0.0",
+            "get-stream": "^5.0.0",
+            "human-signals": "^1.1.1",
+            "is-stream": "^2.0.0",
+            "merge-stream": "^2.0.0",
+            "npm-run-path": "^4.0.0",
+            "onetime": "^5.1.0",
+            "signal-exit": "^3.0.2",
+            "strip-final-newline": "^2.0.0"
+          }
+        },
+        "fs-extra": {
+          "version": "9.0.1",
+          "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-9.0.1.tgz",
+          "integrity": "sha512-h2iAoN838FqAFJY2/qVpzFXy+EBxfVE220PalAqQLDVsFOHLJrZvut5puAbCdNv6WJk+B8ihI+k0c7JK5erwqQ==",
+          "dev": true,
+          "requires": {
+            "at-least-node": "^1.0.0",
+            "graceful-fs": "^4.2.0",
+            "jsonfile": "^6.0.1",
+            "universalify": "^1.0.0"
+          }
+        },
+        "get-stream": {
+          "version": "5.2.0",
+          "resolved": "https://registry.npmjs.org/get-stream/-/get-stream-5.2.0.tgz",
+          "integrity": "sha512-nBF+F1rAZVCu/p7rjzgA+Yb4lfYXrpl7a6VmJrU8wF9I1CKvP/QwPNZHnOlwbTkY6dvtFIzFMSyQXbLoTQPRpA==",
+          "dev": true,
+          "requires": {
+            "pump": "^3.0.0"
+          }
+        },
+        "is-stream": {
+          "version": "2.0.0",
+          "resolved": "https://registry.npmjs.org/is-stream/-/is-stream-2.0.0.tgz",
+          "integrity": "sha512-XCoy+WlUr7d1+Z8GgSuXmpuUFC9fOhRXglJMx+dwLKTkL44Cjd4W1Z5P+BQZpr+cR93aGP4S/s7Ftw6Nd/kiEw==",
+          "dev": true
+        },
+        "jsonfile": {
+          "version": "6.1.0",
+          "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-6.1.0.tgz",
+          "integrity": "sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==",
+          "dev": true,
+          "requires": {
+            "graceful-fs": "^4.1.6",
+            "universalify": "^2.0.0"
+          },
+          "dependencies": {
+            "universalify": {
+              "version": "2.0.0",
+              "resolved": "https://registry.npmjs.org/universalify/-/universalify-2.0.0.tgz",
+              "integrity": "sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==",
+              "dev": true
+            }
+          }
+        },
+        "npm-run-path": {
+          "version": "4.0.1",
+          "resolved": "https://registry.npmjs.org/npm-run-path/-/npm-run-path-4.0.1.tgz",
+          "integrity": "sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==",
+          "dev": true,
+          "requires": {
+            "path-key": "^3.0.0"
+          }
+        },
+        "path-key": {
+          "version": "3.1.1",
+          "resolved": "https://registry.npmjs.org/path-key/-/path-key-3.1.1.tgz",
+          "integrity": "sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==",
+          "dev": true
+        },
+        "shebang-command": {
+          "version": "2.0.0",
+          "resolved": "https://registry.npmjs.org/shebang-command/-/shebang-command-2.0.0.tgz",
+          "integrity": "sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==",
+          "dev": true,
+          "requires": {
+            "shebang-regex": "^3.0.0"
+          }
+        },
+        "shebang-regex": {
+          "version": "3.0.0",
+          "resolved": "https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz",
+          "integrity": "sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==",
+          "dev": true
+        },
+        "universalify": {
+          "version": "1.0.0",
+          "resolved": "https://registry.npmjs.org/universalify/-/universalify-1.0.0.tgz",
+          "integrity": "sha512-rb6X1W158d7pRQBg5gkR8uPaSfiids68LTJQYOtEUhoJUWBdaQHsuT/EUduxXYxcrt4r5PJ4fuHW1MHT6p0qug==",
+          "dev": true
+        },
+        "which": {
+          "version": "2.0.2",
+          "resolved": "https://registry.npmjs.org/which/-/which-2.0.2.tgz",
+          "integrity": "sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==",
+          "dev": true,
+          "requires": {
+            "isexe": "^2.0.0"
+          }
+        }
+      }
+    },
+    "cordova-androidx-build": {
+      "version": "1.0.4",
+      "resolved": "https://registry.npmjs.org/cordova-androidx-build/-/cordova-androidx-build-1.0.4.tgz",
+      "integrity": "sha512-ZC+NHOA4WPI8qV+YyvBba/XokF169tpc9X08fbov6zNXwczeA0w+9lqq+E5Nyp+hX4OX/r8p3q1MSPPYLDa8tA=="
+    },
     "cordova-app-hello-world": {
       "version": "5.0.0",
       "resolved": "https://registry.npmjs.org/cordova-app-hello-world/-/cordova-app-hello-world-5.0.0.tgz",
@@ -6098,9 +6248,9 @@
       "dev": true
     },
     "cordova-serve": {
-      "version": "4.0.1",
-      "resolved": "https://registry.npmjs.org/cordova-serve/-/cordova-serve-4.0.1.tgz",
-      "integrity": "sha512-YbfXaZ60yr5dkqmDFQgrU7TSKnzCqYsxHgIUzDeX8RggZb6mz1F9jMfUBbaYyaU7JjcuJ0aoRPYLvwSGQVhGkw==",
+      "version": "4.0.0",
+      "resolved": "https://registry.npmjs.org/cordova-serve/-/cordova-serve-4.0.0.tgz",
+      "integrity": "sha512-gzTLeBQzNP8aM/nG0/7sSfICfNazUgwvEU2kiDaybbYXmxwioo2v96h4tzE0XOyA64beyYwAyRYEEqWA4AMZjw==",
       "requires": {
         "chalk": "^3.0.0",
         "compression": "^1.7.4",
@@ -6110,10 +6260,11 @@
       },
       "dependencies": {
         "ansi-styles": {
-          "version": "4.3.0",
-          "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-4.3.0.tgz",
-          "integrity": "sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==",
+          "version": "4.2.1",
+          "resolved": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-4.2.1.tgz",
+          "integrity": "sha512-9VGjrMsG1vePxcSweQsN20KY/c4zN0h9fLjqAbwbPfahM3t+NL+M9HC8xeXG2I8pX5NoamTGNuomEUFI7fcUjA==",
           "requires": {
+            "@types/color-name": "^1.1.1",
             "color-convert": "^2.0.1"
           }
         },
@@ -9282,7 +9433,8 @@
       },
       "dependencies": {
         "kind-of": {
-          "versioversioned": "https://registry.npmjs.org/kind-of/-/kind-of-3.2.2.tgz",
+          "version": "3.2.2",
+          "resolved": "https://registry.npmjs.org/kind-of/-/kind-of-3.2.2.tgz",
           "integrity": "sha1-MeohpzS6ubuw8yRm2JOupR5KPGQ=",
           "dev": true,
           "requires": {
@@ -11275,11 +11427,6 @@
           "dev": true
         }
       }
-    },
-    "node-properties-parser": {
-      "version": "0.0.2",
-      "resolved": "https://registry.npmjs.org/node-properties-parser/-/node-properties-parser-0.0.2.tgz",
-      "integrity": "sha512-iBTwiB0Nm1TAGfjsV3BR0s1F+YTdqlJ/q7539Kr4xQvLo9ne2SSiApY3fv9hRROB2ZLlbfd9Z1YnBVs0IbcDkA=="
     },
     "node-releases": {
       "version": "1.1.60",
@@ -14649,9 +14796,13 @@
       }
     },
     "properties-parser": {
-      "version": "0.5.1",
-      "resolved": "https://registry.npmjs.org/properties-parser/-/properties-parser-0.5.1.tgz",
-      "integrity": "sha512-wEplGX6Rrc7Eck7Jrh+gjq053HsXC/pppUL45Ac87YIFHIKtOxf8j1I28+p45xONZsK0pYGGmsdMLr2TLwhM+g=="
+      "version": "0.3.1",
+      "resolved": "https://registry.npmjs.org/properties-parser/-/properties-parser-0.3.1.tgz",
+      "integrity": "sha1-ExbpU5/7/ZOEXjabIRAiq9R4dxo=",
+      "dev": true,
+      "requires": {
+        "string.prototype.codepointat": "^0.2.0"
+      }
     },
     "protoduck": {
       "version": "5.0.1",
@@ -16799,6 +16950,12 @@
           }
         }
       }
+    },
+    "string.prototype.codepointat": {
+      "version": "0.2.1",
+      "resolved": "https://registry.npmjs.org/string.prototype.codepointat/-/string.prototype.codepointat-0.2.1.tgz",
+      "integrity": "sha512-2cBVCj6I4IOvEnjgO/hWqXjqBGsY+zwPmHl12Srk9IXSZ56Jwwmy+66XO5Iut/oQVR7t5ihYdLB0GMa4alEUcg==",
+      "dev": true
     },
     "string.prototype.trimend": {
       "version": "1.0.1",
