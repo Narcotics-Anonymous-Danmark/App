@@ -105,7 +105,8 @@
       "cordova-plugin-insomnia": {},
       "cordova-plugin-app-version": {},
       "cordova-androidx-build": {},
-      "cordova-plugin-androidx-adapter": {}
+      "cordova-plugin-androidx-adapter": {},
+			"cordova-plugin-local-notification": {}
     },
     "platforms": [
       "ios",
