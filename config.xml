@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="dk.nadanmark.ios.app" version="1.0.6">
+<widget android-versionCode="1014000003" id="dk.nadanmark.app" version="1.1.4">
     <name>NA Danmark</name>
     <description>Narcotics Anonymous Danmark</description>
     <author email="app@nadanmark.dk" href="https://nadanmark.dk/">Internetudvalget</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.0.115:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -24,6 +24,7 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="GOOGLE_MAPS_ANDROID_API_KEY" value="AIzaSyDwPqrrBYFrtCIJ0IUL81tiIVwYJqUMKCw" />
     <preference name="GOOGLE_MAPS_IOS_API_KEY" value="AIzaSyAtwUjsIB14f0aHgdLk_JYnUrI0jvczMXw" />
+    <preference name="GOOGLE_MAPS_PLAY_SERVICES_VERSION" value="17.0.0" />
     <preference name="WKWebViewOnly" value="true" />
     <platform name="android">
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
@@ -119,4 +120,5 @@
     <allow-navigation href="http://192.168.0.102:8100" />
     <allow-navigation href="http://192.168.0.158:8100" />
     <allow-navigation href="http://192.168.0.38:8100" />
+    <allow-navigation href="http://192.168.0.115:8100" />
 </widget>
