@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { CleantimeService } from 'src/app/providers/cleantime.service';
 import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
+import 'moment-timezone';
 
 @Component({
     selector: 'app-cleantime-counter',
@@ -51,30 +53,28 @@ export class CleantimeCounterPage implements OnInit {
     delete = "";
 
     constructor(
+
         private storage: Storage,
+        private cleantime: CleantimeService,
         private translate: TranslateService,
         private alertController: AlertController
     ) { }
 
     ngOnInit() {
         this.maxDate = moment().tz(moment.tz.guess()).toISOString(true);
+        this.tag = 'none';
+        this.years = 'YEARS'
+        this.months = 'MONTHS'
+        this.days = 'DAYS'
+
+        this.cleantime.getProfiles().then(existingProfiles => {
+            this.profiles = existingProfiles.length ? existingProfiles : [this.createDefaultProfile()];
+            this.wait = false;
+        });
+        
+        this.getCleanTime();
+
         this.storage.ready().then(() => {
-            this.storage.get('cleanDateProfiles')
-                .then(value => {
-                    if (value) {
-                        this.profiles = value;
-                    } else {
-                        this.ensureOneProfile();
-                    }
-
-                    this.tag = 'none';
-                    this.years = 'YEARS'
-                    this.months = 'MONTHS'
-                    this.days = 'DAYS'
-                    this.wait = false;
-                    this.getCleanTime();
-                });
-
             this.storage.get('activeProfile')
                 .then(value => {
                     if (value) {
@@ -109,12 +109,16 @@ export class CleantimeCounterPage implements OnInit {
 
     ensureOneProfile() {
         if (this.profiles.length < 1){
-            this.profiles.push({
-                name: "Profil 1",
-                cleandate: moment(moment().format("YYYY-MM-DD"), "YYYY-MM-DD").tz(moment.tz.guess()).toISOString(true)
-            });
+            this.profiles.push(this.createDefaultProfile());
             this.activeProfile = "0";
         }
+    }
+
+    createDefaultProfile() {
+        return {
+            name: "Profil 1",
+            cleandate: moment(moment().format("YYYY-MM-DD"), "YYYY-MM-DD").tz(moment.tz.guess()).toISOString(true)
+        };
     }
 
     async addProfile() {
@@ -215,16 +219,14 @@ export class CleantimeCounterPage implements OnInit {
         if (!this.wait) {
             this.storage.set('cleanDateProfiles', this.profiles);
             this.storage.set('activeProfile', this.activeProfile);
-            let cleanDayMoment = moment(this.profiles[parseInt(this.activeProfile)].cleandate);
+
             let todayMoment = moment(moment().format("YYYY-MM-DD"), "YYYY-MM-DD").tz(moment.tz.guess());
 
-            let cleanTimeInDays = Math.floor(todayMoment.diff(cleanDayMoment, 'days', true));
-            let cleanTimeInMonthsPrecise = todayMoment.diff(cleanDayMoment, 'months', true);
-            let cleanTimeInYearsPrecise = todayMoment.diff(cleanDayMoment, 'years', true);
-            let cleanTimeInYears = Math.floor(cleanTimeInYearsPrecise);
+            let cleanDay = this.cleantime.getProfileCleanDay(this.profiles[parseInt(this.activeProfile)]);
+            let [cleanTimeInDays, cleanTimeInMonthsPrecise, cleanTimeInYearsPrecise, cleanTimeInYears] = this.cleantime.getCleanTimes(cleanDay);
 
             // View 1 - days / months/ years
-            let viewDate1 = moment(cleanDayMoment);
+            let viewDate1 = moment(cleanDay);
             this.cleanTimeInYears1 = Math.floor(todayMoment.diff(viewDate1, 'years', true));
             viewDate1.add(this.cleanTimeInYears1, "years");
             this.cleanTimeInMonths1 = Math.floor(todayMoment.diff(viewDate1, 'months', true));
@@ -232,7 +234,7 @@ export class CleantimeCounterPage implements OnInit {
             this.cleanTimeInDays1 = Math.floor(todayMoment.diff(viewDate1, 'days', true));
 
             // View 2 - days / months
-            let viewDate2 = moment(cleanDayMoment);
+            let viewDate2 = moment(cleanDay);
             this.cleanTimeInMonths2 = Math.floor(todayMoment.diff(viewDate2, 'months', true));
             viewDate2.add(this.cleanTimeInMonths2, "months");
             this.cleanTimeInDays2 = Math.floor(todayMoment.diff(viewDate2, 'days', true));
