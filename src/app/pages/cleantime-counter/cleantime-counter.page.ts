@@ -223,7 +223,8 @@ export class CleantimeCounterPage implements OnInit {
             let todayMoment = moment(moment().format("YYYY-MM-DD"), "YYYY-MM-DD").tz(moment.tz.guess());
 
             let cleanDay = this.cleantime.getProfileCleanDay(this.profiles[parseInt(this.activeProfile)]);
-            let [cleanTimeInDays, cleanTimeInMonthsPrecise, cleanTimeInYearsPrecise, cleanTimeInYears] = this.cleantime.getCleanTimes(cleanDay);
+            let cleanTimes = this.cleantime.getCleanTimes(cleanDay);
+            let [cleanTimeInDays,,,] = cleanTimes;
 
             // View 1 - days / months/ years
             let viewDate1 = moment(cleanDay);
@@ -243,7 +244,7 @@ export class CleantimeCounterPage implements OnInit {
             this.cleanTimeInDays3 = cleanTimeInDays;
 
 
-            this.cleanTimeTag(cleanTimeInDays, cleanTimeInMonthsPrecise, cleanTimeInYears, cleanTimeInYearsPrecise);
+            this.cleanTimeTag(cleanTimes);
             if(cleanTimeInDays === 1){
                 this.days = 'DAY';
             }
@@ -256,61 +257,54 @@ export class CleantimeCounterPage implements OnInit {
         }
     }
 
-    cleanTimeTag(cleanTimeInDays, cleanTimeInMonthsPrecise, cleanTimeInYears, cleanTimeInYearsPrecise) {
-        // One day
-        if (cleanTimeInDays === 1) {
-            this.tagTime = '1';
-            this.tag = 'DAYCLEAN';
-            this.keytagImage = './assets/keytags/da/1-day.png';
+    cleanTimeTag(cleanTimes) {
+        let [cleanTimeInDays, cleanTimeInMonthsPrecise, cleanTimeInYearsPrecise, cleanTimeInYears] = cleanTimes;
+        let anniversaryName = "";
+        let anniversariesDef = this.cleantime.getAnniversaryDefinitions();
+        let properties = {
+            "cleanTimeInDays": cleanTimeInDays,
+            "cleanTimeInMonthsPrecise": cleanTimeInMonthsPrecise,
+            "cleanTimeInYearsPrecise": cleanTimeInYearsPrecise,
+            "cleanTimeInYears": cleanTimeInYears
+        };
+        Object.keys(anniversariesDef).forEach(name => {
+            let anniversaryDef = anniversariesDef[name];
+            let anniversaryValid = Object.keys(properties).every(key => {
+                let value = properties[key];
+                if(anniversaryDef.hasOwnProperty(key)){
+                    let propertyValue = anniversaryDef[key];
+                    if(typeof propertyValue === "function"){
+                        const func: Function = propertyValue;
+                        let result = func(value, cleanTimes);
+                        if(!result){
+                            return false;
+                        }
+                    } else if(typeof propertyValue === "number"){
+                        if(value !== propertyValue){
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            });
+            if(!anniversaryValid){
+                return true;
+            }
+            anniversaryName = name;
+            return false;
+        });
 
-            // 30 days
-        } else if (cleanTimeInDays === 30) {
-            this.tagTime = '30';
-            this.tag = 'DAYSCLEAN';
-            this.keytagImage = './assets/keytags/da/30-days.png';
-
-            // 60 days
-        } else if (cleanTimeInDays === 60) {
-            this.tagTime = '60';
-            this.tag = 'DAYSCLEAN';
-            this.keytagImage = './assets/keytags/da/60-days.png';
-
-            // 90 days
-        } else if (cleanTimeInDays === 90) {
-            this.tagTime = '90';
-            this.tag = 'DAYSCLEAN';
-            this.keytagImage = './assets/keytags/da/90-days.png';
-
-            // 6 months
-        } else if (cleanTimeInMonthsPrecise === 6) {
-            this.tagTime = '6';
-            this.tag = 'MONTHSCLEAN';
-            this.keytagImage = './assets/keytags/da/6-months.png';
-
-            // 9 months
-        } else if (cleanTimeInMonthsPrecise === 9) {
-            this.tagTime = '9';
-            this.tag = 'MONTHSCLEAN';
-            this.keytagImage = './assets/keytags/da/9-months.png';
-
-            // 1 year
-        } else if (cleanTimeInYearsPrecise === 1) {
-            this.tagTime = '1';
-            this.tag = 'YEARCLEAN';
-            this.keytagImage = './assets/keytags/da/1-year.png';
-
-            // 18 months
-        } else if (cleanTimeInMonthsPrecise === 18) {
-            this.tagTime = '18';
-            this.tag = 'MONTHSCLEAN';
-            this.keytagImage = './assets/keytags/da/18-months.png';
-
-            // Multiple years
-        } else if (cleanTimeInYearsPrecise === cleanTimeInYears && cleanTimeInYears > 1) {
-            this.tagTime = cleanTimeInYears;
-            this.tag = 'YEARSCLEAN';
-            this.keytagImage = './assets/keytags/da/x-years.png';
-
+        if(anniversaryName){
+            let anniversaryDef = anniversariesDef[anniversaryName];
+            this.tag = anniversaryDef["tag"];
+            this.keytagImage = "./assets/keytags/da/" + anniversaryName + ".png";
+            let tagTime = anniversaryDef["tagTime"];
+            if(typeof tagTime === "function"){
+                const func: Function = tagTime;
+                this.tagTime = tagTime(cleanTimes);
+            } else if(typeof tagTime === "number"){
+                this.tagTime = tagTime;
+            }
         } else {
             // Not a clean time anniversary today :(
             this.tag = 'none';

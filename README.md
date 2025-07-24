@@ -26,7 +26,7 @@ sudo apt-get install curl
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 source ~/.bashrc
 nvm install 10.13.0
-nvm use v10.13.0 
+nvm use v10.13.0
 nvm alias default 10.13.0
 ```
 

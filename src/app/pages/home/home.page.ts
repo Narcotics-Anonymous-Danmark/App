@@ -16,19 +16,18 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
 
-    cordova.plugins.notification.local.schedule({
-        title: 'Test',
-        text: 'This is a very important test',
-        trigger: { at: new Date(2025, 5, 19, 22, 10, 0) }
-    });
-
     this.cleantime.getProfiles().then(profiles => {
       profiles.forEach(profile => {
         let cleanDay = this.cleantime.getProfileCleanDay(profile);
-        let [cleanTimeInDays,,,] = this.cleantime.getCleanTimes(cleanDay);
-        console.log("Profile " + profile["name"] + " clean days: " + cleanTimeInDays);
+        let nextAnniversaries = this.cleantime.getNextAnniversaries(cleanDay, {years: 2});
+        // TODO: add notification
+        // cordova.plugins.notification.local.schedule({
+        //   title: 'Test',
+        //   text: 'This is a very important test',
+        //   trigger: { at: new Date(2025, 5, 19, 22, 10, 0) }
+        // });
       });
-    })
+    });
   }
 
 }
