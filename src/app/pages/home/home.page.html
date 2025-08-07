@@ -10,15 +10,110 @@
 </ion-header>
 
 <ion-content>
-    <div class="ion-text-center" style="padding:0 20px;">
-        <h1>{{'HOME_TITLE' | translate}}<br />{{'HOME_MESSAGE' | translate}}</h1>
+    <div class="home-text-header ion-text-center" style="padding:0 20px;">
+        <h5>{{'HOME_TITLE' | translate}}<br />{{'HOME_MESSAGE' | translate}}</h5>
     </div>
-    <br>
-    <ion-menu-toggle auto-hide="false">
-        <ion-img class="center" src="./assets/img/NALogo.svg"></ion-img>
-    </ion-menu-toggle>
-    <br>
-    <div class="ion-text-center" style="padding:0 20px;">
-        <h4>{{'HOME_MESSAGE_2' | translate}}<br />{{'HOME_MESSAGE_3' | translate}}</h4>
-    </div>
+
+    <ion-slides pager="true" style="--bullet-background:#000000;">
+        <ion-slide>
+            <ion-card style="width:100%;text-align:left;" [routerDirection]="'root'" [routerLink]="'/cleantime-counter'">
+                <ion-card-header>
+                    <ion-card-title>Cleantime</ion-card-title>
+                    <ion-card-subtitle>Profile 1</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                    <div style="padding-bottom: 10px;">
+                        <p style="vertical-align: middle;">
+                            <ion-icon name="time-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                            2 år, 9 måneder, 3 dage
+                        </p>
+                        <p style="vertical-align: middle;">
+                            <ion-icon name="calendar-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                            25 Maj 2023
+                        </p>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+        </ion-slide>
+        <ion-slide>
+            <ion-card style="width:100%;text-align:left;" [routerDirection]="'root'" [routerLink]="'/cleantime-counter'">
+                <ion-card-header>
+                    <ion-card-title>Cleantime</ion-card-title>
+                    <ion-card-subtitle>Profile 1</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                    <div style="padding-bottom: 10px;">
+                        <p style="vertical-align: middle;">
+                            <ion-icon name="time-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                            2 år, 9 måneder, 3 dage
+                        </p>
+                        <p style="vertical-align: middle;">
+                            <ion-icon name="calendar-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                            25 Maj 2023
+                        </p>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+        </ion-slide>
+        <ion-slide>
+            <ion-card style="width:100%;text-align:left;" [routerDirection]="'root'" [routerLink]="'/cleantime-counter'">
+                <ion-card-header>
+                    <ion-card-title>Cleantime</ion-card-title>
+                    <ion-card-subtitle>Profile 1</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                    <div style="padding-bottom: 10px;">
+                        <p style="vertical-align: middle;">
+                            <ion-icon name="time-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                            2 år, 9 måneder, 3 dage
+                        </p>
+                        <p style="vertical-align: middle;">
+                            <ion-icon name="calendar-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                            25 Maj 2023
+                        </p>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+        </ion-slide>
+    </ion-slides>
+
+    <ion-card [routerDirection]="'root'" [routerLink]="'/jft'">
+        <ion-card-header>
+            <ion-card-title>Bare for i dag</ion-card-title>
+            <ion-card-subtitle>7 August</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            <div style="padding-bottom: 5px;">
+                <div style="max-height:60px; overflow:hidden;mask-image: linear-gradient(to bottom, black 50%, transparent 100%);">
+                    Det er let at være taknemmelig, når det hele går glat. Hvis vi får lønforhøjelse, er vi taknemmelige. Hvis vi bliver gift, er vi taknemmelige. Hvis en eller anden overrasker os med en dejlig gave eller en tjeneste, vi ikke har bedt om, er vi taknemmelige. Men hvis vi bliver fyret, skilt eller skuffet, ryger taknemmeligheden lige ud ad vinduet. Vi ser os selv blive besatte af de ting, der er gået galt, selv hvis alt andet er i den skønneste orden. 
+                    Det er i disse situationer, at vi kan bruge en taknemmelighedsliste. Vi sætter os ned med papir og blyant og laver en liste over de mennesker, vi er taknemmelige for. Vi har alle sammen mennesker, som har støttet os gennem livets omvæltninger. Vi laver en liste over de åndelige egenskaber, vi har opnået, for vi ved, at vi aldrig ville kunne klare os igennem vores nuværende situation uden dem. Sidst, men ikke mindst, laver vi en liste over vores bedring i sig selv. Alt, hvad vi er taknemmelige over, kommer på listen. 
+                    Vi vil helt sikkert opdage, at vi bogstaveligt talt har hundredvis af ting i vores liv, vi kan være taknemmelige over. Selv de af os, som lider af en sygdom, eller som har mistet alle vores ejendele, vil kunne finde velsignelser af åndelig art at være taknemmelige for. En åndelig opvågnen er den mest værdifulde gave, en addict kan få.
+                </div>
+            </div>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card [routerDirection]="'root'" [routerLink]="'/events'">
+        <ion-card-header>
+            <ion-card-title>Arrangementer</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-item href="https://google.com" class="ion-no-padding" lines="none">
+                <ion-thumbnail slot="start">
+                    <img src="https://www.nadanmark.dk/wp-content/uploads/2024/12/462645498_986510246833213_2768121663887640601_n-150x150.jpg">
+                </ion-thumbnail>
+                <ion-label>
+                    <h3>THE IMPOSSIBLE DREAM 2 - NEW YORK CITY</h3>
+                    <p style="vertical-align: middle;">
+                        <ion-icon name="calendar-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                        29.aug. 2025 12:00
+                    </p>
+                    <p style="vertical-align: middle;">
+                        <ion-icon name="location-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                        New York
+                    </p>
+                </ion-label>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
 </ion-content>

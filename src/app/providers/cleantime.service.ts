@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import 'moment-timezone';
 
@@ -8,7 +9,10 @@ import 'moment-timezone';
 })
 export class CleantimeService {
 
-  constructor(private storage: Storage) { }
+  constructor(
+    private storage: Storage,
+    private translate: TranslateService
+  ) { }
 
   async getProfiles() {
     let profiles = [];
@@ -139,7 +143,8 @@ export class CleantimeService {
         if(anniversaryDate >= todayMoment && anniversaryDate <= maxDateMoment){
           nextAnniversaries.push({
             name: key,
-            date: anniversaryDate.toDate()
+            date: anniversaryDate.toDate(),
+            tagTime: anniversaryDef.tagTime
           });
         }
       } else if(typeof nextDateArg === "function"){
@@ -157,13 +162,21 @@ export class CleantimeService {
             {
               nextAnniversaries.push({
                 name: key,
-                date: anniversaryDate.toDate()
+                date: anniversaryDate.toDate(),
+                tagTime: years
               });
             }
           }
-        } while(anniversaryDate >= todayMoment && anniversaryDate <= maxDateMoment);
+        } while(anniversaryDate <= maxDateMoment);
       }
     });
     return nextAnniversaries;
+  }
+
+  async getAnniversaryString(anniversary){
+    let anniversariesDefs = this.getAnniversaryDefinitions();
+    let anniversariesDef = anniversariesDefs[anniversary.name];
+    let anniversaryTagText = await this.translate.get(anniversariesDef["tag"]).toPromise();
+    return anniversary.tagTime + " " + anniversaryTagText;
   }
 }

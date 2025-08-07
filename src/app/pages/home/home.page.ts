@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CleantimeService } from 'src/app/providers/cleantime.service';
-
-declare var cordova: any;
+import { NotificationService } from 'src/app/providers/notification.service';
 
 @Component({
   selector: 'app-home',
@@ -11,23 +10,12 @@ declare var cordova: any;
 export class HomePage implements OnInit {
 
   constructor(
-    private cleantime: CleantimeService
+    private cleantime: CleantimeService,
+    private notification: NotificationService,
   ) { }
 
   ngOnInit() {
-
-    this.cleantime.getProfiles().then(profiles => {
-      profiles.forEach(profile => {
-        let cleanDay = this.cleantime.getProfileCleanDay(profile);
-        let nextAnniversaries = this.cleantime.getNextAnniversaries(cleanDay, {years: 2});
-        // TODO: add notification
-        // cordova.plugins.notification.local.schedule({
-        //   title: 'Test',
-        //   text: 'This is a very important test',
-        //   trigger: { at: new Date(2025, 5, 19, 22, 10, 0) }
-        // });
-      });
-    });
+    this.notification.ensureCleandayNotifications();
   }
 
 }
