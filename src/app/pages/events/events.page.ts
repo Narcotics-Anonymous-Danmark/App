@@ -14,7 +14,6 @@ export class EventsPage implements OnInit {
     events: any;
 
     constructor(
-        private translate: TranslateService,
         private insomnia: Insomnia,
         private theInAppBrowser: InAppBrowser,
         private eventProvider: EventService,

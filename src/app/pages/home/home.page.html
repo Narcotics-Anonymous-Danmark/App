@@ -10,15 +10,75 @@
 </ion-header>
 
 <ion-content>
-    <div class="ion-text-center" style="padding:0 20px;">
-        <h1>{{'HOME_TITLE' | translate}}<br />{{'HOME_MESSAGE' | translate}}</h1>
+    <div class="home-text-header ion-text-center" style="padding:0 20px;">
+        <h5>{{'HOME_TITLE' | translate}}<br />{{'HOME_MESSAGE' | translate}}</h5>
     </div>
-    <br>
-    <ion-menu-toggle auto-hide="false">
-        <ion-img class="center" src="./assets/img/NALogo.svg"></ion-img>
-    </ion-menu-toggle>
-    <br>
-    <div class="ion-text-center" style="padding:0 20px;">
-        <h4>{{'HOME_MESSAGE_2' | translate}}<br />{{'HOME_MESSAGE_3' | translate}}</h4>
-    </div>
+
+    <ion-slides pager="true" style="--bullet-background:#000000;">
+        <ion-slide *ngFor="let cleantime of cleantimes; let i = index">
+            <ion-card style="width:100%;text-align:left;margin-bottom:0;" [routerDirection]="'root'" [routerLink]="'/cleantime-counter'">
+                <ion-card-header>
+                    <ion-card-title>{{'CLEANTIME' | translate}}</ion-card-title>
+                    <ion-card-subtitle>{{ cleantime.name }}</ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                    <div style="padding-bottom: 10px;">
+                        <p style="vertical-align: middle;">
+                            <ion-icon name="time-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                            {{ cleantime.years }} {{ cleantime.yearsLabel | translate}}, {{ cleantime.months }} {{ cleantime.monthsLabel | translate}}, {{ cleantime.days }} {{ cleantime.daysLabel | translate}}
+                        </p>
+                        <p style="vertical-align: middle;">
+                            <ion-icon name="calendar-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                            {{ cleantime.date | date:"dd. MMMM yyyy" }}
+                        </p>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+        </ion-slide>
+    </ion-slides>
+
+    <ion-card [routerDirection]="'root'" [routerLink]="'/jft'" *ngIf="jft.todayJft">
+        <ion-card-header style="margin-bottom:0;padding-bottom:0;">
+            <ion-card-title style="margin-bottom:0;padding-bottom:0;">{{'JFT' | translate}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <div style="padding-bottom: 5px;">
+                <div style="max-height:120px; overflow:hidden;mask-image: linear-gradient(to bottom, black 50%, transparent 100%);">
+                    <p style="font-size:12px; font-weight:bold;text-align:right;">{{ jft.todayJft.day }}. {{ jft.todayJft.month }}</p>
+                    <p style="margin-top:10px;font-size:14px; font-weight:bold;text-align:center;">{{ jft.todayJft.title }}</p>
+                    <p style="margin-top:10px;font-size:12px; font-style:italic; text-align: center;">{{ jft.todayJft.quote }}</p>
+                    <p style="margin-top:5px;font-size:10px;font-weight:bold;text-align:right;">{{ jft.todayJft.source }}</p>
+                    <p style="margin-top:20px;font-size:10px;">{{ jft.todayJft.text }}</p>
+                </div>
+            </div>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-slides pager="true" style="--bullet-background:#000000;margin-bottom:10px;">
+        <ion-slide *ngFor="let event of events; let i = index">
+            <ion-card style="width:100%;text-align:left;margin-top:0;margin-bottom:0;" [routerDirection]="'root'" [routerLink]="'/events'">
+                <ion-card-header style="margin-bottom:0;padding-bottom:0;">
+                    <ion-card-title style="margin-bottom:0;padding-bottom:0;">{{'EVENTS' | translate}}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-item class="ion-no-padding" lines="none" style="padding-bottom:10px;">
+                        <ion-thumbnail slot="start">
+                            <img src="{{ event.thumbnail ? event.thumbnail : './assets/img/na-logo-placeholder.png'}}">
+                        </ion-thumbnail>
+                        <ion-label>
+                            <h3>{{ event.event_name }}</h3>
+                            <p style="vertical-align: middle;">
+                                <ion-icon name="calendar-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                                {{ event.event_start_date | date:"dd. MMM yyyy hh:mm" }}
+                            </p>
+                            <p style="vertical-align: middle;">
+                                <ion-icon name="location-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
+                                {{ event.location_town }}
+                            </p>
+                        </ion-label>
+                    </ion-item>
+                </ion-card-content>
+            </ion-card>
+        </ion-slide>
+    </ion-slides>
 </ion-content>

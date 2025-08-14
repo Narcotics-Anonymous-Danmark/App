@@ -14,7 +14,7 @@
         <ion-item-sliding *ngFor="let event of events" #slidingItem>
             <ion-item href="{{ event.url }}">
                 <ion-thumbnail slot="start">
-                    <img src="{{ event.thumbnail }}">
+                    <img src="{{ event.thumbnail ? event.thumbnail : './assets/img/na-logo-placeholder.png'}}">
                 </ion-thumbnail>
                 <ion-label>
                     <h3>{{ event.event_name }}</h3>
