@@ -227,18 +227,10 @@ export class CleantimeCounterPage implements OnInit {
             let [cleanTimeInDays,,,] = cleanTimes;
 
             // View 1 - days / months/ years
-            let viewDate1 = moment(cleanDay);
-            this.cleanTimeInYears1 = Math.floor(todayMoment.diff(viewDate1, 'years', true));
-            viewDate1.add(this.cleanTimeInYears1, "years");
-            this.cleanTimeInMonths1 = Math.floor(todayMoment.diff(viewDate1, 'months', true));
-            viewDate1.add(this.cleanTimeInMonths1, "months");
-            this.cleanTimeInDays1 = Math.floor(todayMoment.diff(viewDate1, 'days', true));
+            [this.cleanTimeInYears1, this.cleanTimeInMonths1, this.cleanTimeInDays1] = this.cleantime.getCleanYearsMonthsDays(cleanDay);
 
             // View 2 - days / months
-            let viewDate2 = moment(cleanDay);
-            this.cleanTimeInMonths2 = Math.floor(todayMoment.diff(viewDate2, 'months', true));
-            viewDate2.add(this.cleanTimeInMonths2, "months");
-            this.cleanTimeInDays2 = Math.floor(todayMoment.diff(viewDate2, 'days', true));
+            [this.cleanTimeInMonths2, this.cleanTimeInDays2] = this.cleantime.getCleanMonthsDays(cleanDay);
 
             // View 3 - days
             this.cleanTimeInDays3 = cleanTimeInDays;

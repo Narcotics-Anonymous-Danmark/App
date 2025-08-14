@@ -81,6 +81,7 @@
     "WEEKDAYS"          : "Weekdays",
     "mapsearch.search"  : "Search",
 
+    "CLEANTIME": "Cleantime",
     "DATETIME": "Cleantime counter",
     "ENTERCLEANDATE": "First clean day",
     "CLEANTIMEINDAYS": "Clean days",

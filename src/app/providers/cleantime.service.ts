@@ -43,6 +43,26 @@ export class CleantimeService {
     return [cleanTimeInDays, cleanTimeInMonthsPrecise, cleanTimeInYearsPrecise, cleanTimeInYears];
   }
 
+  getCleanYearsMonthsDays(cleanDay, fromDate = new Date){
+    let fromDateMoment = moment(moment(fromDate).format("YYYY-MM-DD"), "YYYY-MM-DD").tz(moment.tz.guess());
+    let viewDate = moment(cleanDay);
+    const cleanTimeInYears = Math.floor(fromDateMoment.diff(viewDate, 'years', true));
+    viewDate.add(cleanTimeInYears, "years");
+    const cleanTimeInMonths = Math.floor(fromDateMoment.diff(viewDate, 'months', true));
+    viewDate.add(cleanTimeInMonths, "months");
+    const cleanTimeInDays = Math.floor(fromDateMoment.diff(viewDate, 'days', true));
+    return [cleanTimeInYears, cleanTimeInMonths, cleanTimeInDays];
+  }
+
+  getCleanMonthsDays(cleanDay, fromDate = new Date){
+    let fromDateMoment = moment(moment(fromDate).format("YYYY-MM-DD"), "YYYY-MM-DD").tz(moment.tz.guess());
+    let viewDate = moment(cleanDay);
+    const cleanTimeInMonths = Math.floor(fromDateMoment.diff(viewDate, 'months', true));
+    viewDate.add(cleanTimeInMonths, "months");
+    const cleanTimeInDays = Math.floor(fromDateMoment.diff(viewDate, 'days', true));
+    return [cleanTimeInMonths, cleanTimeInDays];
+  }
+
   getAnniversaryDefinitions(){
     return {
         "1-day": {
