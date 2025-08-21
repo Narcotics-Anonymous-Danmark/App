@@ -6,7 +6,7 @@
 
 1. Download the master.zip file:
 
-https://github.com/bmlt-enabled/BMLTSearch3/archive/master.zip
+https://github.com/Narcotics-Anonymous-Danmark/App/archive/master.zip
 
 or clone this project:
 
@@ -20,20 +20,22 @@ git clone https://github.com/Narcotics-Anonymous-Danmark/App.git
 sudo apt-get install curl
 ```
 
-3. Install nvm (v0.39.3) so we can use node.js (v10.13.0) and npm (v6.4.1)
+3. Install nvm (v0.39.3) so we can use node.js (v16.13.0) and npm (v8.1.0)
 
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 source ~/.bashrc
-nvm install 10.13.0
-nvm use v10.13.0
-nvm alias default 10.13.0
+nvm install 16.13.0
+nvm use v16.13.0
+nvm alias default 16.13.0
+npm install npm@8.1.0 -g
 ```
 
-4. Install Ionic Framework
+4. Install Ionic Framework & Cordova
 
 ```
 npm install -g ionic@4.0.0
+npm install -g cordova@12.0.0
 ```
 
 5. Install package.json dependencies
@@ -45,33 +47,7 @@ npm install
 6. Install Java
 
 ```
-sudo apt-get install openjdk-8-jdk
-```
-
-#### Browser platform
-
-1. Add platform (browser)
-
-```
-ionic cordova platform add browser
-```
-
-2. Add browsersync for auto-refresh during development
-
-```
-ionic cordova plugin add cordova-plugin-browsersync
-```
-
-3. Install Cordova/PhoneGap plugins (Cordova Plugins package.json branch dependencies)
-
-```
-ionic cordova build browser
-```
-
-4. Run the app using the browser
-
-```
-ionic cordova run browser -l
+sudo apt-get install openjdk-17-jdk
 ```
 
 #### Android platform
@@ -79,7 +55,7 @@ ionic cordova run browser -l
 1. Add platform (android)
 
 ```
-ionic cordova platform add android
+ionic cordova platform add android@13.0.0
 ```
 
 2. Add browsersync for auto-refresh during development
@@ -92,11 +68,12 @@ ionic cordova plugin add cordova-plugin-browsersync
 
 ```
 sudo snap install androidsdk
-androidsdk "build-tools;28.0.0"
-androidsdk "platforms;android-28"
+androidsdk "build-tools;34.0.0"
+androidsdk "platforms;android-35"
 androidsdk "system-images;android-28;google_apis_playstore;x86"
 ~/AndroidSDK/tools/bin/avdmanager create avd -n test -k "system-images;android-28;google_apis_playstore;x86"
-sudo apt install gradle
+Download gradle 8.14.3 from: https://gradle.org/next-steps/?version=8.14.3&format=bin
+sudo ln -s ~/Downloads/gradle-8.14.3/bin/gradle /usr/bin/gradle
 sudo apt install adb
 sudo apt install google-android-emulator-installer
 ```
@@ -148,10 +125,10 @@ We also need `properties-parser@0.5.1`
 npm install properties-parser@0.5.1
 ```
 
-Add `mapsplugin` plugin:
+Add `cordova-plugin-googlemaps-2` plugin:
 
 ```
-ionic cordova plugin add "git+ssh://git@github.com:mapsplugin/cordova-plugin-googlemaps.git#multiple_maps"
+ionic cordova plugin add https://github.com/GitToTheHub/cordova-plugin-googlemaps-2
 ```
 
 ## Android Gradle issue

@@ -15,6 +15,7 @@ export class NotificationService {
   ) { }
 
   async ensureCleandayNotifications() {
+    if(!cordova.plugins.notification) return;
     cordova.plugins.notification.local.cancelAll();
     let profiles = await this.cleantime.getProfiles();
     let id = 0;
