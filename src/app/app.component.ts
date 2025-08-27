@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
-import { environment } from '../environments/environment';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,8 +13,6 @@ import { Router } from '@angular/router';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-
-    public app_version = environment.currentVersion;
 
     public appPages = [
         {
@@ -81,6 +79,7 @@ export class AppComponent implements OnInit {
 
     constructor(
         private platform: Platform,
+        private splashScreen: SplashScreen,
         private statusBar: StatusBar,
         private translate: TranslateService,
         private storage: Storage,
@@ -101,6 +100,7 @@ export class AppComponent implements OnInit {
     initializeApp() {
         this.platform.ready().then(() => {
             this.statusBar.styleDefault();
+            this.splashScreen.hide();
             this.platform.backButton.subscribeWithPriority(0, () => {
                 this.router.navigate(['/home']);
             });
