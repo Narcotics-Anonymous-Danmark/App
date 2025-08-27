@@ -232,7 +232,7 @@ IUFormand's password
 Upload to Play Console
 
 Remember to check apk from Play Console:
-- Download apj after aab upload
+- Download apk after aab upload
 - adb install the download apk on emulator/device to test new release: version number + all changes
 
 
