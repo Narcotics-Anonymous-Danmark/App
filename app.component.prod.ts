@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
+import { environment } from '../environments/environment';
 
 @Component({
     selector: 'app-root',
@@ -12,6 +13,8 @@ import { Storage } from '@ionic/storage';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
+
+    public app_version = environment.currentVersion;
 
     public appPages = [
         {

@@ -13,7 +13,7 @@ import { Platform } from '@ionic/angular';
 export class HomePage {
 
   cleantimes = [];
-  jft = {};
+  jft: any = {};
   events = [];
 
   constructor(
