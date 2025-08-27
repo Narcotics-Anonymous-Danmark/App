@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CleantimeService } from 'src/app/providers/cleantime.service';
 import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { NotificationService } from 'src/app/providers/notification.service';
 import * as moment from 'moment';
 import 'moment-timezone';
 
@@ -53,11 +54,11 @@ export class CleantimeCounterPage implements OnInit {
     delete = "";
 
     constructor(
-
         private storage: Storage,
         private cleantime: CleantimeService,
         private translate: TranslateService,
-        private alertController: AlertController
+        private alertController: AlertController,
+        private notification: NotificationService,
     ) { }
 
     ngOnInit() {
@@ -104,6 +105,8 @@ export class CleantimeCounterPage implements OnInit {
             this.translate.get('RENAME').subscribe(value => { this.rename = value; });
             this.translate.get('AREYOUSURE').subscribe(value => { this.areYouSure = value; });
             this.translate.get('DELETE').subscribe(value => { this.delete = value; });
+
+            this.notification.ensureCleandayNotifications();
         });
     }
 

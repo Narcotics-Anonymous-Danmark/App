@@ -5,10 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
-import { environment } from '../environments/environment';
 import { Router } from '@angular/router';
-
-//import { AppVersion } from '@ionic-native/app-version/ngx';
 
 @Component({
     selector: 'app-root',
@@ -16,8 +13,6 @@ import { Router } from '@angular/router';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-
-    public app_version = environment.currentVersion;
 
     public appPages = [
         {
@@ -50,16 +45,6 @@ export class AppComponent implements OnInit {
             url: 'cleantime-counter',
             icon: 'hourglass'
         },
-        //{
-        //  title: 'VIRTUAL_MEETINGS',
-        //  url: 'virt-tabs',
-        //  icon: 'globe-outline'
-        //},
-        // {
-        //     title: 'NEWS',
-        //     url: 'coming-soon',
-        //     icon: 'bulb'
-        // },
         {
             title: 'EVENTS',
             url: 'events',
@@ -70,26 +55,6 @@ export class AppComponent implements OnInit {
             url: 'audiobooks',
             icon: 'book'
         },
-        // {
-        //     title: 'BASIC_TEXT',
-        //     url: 'basic-text',
-        //     icon: 'book'
-        // },
-        // {
-        //     title: 'HOW_AND_WHY',
-        //     url: 'how-and-why',
-        //     icon: 'book'
-        // },
-        // {
-        //     title: 'STEP_WORKING_GUIDES',
-        //     url: 'step-working-guides',
-        //     icon: 'book'
-        // },
-        //{
-        //    title: 'AUDIOBOOKS',
-        //    url: 'audiobooks',
-        //    icon: 'book'
-        //},
         {
             title: 'SPEAKS',
             url: 'speaks',
@@ -118,9 +83,7 @@ export class AppComponent implements OnInit {
         private statusBar: StatusBar,
         private translate: TranslateService,
         private storage: Storage,
-        private router: Router
-        
-        //private appVersion: AppVersion
+        private router: Router        
     ) {
         this.initializeApp();
         this.translate.setDefaultLang('da');
@@ -137,25 +100,7 @@ export class AppComponent implements OnInit {
     initializeApp() {
         this.platform.ready().then(() => {
             this.statusBar.styleDefault();
-
-            //console.log(this.appVersion);
-
-            //var appName = this.appVersion.getAppName();
-            //var packageName = this.appVersion.getPackageName();
-            //var versionCode = this.appVersion.getVersionCode();
-            //var versionNumber = this.appVersion.getVersionNumber();
-            //console.log(versionCode);
-
-            //this.appVersion.getVersionNumber().then(
-            //    (versionNumber) => {
-            //        this.app_version = versionNumber;
-            //    },
-            //    (error) => {
-            //        console.log(error);
-            //    });
-
             this.splashScreen.hide();
-
             this.platform.backButton.subscribeWithPriority(0, () => {
                 this.router.navigate(['/home']);
             });

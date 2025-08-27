@@ -16,7 +16,6 @@ import { environment } from '../environments/environment';
 import { registerLocaleData } from '@angular/common';
 import localeDa from '@angular/common/locales/da';
 registerLocaleData(localeDa);
-//import { AppVersion } from '@ionic-native/app-version/ngx';
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, 'assets/translations/', '.json');
@@ -44,7 +43,6 @@ export function createTranslateLoader(http: HttpClient) {
     ],
     providers: [
         StatusBar,
-        //AppVersion,
         HTTP,
         SplashScreen,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

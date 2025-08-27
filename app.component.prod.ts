@@ -5,9 +5,6 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
-import { environment } from '../environments/environment';
-
-//import { AppVersion } from '@ionic-native/app-version/ngx';
 
 @Component({
     selector: 'app-root',
@@ -15,8 +12,6 @@ import { environment } from '../environments/environment';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-
-    public app_version = environment.currentVersion;
 
     public appPages = [
         {
@@ -44,36 +39,6 @@ export class AppComponent implements OnInit {
             url: 'jft',
             icon: 'albums'
         },
-        //{
-        //    title: 'NACC',
-        //    url: 'coming-soon',
-        //    icon: 'hourglass'
-        //},
-        //{
-        //  title: 'VIRTUAL_MEETINGS',
-        //  url: 'virt-tabs',
-        //  icon: 'globe-outline'
-        //},
-        //{
-        //    title: 'NEWS',
-        //    url: 'coming-soon',
-        //    icon: 'bulb'
-        //},
-        //{
-        //    title: 'EVENTS',
-        //    url: 'coming-soon',
-        //    icon: 'calendar'
-        //},
-        //{
-        //    title: 'AUDIOBOOKS',
-        //    url: 'audiobooks',
-        //    icon: 'book'
-        //},
-        //{
-        //    title: 'SPEAKS',
-        //    url: 'coming-soon',
-        //    icon: 'chatbox-ellipses'
-        //},
         {
             title: 'GRC',
             url: 'grc',
@@ -97,11 +62,10 @@ export class AppComponent implements OnInit {
         private statusBar: StatusBar,
         private translate: TranslateService,
         private storage: Storage,
-        //private appVersion: AppVersion
     ) {
         this.initializeApp();
         this.translate.setDefaultLang('da');
-        storage.get('language').then((value) => {
+        this.storage.get('language').then((value) => {
             if (value) {
                 this.translate.use(value);
             } else {
@@ -114,23 +78,6 @@ export class AppComponent implements OnInit {
     initializeApp() {
         this.platform.ready().then(() => {
             this.statusBar.styleDefault();
-
-            //console.log(this.appVersion);
-
-            //var appName = this.appVersion.getAppName();
-            //var packageName = this.appVersion.getPackageName();
-            //var versionCode = this.appVersion.getVersionCode();
-            //var versionNumber = this.appVersion.getVersionNumber();
-            //console.log(versionCode);
-
-            //this.appVersion.getVersionNumber().then(
-            //    (versionNumber) => {
-            //        this.app_version = versionNumber;
-            //    },
-            //    (error) => {
-            //        console.log(error);
-            //    });
-
             this.splashScreen.hide();
         });
     }

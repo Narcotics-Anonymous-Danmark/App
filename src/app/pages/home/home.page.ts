@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CleantimeService } from 'src/app/providers/cleantime.service';
 import { JftService } from 'src/app/providers/jft.service';
 import { EventService } from '../../providers/event.service';
 import { NotificationService } from 'src/app/providers/notification.service';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage {
 
   cleantimes = [];
   jft = {};
@@ -20,14 +21,14 @@ export class HomePage implements OnInit {
     private jftProvider: JftService,
     private eventProvider: EventService,
     private notification: NotificationService,
+    private platform: Platform,
   ) {
-    this.loadCleantimes();
-    this.loadJft();
-    this.loadEvents();
-  }
-
-  ngOnInit() {
-    this.notification.ensureCleandayNotifications();
+      this.platform.ready().then(() => {
+        this.loadCleantimes();
+        this.loadJft();
+        this.loadEvents();
+        this.notification.ensureCleandayNotifications();
+      });
   }
 
   loadCleantimes() {

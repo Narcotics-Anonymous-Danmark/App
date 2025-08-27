@@ -18,7 +18,10 @@ export class CleantimeService {
     let profiles = [];
     await this.storage.ready().then(async () => {
       await this.storage.get('cleanDateProfiles').then(value => {
-        profiles = value;
+        if(value)
+        {
+          profiles = value;
+        }
       });
     });
     return profiles;
