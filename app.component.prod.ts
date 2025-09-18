@@ -23,9 +23,9 @@ export class AppComponent implements OnInit {
             icon: 'home'
         },
         {
-         title: 'MAP_SEARCH',
-         url: 'map-search',
-         icon: 'map'
+            title: 'MAP_SEARCH',
+            url: 'map-search',
+            icon: 'map'
         },
         {
             title: 'LOCATIONSEARCH',

@@ -55,7 +55,7 @@ sudo apt-get install openjdk-17-jdk
 1. Add platform (android)
 
 ```
-ionic cordova platform add android@13.0.0
+ionic cordova platform add android@14.0.1
 ```
 
 2. Add browsersync for auto-refresh during development
@@ -68,9 +68,9 @@ ionic cordova plugin add cordova-plugin-browsersync
 
 ```
 sudo snap install androidsdk
-androidsdk "build-tools;34.0.0"
-androidsdk "platforms;android-35"
-androidsdk "system-images;android-28;google_apis_playstore;x86"
+sdkmanager "build-tools;35.0.0"
+sdkmanager "platforms;android-35"
+sdkmanager "system-images;android-28;google_apis_playstore;x86"
 ~/AndroidSDK/tools/bin/avdmanager create avd -n test -k "system-images;android-28;google_apis_playstore;x86"
 Download gradle 8.14.3 from: https://gradle.org/next-steps/?version=8.14.3&format=bin
 sudo ln -s ~/Downloads/gradle-8.14.3/bin/gradle /usr/bin/gradle

@@ -4,9 +4,11 @@ import { Platform, ModalController } from '@ionic/angular';
 import { MeetingListProvider } from '../../providers/meeting-list.service';
 import { LoadingService } from '../../providers/loading.service';
 import { TranslateService } from '@ngx-translate/core';
-import { GoogleMaps, GoogleMap, GoogleMapOptions, GoogleMapsEvent, MarkerCluster, Marker, MarkerLabel, MarkerOptions,
-         MarkerClusterIcon, MarkerClusterOptions, ILatLng, LatLng, VisibleRegion, CameraPosition, Spherical, Environment,
-         LocationService, MyLocation, Geocoder, GeocoderResult } from '@ionic-native/google-maps/ngx';
+import {
+  GoogleMaps, GoogleMap, GoogleMapOptions, GoogleMapsEvent, MarkerCluster, Marker, MarkerLabel, MarkerOptions,
+  MarkerClusterIcon, MarkerClusterOptions, ILatLng, LatLng, VisibleRegion, CameraPosition, Spherical, Environment,
+  LocationService, MyLocation, Geocoder, GeocoderResult
+} from '@ionic-native/google-maps/ngx';
 import { ModalPage } from '../modal/modal.page';
 import { Base64 } from '@ionic-native/base64/ngx';
 import * as moment from 'moment';
@@ -138,17 +140,12 @@ export class MapSearchPage implements OnInit {
 
   loadMap() {
 
-    Environment.setEnv({
-      API_KEY_FOR_BROWSER_RELEASE: 'AIzaSyAiowBMk_xPfnzaq7wZzcbyuCDpKqzZkyA',
-      API_KEY_FOR_BROWSER_DEBUG: 'AIzaSyAiowBMk_xPfnzaq7wZzcbyuCDpKqzZkyA'
-    });
-
     this.translate.get('LOCATING').subscribe(value => {
       this.presentLoader(value);
     });
 
     if (LocationService.hasPermission()) {
-      let locationTimeout = setTimeout(()=>{
+      let locationTimeout = setTimeout(() => {
         this.drawMap();
         this.dismissLoader();
       }, 10000);
@@ -547,7 +544,7 @@ export class MapSearchPage implements OnInit {
         hour: i.start_time.split(':')[0],
         minute: i.start_time.split(':')[1],
         second: 0
-    }).isoWeekday(parseInt(i.weekday_tinyint, 10) === 1 ? 7 : parseInt(i.weekday_tinyint, 10) - 1).format('HH:mm'));
+      }).isoWeekday(parseInt(i.weekday_tinyint, 10) === 1 ? 7 : parseInt(i.weekday_tinyint, 10) - 1).format('HH:mm'));
       this.openModal(this.meeting);
     });
   }
