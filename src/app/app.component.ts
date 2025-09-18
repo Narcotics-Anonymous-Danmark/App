@@ -24,9 +24,9 @@ export class AppComponent implements OnInit {
             icon: 'home'
         },
         {
-         title: 'MAP_SEARCH',
-         url: 'map-search',
-         icon: 'map'
+            title: 'MAP_SEARCH',
+            url: 'map-search',
+            icon: 'map'
         },
         {
             title: 'LOCATIONSEARCH',
@@ -86,7 +86,7 @@ export class AppComponent implements OnInit {
         private statusBar: StatusBar,
         private translate: TranslateService,
         private storage: Storage,
-        private router: Router        
+        private router: Router
     ) {
         this.initializeApp();
         this.translate.setDefaultLang('da');
