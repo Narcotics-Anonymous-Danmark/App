@@ -196,7 +196,7 @@ java -jar pepk.jar --keystore=nadanmarkapp.keystore --alias=nadanmarkapp --outpu
 --encryption-key-path=encryption_public_key.pem
 ```
 
-Remember nadanmark.dk API credentials!!!
+Remember nadanmark.dk API and Google Maps credentials!!!
 
 Remember to change version number in:
 - config.xml: android-versionCode + version (new version - minor: 1)
@@ -233,7 +233,9 @@ Upload to Play Console
 
 Remember to check apk from Play Console:
 - Download apk after aab upload
+- adb install the old APK first
 - adb install the download apk on emulator/device to test new release: version number + all changes
+- check that settings are persisted - cleantime most important
 
 
 ### iOS
