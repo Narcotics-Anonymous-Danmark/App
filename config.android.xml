@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget android-versionCode="1022000001" id="dk.nadanmark.app" version="1.2.2">
+    <name>NA Danmark</name>
+    <description>Narcotics Anonymous Danmark</description>
+    <author email="app@nadanmark.dk" href="https://nadanmark.dk/">Internetudvalget</author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <preference name="ScrollEnabled" value="false" />
+    <preference name="android-minSdkVersion" value="26" />
+    <preference name="android-targetSdkVersion" value="35" />
+    <preference name="android-compileSdkVersion" value="35" />
+    <preference name="BackupWebStorage" value="none" />
+    <preference name="FadeSplashScreenDuration" value="300" />
+    <preference name="AndroidWindowSplashScreenBackground" value="#0A61AD" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="GOOGLE_MAPS_ANDROID_API_KEY" value="google_maps_api_key" />
+    <preference name="GOOGLE_MAPS_PLAY_SERVICES_VERSION" value="17.0.0" />
+    <preference name="WKWebViewOnly" value="true" />
+    <platform name="android">
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/splash/splashscreen.png" />
+        <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
+            <application android:networkSecurityConfig="@xml/network_security_config" />
+        </edit-config>
+        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application/activity" xmlns:android="http://schemas.android.com/apk/res/android">
+            <activity android:exported="true" />
+        </edit-config>
+        <resource-file src="resources/android/xml/network_security_config.xml" target="app/src/main/res/xml/network_security_config.xml" />
+        <allow-intent href="market:*" />
+        <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
+        <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
+        <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
+        <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
+        <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
+        <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
+    </platform>
+    <plugin name="cordova-plugin-device" spec="2.0.2" />
+    <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
+    <plugin name="cordova-plugin-googlemaps-2" spec="git+ssh://git@github.com/GitToTheHub/cordova-plugin-googlemaps-2" />
+    <plugin name="cordova-plugin-local-notification" spec="^1.2.1" />
+    <allow-navigation href="http://localhost:8100" sessionid="49e806e1" />
+    <allow-navigation href="http://192.168.0.102:8100" />
+    <allow-navigation href="http://192.168.0.158:8100" />
+    <allow-navigation href="http://192.168.0.38:8100" />
+    <allow-navigation href="http://192.168.0.115:8100" />
+</widget>
