@@ -28,9 +28,12 @@ export class CleantimeCounterPage implements OnInit {
     cleanTimeInDays2 = 0;
     cleanTimeInDays3 = 0;
 
-    years;
-    months;
-    days;
+    years1;
+    months1;
+    days1;
+    months2;
+    days2;
+    days3;
     tag;
     tagTime;
     keytagImage;
@@ -64,9 +67,9 @@ export class CleantimeCounterPage implements OnInit {
     ngOnInit() {
         this.maxDate = moment().tz(moment.tz.guess()).toISOString(true);
         this.tag = 'none';
-        this.years = 'YEARS'
-        this.months = 'MONTHS'
-        this.days = 'DAYS'
+        this.years1 = 'YEARS'
+        this.months1 = this.months2 = 'MONTHS'
+        this.days1 = this.days2 = this.days3 = 'DAYS'
 
         this.cleantime.getProfiles().then(existingProfiles => {
             this.profiles = existingProfiles.length ? existingProfiles : [this.createDefaultProfile()];
@@ -240,14 +243,23 @@ export class CleantimeCounterPage implements OnInit {
 
 
             this.cleanTimeTag(cleanTimes);
-            if(cleanTimeInDays === 1){
-                this.days = 'DAY';
+            if(this.cleanTimeInDays1 === 1){
+                this.days1 = 'DAY';
             }
-            if(cleanTimeInDays === 1){
-                this.days = 'DAY';
+            if(this.cleanTimeInMonths1 === 1){
+                this.months1 = 'MONTH';
             }
-            if(cleanTimeInDays === 1){
-                this.days = 'DAY';
+            if(this.cleanTimeInYears1 === 1){
+                this.years1 = 'YEAR';
+            }
+            if(this.cleanTimeInDays2 === 1){
+                this.days2 = 'DAY';
+            }
+            if(this.cleanTimeInMonths2 === 1){
+                this.months2 = 'MONTH';
+            }
+            if(this.cleanTimeInDays3 === 1){
+                this.days3 = 'DAY';
             }
         }
     }
