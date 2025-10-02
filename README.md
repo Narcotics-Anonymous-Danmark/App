@@ -245,7 +245,7 @@ Replace/rename the following configuration files from android to ios:
 - package.ios.json -> package.json
 - package.lock.ios.json -> package.lock.json
 
-Remember nadanmark.dk API credentials!!!
+Remember nadanmark.dk API and Google Maps credentials!!!
 
 Remember to change version number in:
 - config.xml: version
