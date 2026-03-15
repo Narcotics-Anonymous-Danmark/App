@@ -27,21 +27,6 @@ module.exports = (ctx) => {
         fs.writeFileSync('package.json', JSON.stringify(packageJSON, null, "\t"), 'utf-8');
         console.log("package.json app version updated");
 
-        let prodEnvData = fs.readFileSync(`src/environments/environment.prod.ts`, 'utf-8');
-        prodEnvData = prodEnvData.replace(/currentVersion: ".*"/, `currentVersion: "${packageJSON.version}"`);
-        fs.writeFileSync('src/environments/environment.prod.ts', prodEnvData, 'utf-8');
-        console.log("environments.prod.ts app version updated");
-
-        let unstableEnvData = fs.readFileSync(`src/environments/environment.unstable.ts`, 'utf-8');
-        unstableEnvData = unstableEnvData.replace(/currentVersion: ".*"/, `currentVersion: "${packageJSON.version}"`);
-        fs.writeFileSync('src/environments/environment.unstable.ts', unstableEnvData, 'utf-8');
-        console.log("environments.unstable.ts app version updated");
-
-        //let localEnvData = fs.readFileSync(`src/environments/environment.local.ts`, 'utf-8');
-        //localEnvData = localEnvData.replace(/currentVersion: ".*"/, `currentVersion: "${packageJSON.version}"`);
-        //fs.writeFileSync('src/environments/environment.local.ts', localEnvData, 'utf-8');
-        //console.log("environments.local.ts app version updated");
-
         let defaultEnvData = fs.readFileSync(`src/environments/environment.ts`, 'utf-8');
         defaultEnvData = defaultEnvData.replace(/currentVersion: ".*"/, `currentVersion: "${packageJSON.version}"`);
         fs.writeFileSync('src/environments/environment.ts', defaultEnvData, 'utf-8');

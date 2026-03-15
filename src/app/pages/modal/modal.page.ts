@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { Component } from '@angular/core';
 import { NavParams, ModalController } from '@ionic/angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
@@ -14,7 +13,6 @@ export class ModalPage {
   meetingList: any;
 
   constructor(
-    private translate: TranslateService,
     private navParams: NavParams,
     private modalController: ModalController,
     private iab: InAppBrowser) {

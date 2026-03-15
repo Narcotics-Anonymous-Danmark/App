@@ -71,7 +71,7 @@
     "cordova-plugin-device": "^3.0.0",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-geolocation": "^4.1.0",
-    "cordova-plugin-googlemaps-2": "github:GitToTheHub/cordova-plugin-googlemaps-2",
+    "cordova-plugin-googlemaps-2": "https://github.com/GitToTheHub/cordova-plugin-googlemaps-2",
     "cordova-plugin-inappbrowser": "^4.1.0",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^5.0.0",

@@ -16,8 +16,7 @@ export class MeetingCardComponent implements OnInit, AfterContentInit {
   meetingType;
 
   constructor(
-    private iab: InAppBrowser,
-    private translate: TranslateService) { }
+    private iab: InAppBrowser) { }
 
   ngOnInit() {}
 

@@ -202,8 +202,6 @@ Remember to change version number in:
 - config.xml: android-versionCode + version (new version - minor: 1)
 - package.json: version (new version - minor: 1)
 - package-lock.json: version
-- environment.unstable.ts: currentVersion
-- environment.prod.ts: currentVersion
 - environment.ts: currentVersion
 
 We need to make a regular build before a production build to make sure files are updated and ready
@@ -251,8 +249,6 @@ Remember to change version number in:
 - config.xml: version
 - package.json: version
 - package-lock.json: version
-- environment.unstable.ts: currentVersion
-- environment.prod.ts: currentVersion
 - environment.ts: currentVersion
 
 ```

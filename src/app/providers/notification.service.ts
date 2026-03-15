@@ -13,7 +13,7 @@ export class NotificationService {
   ) { }
 
   async ensureCleandayNotifications() {
-    if(!cordova.plugins.notification) return;
+    if (typeof cordova === 'undefined' || !cordova.plugins || !cordova.plugins.notification) return;
     cordova.plugins.notification.local.cancelAll();
     let profiles = await this.cleantime.getProfiles();
     let id = 0;
@@ -31,6 +31,8 @@ export class NotificationService {
           trigger: { at: date }
         });
       };
+    }
+    if (notifications.length > 0) {
       cordova.plugins.notification.local.schedule(notifications);
     }
   }
