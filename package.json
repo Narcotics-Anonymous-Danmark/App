@@ -23,6 +23,7 @@
 		"@types/moment-timezone": "^0.5.30",
 		"android-versions": "^2.1.0",
 		"cordova": "^12.0.0",
+		"cordova-android": "14.0.1",
 		"cordova-fetch": "^3.0.1",
 		"cordova-ios": "7.1.0",
 		"ionic": "^4.0.0",
@@ -38,6 +39,7 @@
 	"devDependencies": {
 		"@angular-devkit/build-angular": "~0.901.5",
 		"@angular/cli": "~9.1.5",
+		"@ionic/angular-toolkit": "^2.3.3",
 		"com-badrit-base64": "^0.2.0",
 		"cordova-plugin-advanced-http": "^3.3.1",
 		"cordova-plugin-device": "^3.0.0",
@@ -57,7 +59,9 @@
 			"cordova-plugin-advanced-http": {
 				"ANDROIDBLACKLISTSECURESOCKETPROTOCOLS": "SSLv3,TLSv1"
 			},
-			"cordova-plugin-local-notification": {},
+			"cordova-plugin-local-notification": {
+				"ANDROIDX_CORE_VERSION": "1.12.0"
+			},
 			"cordova-plugin-googlemaps-2": {
 				"LOCATION_WHEN_IN_USE_DESCRIPTION": "This app wants to get your location while this app runs only.",
 				"LOCATION_ALWAYS_USAGE_DESCRIPTION": "This app wants to get your location always, even this app runs in background."

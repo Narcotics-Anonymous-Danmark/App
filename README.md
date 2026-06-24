@@ -52,19 +52,11 @@ sudo apt-get install openjdk-17-jdk
 
 #### Android platform
 
-1. Add platform (android)
+The Android build is driven entirely by the `na` CLI — see
+[Using the na CLI](#using-the-na-cli) below. You only need the Android SDK, an
+emulator (or a connected device) and a Google Maps API key in place first.
 
-```
-ionic cordova platform add android@14.0.1
-```
-
-2. Add browsersync for auto-refresh during development
-
-```
-ionic cordova plugin add cordova-plugin-browsersync
-```
-
-3. Install Android SDK and Emulator
+1. Install the Android SDK and an emulator
 
 ```
 sudo snap install androidsdk
@@ -72,64 +64,103 @@ sdkmanager "build-tools;35.0.0"
 sdkmanager "platforms;android-35"
 sdkmanager "system-images;android-28;google_apis_playstore;x86"
 ~/AndroidSDK/tools/bin/avdmanager create avd -n test -k "system-images;android-28;google_apis_playstore;x86"
-Download gradle 8.14.3 from: https://gradle.org/next-steps/?version=8.14.3&format=bin
+```
+
+Install gradle 8.14.3 (download from https://gradle.org/next-steps/?version=8.14.3&format=bin):
+
+```
 sudo ln -s ~/Downloads/gradle-8.14.3/bin/gradle /usr/bin/gradle
 sudo apt install adb
 sudo apt install google-android-emulator-installer
 ```
 
-4. Install Cordova/PhoneGap plugins (Cordova Plugins package.json branch dependencies)
+2. Tell the tooling where the SDK is
+
+`na bootstrap android` / `na run android` read `ANDROID_SDK_ROOT`, then
+`ANDROID_HOME`, then fall back to `~/AndroidSDK`. Export it once, for example:
 
 ```
-ANDROID_SDK_ROOT=~/AndroidSDK ionic cordova build android
+export ANDROID_SDK_ROOT=~/AndroidSDK
 ```
 
-5. Start android emulator
+3. Configure the Google Maps API key (required for maps to render)
+
+`cordova-plugin-googlemaps-2` is fetched from GitHub over HTTPS and restored
+automatically when the Android platform is added — you do **not** add it by hand.
+It needs an Android Maps SDK key. The plugin only reads the key from a
+**top-level** (`<widget>`-scoped) preference, so edit the active `config.xml` and
+replace the placeholder value there (not inside `<platform name="android">`):
 
 ```
-ANDROID_SDK_ROOT=~/AndroidSDK emulator @test
+<preference name="GOOGLE_MAPS_ANDROID_API_KEY" value="YOUR_ANDROID_MAPS_API_KEY" />
+<preference name="GOOGLE_MAPS_PLAY_SERVICES_VERSION" value="17.0.0" />
 ```
 
-6. Run the app using the android emulator
+4. Bootstrap the Android platform
 
 ```
-ANDROID_SDK_ROOT=~/AndroidSDK ionic cordova run android --livereload-url=http://10.0.2.2:8100 -l
+./bin/na bootstrap android
 ```
 
-or if you have issues with "Application Error // There was a network error. (IP:ADDRESS)" or "Application Error // net::ERR_CONNECTION_REFUSED (IP:ADDRESS)" try:
+This installs the global toolchain (npm 8.1.0, ionic 4, cordova 12), installs the
+project dependencies, adds `cordova-android@14.0.1`, restores all plugins
+(including Google Maps over HTTPS) and runs `cordova prepare android`. It does not
+build an APK — `na run android` builds when you actually run the app.
+
+5. Run on an emulator or device
 
 ```
-ANDROID_SDK_ROOT=~/AndroidSDK ionic cordova run android --emulator --target=test --livereload --debug --verbose --external --host=0.0.0.0 --port=8100
+./bin/na run android
 ```
+
+`na run android` auto-detects a connected device; otherwise it boots an emulator
+(the highest-API AVD it finds). Be explicit when needed:
+
+```
+./bin/na run android --device      # force a connected device
+./bin/na run android --emulator    # force an emulator (auto-picks an AVD)
+./bin/na run android --target test # use a specific AVD
+./bin/na run android --no-build    # skip the rebuild
+```
+
+## Using the na CLI
+
+`./bin/na` centralises the per-platform workflow (it pins Node 16.13.0 via nvm and
+the system **npm 8.1.0**):
+
+```
+./bin/na bootstrap android   # install toolchain + deps, add platform, cordova prepare
+./bin/na run android         # build (if sources changed) and run on device/emulator
+./bin/na bootstrap ios       # iOS equivalent (adds ios platform, runs pod install)
+./bin/na run ios             # build and run on simulator/device
+```
+
+Add `--dry-run` to print the steps without executing, or `--force` to re-run steps
+that would otherwise be skipped.
 
 
 ## Apple iphone/ipad app link
 
-TODO: link will be here after it will be published on AppStore
+https://apps.apple.com/dk/app/na-danmark/id6739226092
 
 ## Android phone/tablet link
 
-TODO: link will be here after it will be published on Google Play
+https://play.google.com/store/apps/details?id=dk.nadanmark.app
 
-## Install Google Maps plugin #multiple_maps
+## Google Maps plugin #multiple_maps
 
-We need `cordova-fetch3.0.1`:
+`na bootstrap android` handles Google Maps for you: it installs the
+`cordova-fetch@3.0.1` and `properties-parser@0.5.1` helpers and, when the Android
+platform is added, restores `cordova-plugin-googlemaps-2` (pinned to
+`#v2.9.1`) from GitHub over HTTPS.
 
-```
-npm install cordova-fetch@3.0.1
-```
+You only need to provide the API key — see step 3 of the
+[Android platform](#android-platform) section above.
 
-We also need `properties-parser@0.5.1`
-
-```
-npm install properties-parser@0.5.1
-```
-
-Add `cordova-plugin-googlemaps-2` plugin:
-
-```
-ionic cordova plugin add https://github.com/GitToTheHub/cordova-plugin-googlemaps-2
-```
+> The plugin is fetched with the system **npm 8** (the nvm npm), which clones over
+> HTTPS. Don't reintroduce `cordova-plugin-browsersync`: it depends on `npm@2`,
+> which would land in `node_modules` and make cordova-fetch hang on the dead
+> `git://` protocol when restoring Google Maps.
 
 ## Android Gradle issue
 
