@@ -104,10 +104,18 @@
         <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
             <string>Location will be used to show NA meetings in your area, in the meeting list and on the map. Your location is only used locally on your device.</string>
         </edit-config>
+        <!-- background audio: keep audio books and speaks playing with the screen off/locked -->
+        <config-file parent="UIBackgroundModes" target="*-Info.plist">
+            <array>
+                <string>audio</string>
+            </array>
+        </config-file>
     </platform>
     <plugin name="cordova-plugin-device" spec="3.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-local-notification" spec="^1.2.1" />
+    <plugin name="cordova-plugin-media" spec="^7.0.0" />
+    <plugin name="cordova-plugin-music-controls2" spec="^3.0.7" />
     <allow-navigation href="http://localhost:8100" sessionid="49e806e1" />
     <allow-navigation href="http://192.168.0.102:8100" />
     <allow-navigation href="http://192.168.0.158:8100" />

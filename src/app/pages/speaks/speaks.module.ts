@@ -7,7 +7,6 @@ import { SpeaksPage } from './speaks.page';
 import { TranslateModule } from '@ngx-translate/core';
 import { AudioService } from '../../providers/audio.service';
 import { HTTP } from '@ionic-native/http/ngx';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @NgModule({
     imports: [
@@ -20,8 +19,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
     declarations: [SpeaksPage],
     providers: [
         AudioService,
-        HTTP,
-        InAppBrowser
+        HTTP
     ]
 
 })

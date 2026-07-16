@@ -1,0 +1,26 @@
+name: na_media_player
+description: >-
+  Cross-platform background media player for the NA Danmark app: audio books
+  (chapter playlists) and speaks (single files), with per-book / per-speak
+  resume points. Dart twin of the TypeScript player in src/app/media-player.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Native playback (ExoPlayer on Android, AVPlayer on iOS)
+  just_audio: ^0.9.36
+  # Background audio session + lock screen / notification media controls
+  audio_service: ^0.18.12
+  # Resume point persistence
+  shared_preferences: ^2.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0

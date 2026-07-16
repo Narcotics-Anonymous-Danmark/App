@@ -1,0 +1,76 @@
+/**
+ * Shared data model for the cross-platform media player.
+ *
+ * This contract is mirrored 1:1 by the Dart implementation in
+ * flutter/na_media_player/lib/src/models.dart and documented in
+ * docs/media-player.md. Keep the three in sync.
+ */
+
+export type MediaPlaylistType = 'book' | 'speak';
+
+export interface MediaTrack {
+    /** Stable identifier for the track. We use the audio URL. */
+    id: string;
+    title: string;
+    url: string;
+    /** Display-only duration label from the source data, e.g. "8:10". */
+    durationLabel?: string;
+}
+
+export interface MediaPlaylist {
+    /**
+     * Stable identifier for the playlist. Books use their route slug
+     * ("basic-text", "how-and-why", "step-working-guides"); speaks use the
+     * audio file URL. Resume points are keyed on this id.
+     */
+    id: string;
+    type: MediaPlaylistType;
+    /** Book title or speak event title. Shown as the secondary line. */
+    title: string;
+    /** Optional artwork URL for lock-screen/notification controls. */
+    coverUrl?: string;
+    tracks: MediaTrack[];
+}
+
+/**
+ * A saved listening position. Books get ONE resume point per book (the
+ * chapter index + position within it), speaks get one per audio file.
+ */
+export interface ResumePoint {
+    trackId: string;
+    trackIndex: number;
+    /** Seconds into the track. */
+    position: number;
+    /** ISO-8601 timestamp of the last save. */
+    updatedAt: string;
+}
+
+export type PlaybackStatus = 'idle' | 'loading' | 'playing' | 'paused';
+
+export interface PlayerState {
+    status: PlaybackStatus;
+    playlist: MediaPlaylist | null;
+    trackIndex: number;
+    /** Seconds into the current track. */
+    position: number;
+    /** Track duration in seconds, 0 while unknown. */
+    duration: number;
+}
+
+export const INITIAL_PLAYER_STATE: PlayerState = {
+    status: 'idle',
+    playlist: null,
+    trackIndex: 0,
+    position: 0,
+    duration: 0
+};
+
+/** Formats seconds as m:ss or h:mm:ss for display. */
+export function formatPlaybackTime(totalSeconds: number): string {
+    const seconds = Math.max(0, Math.floor(totalSeconds || 0));
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    const pad = (n: number) => (n < 10 ? '0' + n : '' + n);
+    return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
+}

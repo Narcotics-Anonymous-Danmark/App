@@ -9,6 +9,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicStorageModule } from '@ionic/storage';
 import { HTTP } from '@ionic-native/http/ngx';
+import { MediaPlayerModule } from './media-player/media-player.module';
 import { registerLocaleData } from '@angular/common';
 import localeDa from '@angular/common/locales/da';
 registerLocaleData(localeDa);
@@ -34,6 +35,7 @@ export function createTranslateLoader(http: HttpClient) {
                 deps: [HttpClient]
             }
         }),
+        MediaPlayerModule,
         AppRoutingModule
     ],
     providers: [

@@ -32,6 +32,14 @@
             <activity android:exported="true" />
         </edit-config>
         <resource-file src="resources/android/xml/network_security_config.xml" target="app/src/main/res/xml/network_security_config.xml" />
+        <!-- background audio: keep the CPU awake while the media player runs and
+             allow the music-controls notification (media session) to be shown -->
+        <config-file file="app/src/main/AndroidManifest.xml" parent="/manifest" target="AndroidManifest.xml" xmlns:android="http://schemas.android.com/apk/res/android">
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
+            <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+            <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+            <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+        </config-file>
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
@@ -44,6 +52,11 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-googlemaps-2" spec="git+ssh://git@github.com/GitToTheHub/cordova-plugin-googlemaps-2" />
     <plugin name="cordova-plugin-local-notification" spec="^1.2.1" />
+    <plugin name="cordova-plugin-media" spec="^7.0.0" />
+    <plugin name="cordova-plugin-music-controls2" spec="^3.0.7" />
+    <!-- music-controls2@3.0.7 registers receivers without the export flag Android 14+
+         requires; this hook patches it after each prepare (see scripts/patch-music-controls.js) -->
+    <hook src="scripts/patch-music-controls.js" type="before_compile" />
     <allow-navigation href="http://localhost:8100" sessionid="49e806e1" />
     <allow-navigation href="http://192.168.0.102:8100" />
     <allow-navigation href="http://192.168.0.158:8100" />

@@ -76,6 +76,8 @@
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^5.0.0",
     "cordova-plugin-local-notification": "^1.2.1",
+    "cordova-plugin-media": "^7.0.0",
+    "cordova-plugin-music-controls2": "^3.0.7",
     "cordova-plugin-splashscreen": "^6.0.0",
     "cordova-plugin-statusbar": "^2.4.3",
     "jasmine-core": "~3.8.0",
@@ -106,6 +108,8 @@
       "cordova-plugin-insomnia": {},
       "cordova-plugin-app-version": {},
       "cordova-plugin-local-notification": {},
+      "cordova-plugin-media": {},
+      "cordova-plugin-music-controls2": {},
       "cordova-plugin-device": {},
       "cordova-plugin-googlemaps-2": {
         "LOCATION_WHEN_IN_USE_DESCRIPTION": "This app wants to get your location while this app runs only.",

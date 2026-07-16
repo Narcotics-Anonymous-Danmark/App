@@ -19,7 +19,7 @@ export class AudioService {
                 .get('https://www.nadanmark.dk/wp-json/wp/v2/speaks?excerpt[]=NA-SPEAKS-DK&excerpt[]=NA-SPEAKS-EN', {
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Basic " + btoa("username:password")
+                        "Authorization": "Basic " + btoa("na.app_api:Wt3QTExAaKqXJx")
                     }
                 })
                 .pipe(map(this.processData, this));

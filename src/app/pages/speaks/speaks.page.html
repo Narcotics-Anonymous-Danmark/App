@@ -1,4 +1,4 @@
-﻿<ion-header>
+<ion-header>
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
@@ -20,7 +20,9 @@
             <ion-item-sliding *ngFor="let speak of event.speaks" #slidingItem>
                 <ion-item>
                     <ion-label>
-                        <ion-button size="default" class="ion-text-wrap speak-button" expand="block" (click)="openWithInAppBrowser(speak.audioUrl)">
+                        <ion-button size="default" class="ion-text-wrap speak-button" expand="block"
+                            [fill]="speak.audioUrl === activeSpeakUrl ? 'outline' : 'solid'"
+                            (click)="playSpeak(event, speak)">
                             <ion-ripple-effect></ion-ripple-effect>
                             {{ speak.name }} - {{ speak.location }} - {{ speak.year }}
                         </ion-button>
