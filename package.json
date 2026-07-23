@@ -40,6 +40,7 @@
 		"@angular-devkit/build-angular": "~0.901.5",
 		"@angular/cli": "~9.1.5",
 		"@ionic/angular-toolkit": "^2.3.3",
+		"@types/node": "~13.13.52",
 		"com-badrit-base64": "^0.2.0",
 		"cordova-plugin-advanced-http": "^3.3.1",
 		"cordova-plugin-device": "^3.0.0",
@@ -49,7 +50,8 @@
 		"cordova-plugin-ionic-keyboard": "^2.2.0",
 		"cordova-plugin-local-notification": "^1.2.3",
 		"cordova-plugin-media": "^7.0.0",
-		"cordova-plugin-music-controls2": "^3.0.7"
+		"cordova-plugin-music-controls2": "^3.0.7",
+		"typescript": "~3.8.3"
 	},
 	"description": "Helpline: 7020 0185.",
 	"cordova": {

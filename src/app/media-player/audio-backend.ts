@@ -27,7 +27,7 @@ export interface AudioBackend {
 }
 
 export class CordovaMediaBackend implements AudioBackend {
-    private media: Media | null = null;
+    private media: CordovaMedia | null = null;
     // Media fires its success callback on stop()/release() too, so we mute
     // callbacks once we tear the instance down ourselves.
     private released = false;
@@ -37,7 +37,7 @@ export class CordovaMediaBackend implements AudioBackend {
     }
 
     load(url: string, events: AudioBackendEvents): void {
-        const MediaCtor = (window as any).Media as typeof Media;
+        const MediaCtor = (window as any).Media as typeof CordovaMedia;
         this.media = new MediaCtor(
             url,
             () => { if (!this.released) { events.onEnded(); } },

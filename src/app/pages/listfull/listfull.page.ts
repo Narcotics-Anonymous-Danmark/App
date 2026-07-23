@@ -14,15 +14,15 @@ export class ListfullPage {
 
   serviceGroups: any;
   serviceGroupHierarchy: any = [];
-  meetingListCounties;
-  uniqueCounties;
+  meetingListCounties: any;
+  uniqueCounties: any;
   shownDay = null;
   shownGroupL1 = null;
   shownGroupL2 = null;
   shownGroupL3 = null;
   shownGroupL4 = null;
   HTMLGrouping = 'counties';
-  loader = null;
+  loader: any = null;
   meetingListArea: any = [];
   meetingListCounty: any = [];
   areaName: any = '';
@@ -50,8 +50,8 @@ export class ListfullPage {
             this.meetingListCounties[i].location_municipality = "Online";
           }
         }
-        this.uniqueCounties =( [...new Set(this.meetingListCounties.map(({location_municipality})=>location_municipality))]);
-        this.uniqueCounties.sort((a,b) => a === "Online" ? 1 : (b === "Online" ? -1 : 0));
+        this.uniqueCounties =( [...new Set(this.meetingListCounties.map(({location_municipality}: any)=>location_municipality))]);
+        this.uniqueCounties.sort((a: any, b: any) => a === "Online" ? 1 : (b === "Online" ? -1 : 0));
       }
       this.dismissLoader();
     });
@@ -66,7 +66,7 @@ export class ListfullPage {
 
   }
 
-  getMeetingsByCounty(countyName) {
+  getMeetingsByCounty(countyName: any) {
     this.translate.get('FINDING_MTGS').subscribe(value => { this.presentLoader(value); });
     this.HTMLGrouping = 'meetings';
     this.countyName = countyName;
@@ -77,9 +77,9 @@ export class ListfullPage {
       } else {
         this.meetingListCounty = data;
         if (countyName == "Online") {
-          this.meetingListCounty = this.meetingListCounty.filter(meeting => meeting.location_municipality == "");
+          this.meetingListCounty = this.meetingListCounty.filter((meeting: any) => meeting.location_municipality == "");
         } else {
-          this.meetingListCounty = this.meetingListCounty.filter(meeting => meeting.location_municipality == countyName);
+          this.meetingListCounty = this.meetingListCounty.filter((meeting: any) => meeting.location_municipality == countyName);
         }
         this.isLoaded = true;
       }

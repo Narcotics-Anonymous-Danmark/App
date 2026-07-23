@@ -22,7 +22,7 @@ export class GrcPage implements OnInit {
 
     ngOnInit() { }
 
-    public showReading(reading) {
+    public showReading(reading: any) {
         this.selectedReading = reading;
     }
 }

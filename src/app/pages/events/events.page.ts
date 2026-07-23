@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { EventService } from '../../providers/event.service';
 import { LoadingService } from '../../providers/loading.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
@@ -24,7 +23,7 @@ export class EventsPage implements OnInit {
 
     getAllEvents() {
         this.loadingCtrl.present('Loading Events...');
-        this.eventProvider.load().subscribe((data) => {
+        this.eventProvider.load().subscribe((data: any) => {
             this.events = Array.of(data)[0];
         });
         this.loadingCtrl.dismiss();

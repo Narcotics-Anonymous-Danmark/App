@@ -1,17 +1,16 @@
 import { Component, NgZone, OnInit } from '@angular/core';
-import { Storage } from '@ionic/storage';
 import { Platform, ModalController } from '@ionic/angular';
 import { MeetingListProvider } from '../../providers/meeting-list.service';
 import { LoadingService } from '../../providers/loading.service';
 import { TranslateService } from '@ngx-translate/core';
 import {
-  GoogleMaps, GoogleMap, GoogleMapOptions, GoogleMapsEvent, MarkerCluster, Marker, MarkerLabel, MarkerOptions,
-  MarkerClusterIcon, MarkerClusterOptions, ILatLng, LatLng, VisibleRegion, CameraPosition, Spherical, Environment,
-  LocationService, MyLocation, Geocoder, GeocoderResult
+  GoogleMaps, GoogleMap, GoogleMapOptions, GoogleMapsEvent, MarkerCluster, Marker, MarkerLabel,
+  MarkerClusterIcon, MarkerClusterOptions, ILatLng, LatLng, VisibleRegion, Spherical,
+  LocationService, MyLocation, Geocoder
 } from '@ionic-native/google-maps/ngx';
 import { ModalPage } from '../modal/modal.page';
 import { Base64 } from '@ionic-native/base64/ngx';
-import * as moment from 'moment';
+import moment from 'moment';
 
 declare const google: any;
 @Component({
@@ -22,13 +21,13 @@ declare const google: any;
 export class MapSearchPage implements OnInit {
 
   meetingList: any = [];
-  loader = null;
+  loader: any = null;
   zoom = 8;
   mapLatitude: any = 55.476224;
   mapLongitude: any = 8.4606976;
 
-  eagerMapLat: number;
-  eagerMapLng: number;
+  eagerMapLat!: number;
+  eagerMapLng!: number;
 
   origLocation = { lat: 55.476, lng: 8.460 };
   origZoom = 10;
@@ -38,45 +37,44 @@ export class MapSearchPage implements OnInit {
 
   formattedAddress = '';
 
-  GoogleAutocomplete: { getPlacePredictions: (arg0: { input: any; }, arg1: (predictions: any, status: any) => void) => void; };
-  autocompleteItems: any[];
-  autocomplete: { input: any; };
+  GoogleAutocomplete!: { getPlacePredictions: (arg0: { input: any; }, arg1: (predictions: any, status: any) => void) => void; };
+  autocompleteItems!: any[];
+  autocomplete!: { input: any; };
 
   latitude = 0;
   longitude = 0;
 
   autoRadius = 5;
-  map: GoogleMap;
-  visibleRegion: VisibleRegion;
-  marker: Marker;
-  markers = [];
+  map!: GoogleMap;
+  visibleRegion!: VisibleRegion;
+  marker!: Marker;
+  markers: any[] = [];
   meeting: any;
-  ids: string;
+  ids!: string;
   data: any;
   mapDragInProgress = false;
   cameraMoveInProgress = false;
-  markerCluster: MarkerCluster;
-  Base64MarkerRed: string;
-  Base64MarkerBlue: string;
-  Base64MarkerZero: string;
+  markerCluster!: MarkerCluster;
+  Base64MarkerRed!: string;
+  Base64MarkerBlue!: string;
+  Base64MarkerZero!: string;
 
-  Base64ClusterMarkerM1: string;
-  Base64ClusterMarkerM2: string;
-  Base64ClusterMarkerM3: string;
-  Base64ClusterMarkerM4: string;
-  Base64ClusterMarkerM5: string;
+  Base64ClusterMarkerM1!: string;
+  Base64ClusterMarkerM2!: string;
+  Base64ClusterMarkerM3!: string;
+  Base64ClusterMarkerM4!: string;
+  Base64ClusterMarkerM5!: string;
 
-  filePathMarkerRed: string;
-  filePathMarkerBlue: string;
-  filePathMarkerZero: string;
-  searchMarker: Marker;
+  filePathMarkerRed!: string;
+  filePathMarkerBlue!: string;
+  filePathMarkerZero!: string;
+  searchMarker!: Marker;
 
   formatLanguage = 'en';
 
   constructor(
     private meetingListProvider: MeetingListProvider,
     public loadingCtrl: LoadingService,
-    private storage: Storage,
     private platform: Platform,
     private translate: TranslateService,
     private zone: NgZone,
@@ -138,24 +136,24 @@ export class MapSearchPage implements OnInit {
 
   }
 
-  loadMap() {
+  async loadMap() {
 
     this.translate.get('LOCATING').subscribe(value => {
       this.presentLoader(value);
     });
 
-    if (LocationService.hasPermission()) {
+    if (await LocationService.hasPermission()) {
       let locationTimeout = setTimeout(() => {
         this.drawMap();
         this.dismissLoader();
       }, 10000);
       LocationService.getMyLocation().then((myLocation: MyLocation) => {
         clearTimeout(locationTimeout);
-        this.mapLatitude = this.eagerMapLat = myLocation.latLng.lat;
-        this.mapLongitude = this.eagerMapLng = myLocation.latLng.lng;
+        this.mapLatitude = this.eagerMapLat = myLocation.latLng!.lat;
+        this.mapLongitude = this.eagerMapLng = myLocation.latLng!.lng;
         this.drawMap();
         this.dismissLoader();
-      }, (reason) => {
+      }, () => {
         clearTimeout(locationTimeout);
         this.eagerMapLat = this.mapLatitude;
         this.eagerMapLng = this.mapLongitude;
@@ -203,15 +201,15 @@ export class MapSearchPage implements OnInit {
 
   onMapReady() {
 
-    this.map.on(GoogleMapsEvent.MAP_DRAG_START).subscribe((params: any[]) => {
+    this.map.on(GoogleMapsEvent.MAP_DRAG_START).subscribe((_params: any[]) => {
       this.mapDragInProgress = true;
     });
 
-    this.map.on(GoogleMapsEvent.MAP_DRAG_END).subscribe((params: any[]) => {
+    this.map.on(GoogleMapsEvent.MAP_DRAG_END).subscribe((_params: any[]) => {
       this.mapDragInProgress = false;
     });
 
-    this.map.on(GoogleMapsEvent.CAMERA_MOVE_START).subscribe((params: any[]) => {
+    this.map.on(GoogleMapsEvent.CAMERA_MOVE_START).subscribe((_params: any[]) => {
       this.cameraMoveInProgress = true;
     });
 
@@ -345,8 +343,8 @@ export class MapSearchPage implements OnInit {
         this.meetingList = JSON.parse('[]');
       } else {
         this.meetingList = data;
-        this.meetingList = this.meetingList.filter((meeting: { latitude }) => meeting.latitude = parseFloat(meeting.latitude));
-        this.meetingList = this.meetingList.filter((meeting: { longitude }) => meeting.longitude = parseFloat(meeting.longitude));
+        this.meetingList = this.meetingList.filter((meeting: any) => meeting.latitude = parseFloat(meeting.latitude));
+        this.meetingList = this.meetingList.filter((meeting: any) => meeting.longitude = parseFloat(meeting.longitude));
       }
       this.populateMarkers();
       this.addCluster();
@@ -464,7 +462,7 @@ export class MapSearchPage implements OnInit {
       return;
     }
     this.GoogleAutocomplete.getPlacePredictions({ input: this.autocomplete.input },
-      (predictions, status) => {
+      (predictions: any, _status: any) => {
         this.autocompleteItems = [];
         this.zone.run(() => {
           predictions.forEach((prediction: any) => {
@@ -482,7 +480,7 @@ export class MapSearchPage implements OnInit {
     // Address -> latitude,longitude
     Geocoder.geocode({
       address: item.description
-    }).then((results: GeocoderResult[]) => {
+    }).then((results: any) => {
 
       // Add a marker
       if (this.searchMarker) {
@@ -510,7 +508,6 @@ export class MapSearchPage implements OnInit {
 
   public onMarkerClick(params: any) {
     const searchMarkerClicked: Marker = params[1] as Marker;
-    const isSearchMarkerClicked: any = searchMarkerClicked.get('isInfoWindowVisible');
 
     if (searchMarkerClicked.isInfoWindowShown() === true) {
       searchMarkerClicked.hideInfoWindow();
@@ -536,11 +533,11 @@ export class MapSearchPage implements OnInit {
   }
 
 
-  openMeetingModal(meetingID) {
+  openMeetingModal(meetingID: any) {
     console.log('openMeetingModal()');
-    this.meetingListProvider.getSingleMeetingByID(meetingID).subscribe((meeting) => {
+    this.meetingListProvider.getSingleMeetingByID(meetingID).subscribe((meeting: any) => {
       this.meeting = meeting;
-      this.meeting.filter((i) => i.start_time_raw = moment({
+      this.meeting.filter((i: any) => i.start_time_raw = moment({
         hour: i.start_time.split(':')[0],
         minute: i.start_time.split(':')[1],
         second: 0
@@ -550,7 +547,7 @@ export class MapSearchPage implements OnInit {
   }
 
 
-  async openModal(meeting) {
+  async openModal(_meeting: any) {
     const modal = await this.modalCtrl.create({
       component: ModalPage,
       componentProps: {
@@ -558,7 +555,7 @@ export class MapSearchPage implements OnInit {
       }
     });
 
-    modal.onDidDismiss().then((dataReturned) => {
+    modal.onDidDismiss().then(() => {
     });
 
     return await modal.present();

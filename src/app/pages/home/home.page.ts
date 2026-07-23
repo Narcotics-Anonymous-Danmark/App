@@ -12,9 +12,9 @@ import { Platform } from '@ionic/angular';
 })
 export class HomePage {
 
-  cleantimes = [];
+  cleantimes: any[] = [];
   jft: any = {};
-  events = [];
+  events: any[] = [];
 
   constructor(
     private cleantime: CleantimeService,
@@ -59,7 +59,7 @@ export class HomePage {
   }
 
   loadEvents() {
-    this.eventProvider.load().subscribe((data) => {
+    this.eventProvider.load().subscribe((data: any) => {
         this.events = Array.of(data)[0].slice().splice(0, 3);
     });
   }

@@ -32,7 +32,7 @@ export class MeetingListProvider {
   }
 
 
-  getAutoRadiusMeetings(lat, long, radius) {
+  getAutoRadiusMeetings(lat: any, long: any, radius: any) {
     const getAutoRadiusMeetingsURL: string = this.tomatoBMLT
       + '?switcher=GetSearchResults&geo_width_km='
       + '-'
@@ -45,7 +45,7 @@ export class MeetingListProvider {
     return this.http.get(getAutoRadiusMeetingsURL);
   }
 
-  getRadiusMeetings(lat, long, radius) {
+  getRadiusMeetings(lat: any, long: any, radius: any) {
     const getRadiusMeetingsURL: string = this.tomatoBMLT
       + '?switcher=GetSearchResults'
       + '&data_field_key=longitude,latitude,id_bigint'
@@ -59,7 +59,7 @@ export class MeetingListProvider {
     return this.http.get(getRadiusMeetingsURL);
   }
 
-  getAddressMeetings(lat, long, radius) {
+  getAddressMeetings(lat: any, long: any, radius: any) {
     const getAddressMeetingsURL: string = this.tomatoBMLT
       + '?switcher=GetSearchResults&geo_width_km='
       + '-'
@@ -72,7 +72,7 @@ export class MeetingListProvider {
     return this.http.get(getAddressMeetingsURL);
   }
 
-  getNearestMeeting(lat, long) {
+  getNearestMeeting(lat: any, long: any) {
     const getAddressMeetingsURL: string = this.tomatoBMLT
       + '?switcher=GetSearchResults&geo_width_km='
       + '-1'
@@ -84,7 +84,7 @@ export class MeetingListProvider {
     return this.http.get(getAddressMeetingsURL);
   }
 
-  getMeetingsByAreaProvider(areaID) {
+  getMeetingsByAreaProvider(areaID: any) {
     const getMeetingsByAreaURL: string = this.tomatoBMLT
       + '?switcher=GetSearchResults&services='
       + areaID
@@ -93,7 +93,7 @@ export class MeetingListProvider {
 
   }
 
-  async getMeetingsByVirtArea(areaID) {
+  async getMeetingsByVirtArea(areaID: any) {
     const getMeetingsByVirtAreaURL: string = this.virtualBMLT
       + '?switcher=GetSearchResults&services='
       + areaID
@@ -103,7 +103,7 @@ export class MeetingListProvider {
     return JSON.parse(data.data);
   }
 
-  getSingleMeetingByID(id) {
+  getSingleMeetingByID(id: any) {
     const getSingleMeetingByIDURL: string = this.tomatoBMLT
       + '?switcher=GetSearchResults&meeting_ids[]='
       + id;

@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TidyDelimiterPipe implements PipeTransform {
 
-  transform(value: string, ...args) {
+  transform(value: string) {
     const regex = /(Bus|Train) Lines#@-@#/gi;
     return value.replace(regex, ' ');
   }

@@ -8,8 +8,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
   styleUrls: ['./modal.page.scss'],
 })
 export class ModalPage {
-  text: string;
-  title: string;
+  text!: string;
+  title!: string;
   meetingList: any;
 
   constructor(
@@ -23,20 +23,20 @@ export class ModalPage {
     await this.modalController.dismiss();
   }
 
-  public openMapsLink(destLatitude, destLongitude) {
+  public openMapsLink(destLatitude: any, destLongitude: any) {
     this.iab.create('https://www.google.com/maps/search/?api=1&query=' + destLatitude + ',' + destLongitude, '_system');
   }
 
-  public openLink(url) {
+  public openLink(url: any) {
     this.iab.create(url, '_system');
   }
 
-  public dialNum(url) {
+  public dialNum(url: any) {
     const telUrl = 'tel:' + url;
     this.iab.create(telUrl, '_system');
   }
 
-  isHybrid(meeting) {
+  isHybrid(meeting: any) {
     if (meeting.formats.match(/HY/i)) {
       return 'HYBRID';
     } else {
@@ -44,7 +44,7 @@ export class ModalPage {
     }
   }
 
-  isTempClosed(meeting) {
+  isTempClosed(meeting: any) {
     if (meeting.formats.match(/TC/i)) {
       return 'TEMPCLOSED';
     } else {

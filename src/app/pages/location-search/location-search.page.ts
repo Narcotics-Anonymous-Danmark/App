@@ -16,7 +16,7 @@ export class LocationSearchPage  {
   meetingsListGrouping: string;
 
   shownGroup = null;
-  loader = null;
+  loader: any = null;
   isLoaded = false;
   radius = 25;
 
@@ -67,20 +67,20 @@ export class LocationSearchPage  {
     }
   }
 
-  locatePhone() {
+  async locatePhone() {
     this.translate.get('LOCATING').subscribe(value => {
       this.presentLoader(value);
     });
-    if (LocationService.hasPermission()) {
+    if (await LocationService.hasPermission()) {
       let locationTimeout = setTimeout(()=>{
         this.dismissLoaderAndLoadMeetings();
       }, 10000);
       LocationService.getMyLocation().then((myLocation: MyLocation) => {
         clearTimeout(locationTimeout);
-        this.currentLatitude = myLocation.latLng.lat;
-        this.currentLongitude = myLocation.latLng.lng;
+        this.currentLatitude = myLocation.latLng!.lat;
+        this.currentLongitude = myLocation.latLng!.lng;
         this.dismissLoaderAndLoadMeetings();
-      }, (reason) => {
+      }, () => {
         clearTimeout(locationTimeout);
         this.dismissLoaderAndLoadMeetings();
       });

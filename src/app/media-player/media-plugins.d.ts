@@ -5,9 +5,14 @@
  *
  * Both globals only exist on device; the player feature-detects them and
  * falls back to HTML5 audio (browser development) / no lock-screen controls.
+ *
+ * NOTE: cordova-plugin-media ships its own global `Media` type, so we do NOT
+ * redeclare `Media` here (that would be a duplicate identifier). Our own
+ * shape is named `CordovaMedia` and is self-contained, so the media backend
+ * compiles whether or not the plugin's bundled types are in the program.
  */
 
-declare class Media {
+declare class CordovaMedia {
     constructor(
         src: string,
         mediaSuccess?: () => void,
@@ -62,6 +67,5 @@ interface MusicControlsStatic {
 }
 
 interface Window {
-    Media?: typeof Media;
     MusicControls?: MusicControlsStatic;
 }
