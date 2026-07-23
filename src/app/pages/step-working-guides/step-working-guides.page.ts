@@ -23,7 +23,7 @@ export class StepWorkingGuidesPage implements OnInit, OnDestroy {
   activeChapterIndex = -1;
   resumePoint: ResumePoint | null = null;
   private playlist: MediaPlaylist | null = null;
-  private stateSub: Subscription;
+  private stateSub?: Subscription;
 
   constructor(
     private stepWorkingGuidesProvider: StepWorkingGuidesService,
@@ -57,7 +57,7 @@ export class StepWorkingGuidesPage implements OnInit, OnDestroy {
   }
 
   getTodayJft() {
-    this.stepWorkingGuidesProvider.load().subscribe((data) => {
+    this.stepWorkingGuidesProvider.load().subscribe((data: any) => {
         this.bookTitle = data.bookTitle;
         this.bookEdition = data.bookEdition;
         this.bookAuthor = data.bookAuthor;
@@ -66,7 +66,7 @@ export class StepWorkingGuidesPage implements OnInit, OnDestroy {
           id: BOOK_ID,
           type: 'book',
           title: data.bookTitle,
-          tracks: data.chapters.map((chapter) => ({
+          tracks: data.chapters.map((chapter: any) => ({
             id: chapter.url,
             title: chapter.title,
             url: chapter.url,

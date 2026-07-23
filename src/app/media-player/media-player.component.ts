@@ -18,7 +18,7 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
     state: PlayerState = INITIAL_PLAYER_STATE;
     private seeking = false;
     private seekPreview = 0;
-    private stateSub: Subscription;
+    private stateSub?: Subscription;
 
     constructor(public player: MediaPlayerService) { }
 

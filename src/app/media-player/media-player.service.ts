@@ -89,8 +89,8 @@ export class MediaPlayerService {
         let startPosition = 0;
         if (index === undefined || index === null) {
             index = resumeIndex !== null ? resumeIndex : 0;
-            startPosition = resumeIndex !== null ? resume.position : 0;
-        } else if (resumeIndex === index) {
+            startPosition = resume && resumeIndex !== null ? resume.position : 0;
+        } else if (resume && resumeIndex === index) {
             startPosition = resume.position;
         }
         if (startPosition < MIN_RESUME_POSITION_SECONDS) {

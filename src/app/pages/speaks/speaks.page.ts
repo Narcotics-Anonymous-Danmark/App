@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { AudioService } from '../../providers/audio.service';
 import { LoadingService } from '../../providers/loading.service';
 import { Subscription } from 'rxjs';
@@ -13,10 +12,9 @@ import { MediaPlayerService } from 'src/app/media-player/media-player.service';
 export class SpeaksPage implements OnInit, OnDestroy {
     events: any;
     activeSpeakUrl: string | null = null;
-    private stateSub: Subscription;
+    private stateSub?: Subscription;
 
     constructor(
-        private translate: TranslateService,
         private audioProvider: AudioService,
         private player: MediaPlayerService,
         public loadingCtrl: LoadingService
@@ -39,7 +37,7 @@ export class SpeaksPage implements OnInit, OnDestroy {
 
     getAllSpeakers() {
         this.loadingCtrl.present('Loading Speakers...');
-        this.audioProvider.load().subscribe((data) => {
+        this.audioProvider.load().subscribe((data: any) => {
             this.events = Array.of(data)[0];
         });
         this.loadingCtrl.dismiss();
