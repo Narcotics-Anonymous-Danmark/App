@@ -43,6 +43,9 @@ export class BasicTextPage implements OnInit, OnDestroy {
       this.activeChapterIndex = state.playlist && state.playlist.id === BOOK_ID && state.status !== 'idle'
         ? state.trackIndex
         : -1;
+      if (state.status === 'idle') {
+        this.loadResumePoint();
+      }
     });
   }
 

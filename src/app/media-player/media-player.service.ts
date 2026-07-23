@@ -216,18 +216,15 @@ export class MediaPlayerService {
         }
     }
 
-    private onTrackEnded(): void {
+    private async onTrackEnded(): Promise<void> {
         const { playlist, trackIndex } = this.state;
         if (!playlist) {
             return;
         }
         if (trackIndex < playlist.tracks.length - 1) {
-            // Auto-advance; the resume point moves to the start of the next
-            // track so a killed app still comes back to the right chapter.
             this.startTrack(playlist, trackIndex + 1, 0);
         } else {
-            // Finished the whole book / speak: forget the resume point.
-            this.resumePoints.clear(playlist.type, playlist.id);
+            await this.resumePoints.clear(playlist.type, playlist.id);
             this.stop(false);
         }
     }
