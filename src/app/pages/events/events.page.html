@@ -20,7 +20,7 @@
                     <h3>{{ event.event_name }}</h3>
                     <p style="vertical-align: middle;">
                         <ion-icon name="calendar-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
-                        {{ event.event_start_date | date:"dd. MMM yyyy hh:mm" }}
+                        {{ event.event_start_date | date:"dd. MMM yyyy" }}{{ event.event_start_time ? ' ' + (event.event_start_time | slice:0:5) : '' }}
                     </p>
                     <p style="vertical-align: middle;">
                         <ion-icon name="location-outline" slot="start" style="font-size:18px; vertical-align: top;"></ion-icon>
