@@ -62,7 +62,6 @@ export class MeetingListProvider {
   getAddressMeetings(lat: any, long: any, radius: any) {
     const getAddressMeetingsURL: string = this.tomatoBMLT
       + '?switcher=GetSearchResults&geo_width_km='
-      + '-'
       + radius
       + '&long_val='
       + long
