@@ -269,10 +269,6 @@ Remember to check apk from Play Console:
 
 ### iOS
 
-Replace/rename the following configuration files from android to ios:
-- config.ios.xml -> config.xml
-- package.ios.json -> package.json
-- package.lock.ios.json -> package.lock.json
 
 Remember nadanmark.dk API and Google Maps credentials!!!
 

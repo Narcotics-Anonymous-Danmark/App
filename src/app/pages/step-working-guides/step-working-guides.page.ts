@@ -76,6 +76,7 @@ export class StepWorkingGuidesPage implements OnInit, OnDestroy {
           id: BOOK_ID,
           type: 'book',
           title: data.bookTitle,
+          coverUrl: 'assets/img/audiobooks/step-working-guides.png',
           tracks: data.chapters.map((chapter: any) => ({
             id: chapter.url,
             title: chapter.title,

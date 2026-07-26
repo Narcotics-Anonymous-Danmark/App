@@ -76,6 +76,7 @@ export class HowAndWhyPage implements OnInit, OnDestroy {
           id: BOOK_ID,
           type: 'book',
           title: data.bookTitle,
+          coverUrl: 'assets/img/audiobooks/how-and-why.png',
           tracks: data.chapters.map((chapter: any) => ({
             id: chapter.url,
             title: chapter.title,

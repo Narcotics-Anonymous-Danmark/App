@@ -4,17 +4,19 @@ import { AudioBackend, CordovaMediaBackend, HtmlAudioBackend } from './audio-bac
 import {
     INITIAL_PLAYER_STATE,
     MediaPlaylist,
-    MediaTrack,
+    parseDurationLabel,
     PlaybackStatus,
     PlayerState,
-    ResumePoint
+    ResumePoint,
+    SKIP_BACKWARD_SECONDS,
+    SKIP_FORWARD_SECONDS
 } from './media-player.models';
 import { ResumePointsService } from './resume-points.service';
 
 const RESUME_SAVE_INTERVAL_MS = 5000;
 const POSITION_POLL_INTERVAL_MS = 1000;
-// A resume position this close to the start is not worth restoring.
 const MIN_RESUME_POSITION_SECONDS = 3;
+const MUSIC_CONTROLS_SYNC_INTERVAL_MS = 5000;
 
 /**
  * The single shared media player for the app (audio books + speaks).
@@ -22,7 +24,8 @@ const MIN_RESUME_POSITION_SECONDS = 3;
  * - Plays through cordova-plugin-media on device, so audio keeps running
  *   with the screen off/locked and is never throttled by the webview.
  * - Shows lock-screen/notification controls via cordova-plugin-music-controls2
- *   when the plugin is present.
+ *   when the plugin is present, including the timeline iOS draws from the
+ *   published duration/position and the skip + scrub commands.
  * - Persists resume points: one per book (chapter + position) and one per
  *   speak file, restored automatically on the next play.
  *
@@ -42,6 +45,8 @@ export class MediaPlayerService {
     private pollTimer: any = null;
     private lastResumeSaveAt = 0;
     private musicControlsActive = false;
+    private musicControlsDuration = 0;
+    private lastMusicControlsSyncAt = 0;
     private notificationPermissionRequested = false;
 
     constructor(
@@ -116,7 +121,7 @@ export class MediaPlayerService {
         this.backend.pause();
         this.setStatus('paused');
         this.persistResumePoint();
-        this.updateMusicControlsPlaying(false);
+        this.syncMusicControlsPlayback();
     }
 
     resume(): void {
@@ -125,7 +130,7 @@ export class MediaPlayerService {
         }
         this.backend.play();
         this.setStatus('playing');
-        this.updateMusicControlsPlaying(true);
+        this.syncMusicControlsPlayback();
     }
 
     /** Stops playback and hides the player. The resume point is kept. */
@@ -153,7 +158,7 @@ export class MediaPlayerService {
     }
 
     seekTo(seconds: number): void {
-        if (!this.backend || this.state.status === 'idle') {
+        if (!this.backend || this.state.status === 'idle' || !isFinite(seconds)) {
             return;
         }
         const duration = this.state.duration;
@@ -164,6 +169,7 @@ export class MediaPlayerService {
         this.backend.seekTo(target);
         this.patchState({ position: target });
         this.persistResumePoint();
+        this.syncMusicControlsPlayback();
     }
 
     seekBy(deltaSeconds: number): void {
@@ -186,7 +192,7 @@ export class MediaPlayerService {
             playlist,
             trackIndex,
             position: startPosition,
-            duration: 0
+            duration: parseDurationLabel(track.durationLabel)
         });
 
         this.backend = CordovaMediaBackend.isAvailable()
@@ -203,7 +209,7 @@ export class MediaPlayerService {
         this.setStatus('playing');
         this.startPolling();
         this.persistResumePoint();
-        this.showMusicControls(playlist, track, trackIndex);
+        this.syncMusicControlsMetadata();
     }
 
     private onTrackRunning(): void {
@@ -214,6 +220,7 @@ export class MediaPlayerService {
         if (this.state.status === 'loading') {
             this.setStatus('playing');
         }
+        this.syncMusicControlsPlayback();
     }
 
     private async onTrackEnded(): Promise<void> {
@@ -292,6 +299,11 @@ export class MediaPlayerService {
         if (Date.now() - this.lastResumeSaveAt >= RESUME_SAVE_INTERVAL_MS) {
             this.persistResumePoint();
         }
+        if (this.supportsElapsedUpdates
+            && (Math.floor(duration) !== this.musicControlsDuration
+                || Date.now() - this.lastMusicControlsSyncAt >= MUSIC_CONTROLS_SYNC_INTERVAL_MS)) {
+            this.syncMusicControlsPlayback();
+        }
     }
 
     private releaseBackend(): void {
@@ -333,37 +345,80 @@ export class MediaPlayerService {
         }
     }
 
-    private showMusicControls(playlist: MediaPlaylist, track: MediaTrack, trackIndex: number): void {
-        const controls = (window as any).MusicControls as MusicControlsStatic | undefined;
-        if (!controls) {
+    private get musicControls(): MusicControlsStatic | undefined {
+        return (window as any).MusicControls as MusicControlsStatic | undefined;
+    }
+
+    private get supportsElapsedUpdates(): boolean {
+        return (window as any).cordova?.platformId === 'ios';
+    }
+
+    private syncMusicControlsMetadata(): void {
+        const controls = this.musicControls;
+        const { playlist, trackIndex, position, duration, status } = this.state;
+        if (!controls || !playlist) {
+            return;
+        }
+        const track = playlist.tracks[trackIndex];
+        if (!track) {
             return;
         }
         this.ensureNotificationPermission();
         controls.create({
             track: track.title,
             artist: playlist.title,
+            album: playlist.title,
             cover: playlist.coverUrl || '',
-            isPlaying: true,
+            duration: Math.floor(duration),
+            elapsed: Math.floor(position),
+            isPlaying: status !== 'paused',
             dismissable: false,
             hasPrev: playlist.type === 'book' && trackIndex > 0,
             hasNext: playlist.type === 'book' && trackIndex < playlist.tracks.length - 1,
             hasClose: true,
-            hasScrubbing: false,
+            hasSkipBackward: true,
+            skipBackwardInterval: SKIP_BACKWARD_SECONDS,
+            hasSkipForward: true,
+            skipForwardInterval: SKIP_FORWARD_SECONDS,
+            hasScrubbing: true,
             ticker: track.title
         }, () => { }, () => { });
-        controls.subscribe((action) => this.zone.run(() => this.onMusicControlsEvent(action)));
-        controls.listen();
-        this.musicControlsActive = true;
+
+        if (!this.musicControlsActive) {
+            controls.subscribe((action) => this.zone.run(() => this.onMusicControlsEvent(action)));
+            controls.listen();
+            this.musicControlsActive = true;
+        }
+        this.musicControlsDuration = Math.floor(duration);
+        this.lastMusicControlsSyncAt = Date.now();
+    }
+
+    private syncMusicControlsPlayback(): void {
+        const controls = this.musicControls;
+        if (!controls || !this.musicControlsActive) {
+            return;
+        }
+        const isPlaying = this.state.status !== 'paused';
+        if (!this.supportsElapsedUpdates) {
+            controls.updateIsPlaying(isPlaying);
+            return;
+        }
+        if (Math.floor(this.state.duration) !== this.musicControlsDuration) {
+            this.syncMusicControlsMetadata();
+            return;
+        }
+        this.lastMusicControlsSyncAt = Date.now();
+        controls.updateElapsed({ elapsed: Math.floor(this.state.position), isPlaying });
     }
 
     private onMusicControlsEvent(action: string): void {
-        let message = '';
+        let event: { message?: string; position?: string | number };
         try {
-            message = JSON.parse(action).message;
+            event = JSON.parse(action);
         } catch (e) {
             return;
         }
-        switch (message) {
+        switch (event.message) {
             case 'music-controls-play':
             case 'music-controls-media-button-play':
                 this.resume();
@@ -385,24 +440,28 @@ export class MediaPlayerService {
             case 'music-controls-media-button-previous':
                 this.previous();
                 break;
+            case 'music-controls-skip-forward':
+                this.seekBy(SKIP_FORWARD_SECONDS);
+                break;
+            case 'music-controls-skip-backward':
+                this.seekBy(-SKIP_BACKWARD_SECONDS);
+                break;
+            case 'music-controls-seek-to':
+                this.seekTo(Number(event.position));
+                break;
             case 'music-controls-destroy':
                 this.stop();
                 break;
         }
     }
 
-    private updateMusicControlsPlaying(isPlaying: boolean): void {
-        const controls = (window as any).MusicControls as MusicControlsStatic | undefined;
-        if (controls && this.musicControlsActive) {
-            controls.updateIsPlaying(isPlaying);
-        }
-    }
-
     private destroyMusicControls(): void {
-        const controls = (window as any).MusicControls as MusicControlsStatic | undefined;
+        const controls = this.musicControls;
         if (controls && this.musicControlsActive) {
             controls.destroy(() => { }, () => { });
             this.musicControlsActive = false;
         }
+        this.musicControlsDuration = 0;
+        this.lastMusicControlsSyncAt = 0;
     }
 }

@@ -48,6 +48,10 @@ interface MusicControlsStatic {
         hasNext?: boolean;
         hasClose?: boolean;
         hasScrubbing?: boolean;
+        hasSkipBackward?: boolean;
+        hasSkipForward?: boolean;
+        skipBackwardInterval?: number;
+        skipForwardInterval?: number;
         album?: string;
         duration?: number;
         elapsed?: number;

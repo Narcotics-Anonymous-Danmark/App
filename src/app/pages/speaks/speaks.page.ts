@@ -444,6 +444,7 @@ export class SpeaksPage implements OnInit, OnDestroy, ViewWillEnter {
             id: speak.id,
             type: 'speak',
             title: speak.eventTitle,
+            coverUrl: 'assets/img/na-logo-placeholder.png',
             tracks: [{
                 id: speak.id,
                 title: this.trackTitle(speak),

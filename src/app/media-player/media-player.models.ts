@@ -8,6 +8,9 @@
 
 export type MediaPlaylistType = 'book' | 'speak';
 
+export const SKIP_BACKWARD_SECONDS = 15;
+export const SKIP_FORWARD_SECONDS = 30;
+
 export interface MediaTrack {
     /** Stable identifier for the track. We use the audio URL. */
     id: string;
@@ -61,6 +64,25 @@ export const INITIAL_PLAYER_STATE: PlayerState = {
     position: 0,
     duration: 0
 };
+
+export function parseDurationLabel(label?: string): number {
+    if (!label) {
+        return 0;
+    }
+    const parts = label.trim().split(':');
+    if (parts.length < 2 || parts.length > 3) {
+        return 0;
+    }
+    let seconds = 0;
+    for (const part of parts) {
+        const value = parseInt(part, 10);
+        if (isNaN(value)) {
+            return 0;
+        }
+        seconds = seconds * 60 + value;
+    }
+    return seconds;
+}
 
 /** Formats seconds as m:ss or h:mm:ss for display. */
 export function formatPlaybackTime(totalSeconds: number): string {

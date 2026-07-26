@@ -1,6 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { formatPlaybackTime, INITIAL_PLAYER_STATE, PlayerState } from './media-player.models';
+import {
+    formatPlaybackTime,
+    INITIAL_PLAYER_STATE,
+    PlayerState,
+    SKIP_BACKWARD_SECONDS,
+    SKIP_FORWARD_SECONDS
+} from './media-player.models';
 import { MediaPlayerService } from './media-player.service';
 
 /**
@@ -16,6 +22,8 @@ import { MediaPlayerService } from './media-player.service';
 export class MediaPlayerComponent implements OnInit, OnDestroy {
 
     state: PlayerState = INITIAL_PLAYER_STATE;
+    readonly skipBackward = SKIP_BACKWARD_SECONDS;
+    readonly skipForward = SKIP_FORWARD_SECONDS;
     private seeking = false;
     private seekPreview = 0;
     private stateSub?: Subscription;

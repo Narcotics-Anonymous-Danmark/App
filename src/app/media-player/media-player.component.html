@@ -26,7 +26,7 @@
             (click)="player.previous()" [attr.aria-label]="'PLAYER_PREVIOUS' | translate">
             <ion-icon slot="icon-only" name="play-skip-back-outline"></ion-icon>
         </ion-button>
-        <ion-button fill="clear" (click)="player.seekBy(-15)"
+        <ion-button fill="clear" (click)="player.seekBy(-skipBackward)"
             [attr.aria-label]="'PLAYER_REWIND' | translate">
             <ion-icon slot="icon-only" name="play-back-outline"></ion-icon>
         </ion-button>
@@ -36,7 +36,7 @@
             <ion-icon *ngIf="state.status !== 'loading'" slot="icon-only"
                 [name]="state.status === 'playing' ? 'pause-outline' : 'play-outline'"></ion-icon>
         </ion-button>
-        <ion-button fill="clear" (click)="player.seekBy(30)"
+        <ion-button fill="clear" (click)="player.seekBy(skipForward)"
             [attr.aria-label]="'PLAYER_FORWARD' | translate">
             <ion-icon slot="icon-only" name="play-forward-outline"></ion-icon>
         </ion-button>
