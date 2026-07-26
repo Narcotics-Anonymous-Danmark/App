@@ -6,30 +6,189 @@
         <ion-title>
             {{'SPEAKS' | translate}}
         </ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="toggleFilters()">
+                <ion-icon slot="start" name="funnel-outline"></ion-icon>
+                {{ activeFilterCount ? activeFilterCount : ('SPEAK_FILTERS' | translate) }}
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+
+    <ion-toolbar>
+        <ion-searchbar [(ngModel)]="query" (ionChange)="onFilterChanged()" [debounce]="200" inputmode="search"
+            enterkeyhint="search" [placeholder]="'SPEAK_SEARCH_PLACEHOLDER' | translate"
+            [cancelButtonText]="'CANCEL' | translate">
+        </ion-searchbar>
+    </ion-toolbar>
+
+    <ion-toolbar *ngIf="catalog.conventions.length > 1">
+        <div class="h-scroll">
+            <ion-chip [outline]="conventionCount > 0" color="primary" (click)="clearConventions()">
+                <ion-label>{{ 'SPEAK_ALL' | translate }}</ion-label>
+            </ion-chip>
+            <ion-chip *ngFor="let item of catalog.conventions" [outline]="!hasConvention(item.key)" color="primary"
+                (click)="toggleConvention(item.key)">
+                <ion-label>{{ item.label }}</ion-label>
+            </ion-chip>
+        </div>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <ion-list #scheduleList>
-        <ion-item-group *ngFor="let event of events">
-            <ion-item-divider sticky>
-                <ion-label>
-                    {{event.title}}
-                </ion-label>
-            </ion-item-divider>
-            <ion-item-sliding *ngFor="let speak of event.speaks" #slidingItem>
-                <ion-item>
-                    <ion-label>
-                        <ion-button size="default" class="ion-text-wrap speak-button" expand="block"
-                            [fill]="speak.audioUrl === activeSpeakUrl ? 'outline' : 'solid'"
-                            (click)="playSpeak(event, speak)">
-                            <ion-ripple-effect></ion-ripple-effect>
-                            {{ speak.name }} - {{ speak.location }} - {{ speak.year }}
-                        </ion-button>
-                    </ion-label>
-                </ion-item>
-            </ion-item-sliding>
-        </ion-item-group>
-    </ion-list>
+    <ion-refresher slot="fixed" (ionRefresh)="reload($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
+    <div class="page-wrap">
+
+        <ng-container *ngIf="filtersOpen">
+            <p class="ion-padding-horizontal filter-heading">
+                <ion-note>{{ 'LANGUAGE' | translate }}</ion-note>
+            </p>
+            <div class="h-scroll">
+                <ion-chip [outline]="languageCount > 0" color="primary" (click)="clearLanguages()">
+                    <ion-label>{{ 'SPEAK_ALL' | translate }}</ion-label>
+                </ion-chip>
+                <ion-chip [outline]="!hasLanguage('da')" color="primary" (click)="toggleLanguage('da')">
+                    <ion-label>{{ 'DANISH' | translate }}</ion-label>
+                </ion-chip>
+                <ion-chip [outline]="!hasLanguage('en')" color="primary" (click)="toggleLanguage('en')">
+                    <ion-label>{{ 'ENGLISH' | translate }}</ion-label>
+                </ion-chip>
+            </div>
+
+            <ng-container *ngIf="yearOptions.length">
+                <p class="ion-padding-horizontal filter-heading">
+                    <ion-note>{{ 'SPEAK_YEAR' | translate }}</ion-note>
+                </p>
+                <div class="h-scroll">
+                    <ion-chip [outline]="yearCount > 0" color="primary" (click)="clearYears()">
+                        <ion-label>{{ 'SPEAK_ALL' | translate }}</ion-label>
+                    </ion-chip>
+                    <ion-chip *ngFor="let option of yearOptions" [outline]="!hasYear(option)" color="primary"
+                        (click)="toggleYear(option)">
+                        <ion-label>{{ option }}</ion-label>
+                    </ion-chip>
+                </div>
+            </ng-container>
+
+            <p class="ion-padding-horizontal filter-heading">
+                <ion-note>{{ 'SPEAK_SORT' | translate }}</ion-note>
+            </p>
+            <div class="h-scroll">
+                <ion-chip [outline]="sort !== 'newest'" color="primary" (click)="setSort('newest')">
+                    <ion-label>{{ 'SPEAK_SORT_NEWEST' | translate }}</ion-label>
+                </ion-chip>
+                <ion-chip [outline]="sort !== 'oldest'" color="primary" (click)="setSort('oldest')">
+                    <ion-label>{{ 'SPEAK_SORT_OLDEST' | translate }}</ion-label>
+                </ion-chip>
+                <ion-chip [outline]="sort !== 'name'" color="primary" (click)="setSort('name')">
+                    <ion-label>{{ 'SPEAK_SORT_NAME' | translate }}</ion-label>
+                </ion-chip>
+                <ion-chip *ngIf="startedCount || onlyStarted" [outline]="!onlyStarted" color="primary"
+                    (click)="toggleOnlyStarted()">
+                    <ion-label>{{ 'SPEAK_ONLY_STARTED' | translate }} ({{ startedCount }})</ion-label>
+                </ion-chip>
+            </div>
+
+            <div class="ion-padding-horizontal filter-actions">
+                <ion-button size="small" fill="clear" *ngIf="hasActiveFilters" (click)="resetFilters()">
+                    {{ 'SPEAK_RESET_FILTERS' | translate }}
+                </ion-button>
+                <ion-button size="small" (click)="toggleFilters()">
+                    {{ 'CLOSE' | translate }}
+                </ion-button>
+            </div>
+        </ng-container>
+
+        <ion-list *ngIf="loading">
+            <ion-item *ngFor="let placeholder of [1,2,3,4,5,6,7,8]">
+                <ion-label>
+                    <h2>
+                        <ion-skeleton-text animated style="width: 55%"></ion-skeleton-text>
+                    </h2>
+                    <p>
+                        <ion-skeleton-text animated style="width: 35%"></ion-skeleton-text>
+                    </p>
+                </ion-label>
+            </ion-item>
+        </ion-list>
+
+        <div class="ion-padding ion-text-center" *ngIf="!loading && loadFailed">
+            <h2>{{ 'SPEAK_LOAD_ERROR' | translate }}</h2>
+            <p>
+                <ion-note>{{ 'SPEAK_LOAD_ERROR_BODY' | translate }}</ion-note>
+            </p>
+            <ion-button size="small" (click)="retry()">{{ 'SPEAK_RETRY' | translate }}</ion-button>
+        </div>
+
+        <ng-container *ngIf="!loading && !loadFailed">
+
+            <ion-list *ngIf="continueItems.length">
+                <ion-item-divider sticky>
+                    <ion-label>{{ 'PLAYER_CONTINUE_LISTENING' | translate }}</ion-label>
+                </ion-item-divider>
+                <ion-item-sliding *ngFor="let speak of continueItems; trackBy: trackById">
+                    <ng-container *ngTemplateOutlet="speakRow; context: { $implicit: speak, standalone: true }">
+                    </ng-container>
+                    <ion-item-options side="end">
+                        <ion-item-option color="medium" (click)="forget(speak)">
+                            {{ 'SPEAK_FORGET' | translate }}
+                        </ion-item-option>
+                    </ion-item-options>
+                </ion-item-sliding>
+            </ion-list>
+
+            <p class="ion-padding-horizontal" *ngIf="matchCount">
+                <ion-note>{{ 'SPEAK_COUNT' | translate: { count: matchCount } }}</ion-note>
+            </p>
+
+            <!-- Empty result -->
+            <div class="ion-padding ion-text-center" *ngIf="!matchCount">
+                <h2>{{ 'SPEAK_NONE_FOUND' | translate }}</h2>
+                <p>
+                    <ion-note>{{ 'SPEAK_NONE_FOUND_BODY' | translate }}</ion-note>
+                </p>
+                <ion-button size="small" fill="outline" *ngIf="hasActiveFilters" (click)="resetFilters()">
+                    {{ 'SPEAK_RESET_FILTERS' | translate }}
+                </ion-button>
+            </div>
+
+            <ion-list *ngIf="matchCount">
+                <ion-item-group *ngFor="let group of groups; trackBy: trackByGroup">
+                    <ion-item-divider sticky>
+                        <ion-label>
+                            {{ group.label }}<ng-container *ngIf="group.city"> · {{ group.city }}</ng-container>
+                        </ion-label>
+                    </ion-item-divider>
+
+                    <ng-container *ngFor="let speak of group.speaks; trackBy: trackById">
+                        <ng-container *ngTemplateOutlet="speakRow; context: { $implicit: speak }"></ng-container>
+                    </ng-container>
+                </ion-item-group>
+            </ion-list>
+
+            <ion-infinite-scroll (ionInfinite)="loadMore($event)" [disabled]="!hasMore">
+                <ion-infinite-scroll-content></ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+        </ng-container>
+    </div>
 </ion-content>
+
+<ng-template #speakRow let-speak let-standalone="standalone">
+    <ion-item button detail="false" [color]="rowColor(speak)" (click)="play(speak)">
+        <ion-spinner slot="start" *ngIf="isActive(speak) && playerStatus === 'loading'" name="crescent"
+            color="primary"></ion-spinner>
+        <ion-icon slot="start" *ngIf="!isActive(speak) || playerStatus !== 'loading'" [name]="rowIcon(speak)"
+            [color]="rowIconColor(speak)"></ion-icon>
+
+        <ion-label class="ion-text-wrap">
+            <h2>{{ speak.title }}</h2>
+            <p>{{ standalone ? speak.metaLineWithConvention : speak.metaLine }}</p>
+            <ion-progress-bar *ngIf="progress(speak) as bar" [value]="bar.percent || 0"></ion-progress-bar>
+            <p *ngIf="progress(speak) as bar">
+                <ion-note color="primary">{{ bar.label }}</ion-note>
+            </p>
+        </ion-label>
+    </ion-item>
+</ng-template>

@@ -39,9 +39,8 @@ export interface MediaPlaylist {
 export interface ResumePoint {
     trackId: string;
     trackIndex: number;
-    /** Seconds into the track. */
     position: number;
-    /** ISO-8601 timestamp of the last save. */
+    duration?: number;
     updatedAt: string;
 }
 
@@ -51,9 +50,7 @@ export interface PlayerState {
     status: PlaybackStatus;
     playlist: MediaPlaylist | null;
     trackIndex: number;
-    /** Seconds into the current track. */
     position: number;
-    /** Track duration in seconds, 0 while unknown. */
     duration: number;
 }
 

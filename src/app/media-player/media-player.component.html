@@ -6,7 +6,7 @@
         </div>
         <ion-button fill="clear" size="small" color="medium" class="media-player__close"
             (click)="player.stop()" [attr.aria-label]="'PLAYER_CLOSE' | translate">
-            <ion-icon slot="icon-only" name="close"></ion-icon>
+            <ion-icon slot="icon-only" name="close-outline"></ion-icon>
         </ion-button>
     </div>
 
@@ -24,25 +24,25 @@
     <div class="media-player__controls">
         <ion-button *ngIf="isBook" fill="clear" [disabled]="!hasPrevious"
             (click)="player.previous()" [attr.aria-label]="'PLAYER_PREVIOUS' | translate">
-            <ion-icon slot="icon-only" name="play-skip-back"></ion-icon>
+            <ion-icon slot="icon-only" name="play-skip-back-outline"></ion-icon>
         </ion-button>
         <ion-button fill="clear" (click)="player.seekBy(-15)"
             [attr.aria-label]="'PLAYER_REWIND' | translate">
-            <ion-icon slot="icon-only" name="play-back"></ion-icon>
+            <ion-icon slot="icon-only" name="play-back-outline"></ion-icon>
         </ion-button>
         <ion-button fill="clear" class="media-player__play" (click)="player.togglePlayPause()"
             [attr.aria-label]="(state.status === 'playing' ? 'PLAYER_PAUSE' : 'PLAYER_PLAY') | translate">
             <ion-spinner *ngIf="state.status === 'loading'"></ion-spinner>
             <ion-icon *ngIf="state.status !== 'loading'" slot="icon-only"
-                [name]="state.status === 'playing' ? 'pause' : 'play'"></ion-icon>
+                [name]="state.status === 'playing' ? 'pause-outline' : 'play-outline'"></ion-icon>
         </ion-button>
         <ion-button fill="clear" (click)="player.seekBy(30)"
             [attr.aria-label]="'PLAYER_FORWARD' | translate">
-            <ion-icon slot="icon-only" name="play-forward"></ion-icon>
+            <ion-icon slot="icon-only" name="play-forward-outline"></ion-icon>
         </ion-button>
         <ion-button *ngIf="isBook" fill="clear" [disabled]="!hasNext"
             (click)="player.next()" [attr.aria-label]="'PLAYER_NEXT' | translate">
-            <ion-icon slot="icon-only" name="play-skip-forward"></ion-icon>
+            <ion-icon slot="icon-only" name="play-skip-forward-outline"></ion-icon>
         </ion-button>
     </div>
 </div>

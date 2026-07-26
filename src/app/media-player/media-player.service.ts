@@ -249,7 +249,7 @@ export class MediaPlayerService {
     }
 
     private async persistResumePoint(): Promise<void> {
-        const { playlist, trackIndex, position, status } = this.state;
+        const { playlist, trackIndex, position, duration, status } = this.state;
         if (!playlist || status === 'idle') {
             return;
         }
@@ -258,12 +258,16 @@ export class MediaPlayerService {
             return;
         }
         this.lastResumeSaveAt = Date.now();
-        await this.resumePoints.save(playlist.type, playlist.id, {
+        const point: ResumePoint = {
             trackId: track.id,
             trackIndex,
             position: Math.floor(position),
             updatedAt: new Date().toISOString()
-        });
+        };
+        if (duration > 0) {
+            point.duration = Math.floor(duration);
+        }
+        await this.resumePoints.save(playlist.type, playlist.id, point);
     }
 
     private startPolling(): void {

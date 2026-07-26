@@ -19,7 +19,7 @@ export class EventService {
                 .get('https://www.nadanmark.dk/wp-json/wp/v2/calendar?category-slug=bedringsarrangement', {
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Basic " + btoa("username:password")
+                        "Authorization": "Basic " + btoa("na.app_api:Wt3QTExAaKqXJx")
                     }
                 })
                 .pipe(map(this.processData, this));

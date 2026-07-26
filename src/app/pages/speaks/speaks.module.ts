@@ -5,8 +5,6 @@ import { IonicModule } from '@ionic/angular';
 import { SpeaksPageRoutingModule } from './speaks-routing.module';
 import { SpeaksPage } from './speaks.page';
 import { TranslateModule } from '@ngx-translate/core';
-import { AudioService } from '../../providers/audio.service';
-import { HTTP } from '@ionic-native/http/ngx';
 
 @NgModule({
     imports: [
@@ -16,11 +14,6 @@ import { HTTP } from '@ionic-native/http/ngx';
         TranslateModule,
         SpeaksPageRoutingModule
     ],
-    declarations: [SpeaksPage],
-    providers: [
-        AudioService,
-        HTTP
-    ]
-
+    declarations: [SpeaksPage]
 })
 export class SpeaksPageModule { }

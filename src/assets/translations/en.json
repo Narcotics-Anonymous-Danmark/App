@@ -1,4 +1,4 @@
-﻿{
+{
     "MENU"              : "Menu",
     "HOME"              : "Home",
     "LOCATIONSEARCH"    : "Meetings nearby",
@@ -137,5 +137,31 @@
     "PLAYER_PREVIOUS" : "Previous chapter",
     "PLAYER_NEXT" : "Next chapter",
     "PLAYER_REWIND" : "Rewind 15 seconds",
-    "PLAYER_FORWARD" : "Forward 30 seconds"
+    "PLAYER_FORWARD" : "Forward 30 seconds",
+    "SPEAK_SEARCH_PLACEHOLDER": "Search name, convention, city, year …",
+    "SPEAK_FILTERS": "Filters",
+    "SPEAK_ALL": "All",
+    "SPEAK_SORT": "Sort",
+    "SPEAK_SORT_NEWEST": "Newest",
+    "SPEAK_SORT_OLDEST": "Oldest",
+    "SPEAK_SORT_NAME": "Name",
+    "SPEAK_YEAR": "Year",
+    "SPEAK_ONLY_STARTED": "Only started",
+    "CHAPTERS": "Chapters",
+    "PLAYER_CONTINUE_LISTENING": "Continue listening",
+    "PLAYER_CONTINUE_FROM": "Continue from {{time}}",
+    "PLAYER_TIME_LEFT": "{{time}} left",
+    "PLAYER_NOW_PLAYING": "Now playing",
+    "SPEAK_COUNT": "{{count}} speaks",
+    "SPEAK_NONE_FOUND": "No speaks found",
+    "SPEAK_NONE_FOUND_BODY": "Try another search word, or reset the filters.",
+    "SPEAK_RESET_FILTERS": "Reset",
+    "SPEAK_LOAD_ERROR": "Could not load the speaks",
+    "SPEAK_LOAD_ERROR_BODY": "Check your internet connection and try again.",
+    "SPEAK_RETRY": "Try again",
+    "SPEAK_FORGET": "Remove from list",
+    "CONVENTION": "Convention",
+    "OPENING_SPEAKER": "Opening speak",
+    "MAIN_SPEAKER": "Main speak",
+    "CLOSING_SPEAKER": "Closing speak"
 }

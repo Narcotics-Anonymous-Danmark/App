@@ -92,6 +92,10 @@ class ResumePoint {
   /// Whole seconds into the track.
   final int position;
 
+  /// Track length in seconds when it was known at save time. Display only —
+  /// lets lists show "x left" / a progress bar without loading the file.
+  final int? duration;
+
   /// ISO-8601 timestamp of the last save.
   final String updatedAt;
 
@@ -99,6 +103,7 @@ class ResumePoint {
     required this.trackId,
     required this.trackIndex,
     required this.position,
+    this.duration,
     required this.updatedAt,
   });
 
@@ -106,6 +111,7 @@ class ResumePoint {
         trackId: json['trackId'] as String,
         trackIndex: json['trackIndex'] as int,
         position: (json['position'] as num).floor(),
+        duration: (json['duration'] as num?)?.floor(),
         updatedAt: json['updatedAt'] as String,
       );
 
@@ -113,6 +119,7 @@ class ResumePoint {
         'trackId': trackId,
         'trackIndex': trackIndex,
         'position': position,
+        if (duration != null) 'duration': duration,
         'updatedAt': updatedAt,
       };
 }

@@ -29,6 +29,30 @@ class ResumePointStore {
     }
   }
 
+  /// Every saved point of one type, keyed by playlist id. Used by lists that
+  /// show which items are already started ("continue listening").
+  Future<Map<String, ResumePoint>> getAll(MediaPlaylistType type) async {
+    final prefs = await SharedPreferences.getInstance();
+    final prefix = '$_prefix.${type.name}.';
+    final points = <String, ResumePoint>{};
+    for (final key in prefs.getKeys()) {
+      if (!key.startsWith(prefix)) {
+        continue;
+      }
+      final raw = prefs.getString(key);
+      if (raw == null) {
+        continue;
+      }
+      try {
+        points[key.substring(prefix.length)] =
+            ResumePoint.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+      } catch (_) {
+        // Skip a corrupt entry rather than failing the whole list.
+      }
+    }
+    return points;
+  }
+
   Future<void> save(
       MediaPlaylistType type, String playlistId, ResumePoint point) async {
     final prefs = await SharedPreferences.getInstance();

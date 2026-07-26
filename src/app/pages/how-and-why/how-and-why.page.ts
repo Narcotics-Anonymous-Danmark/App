@@ -1,11 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { HowAndWhyService } from 'src/app/providers/how-and-why.service';
 import { Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MediaPlayerService } from 'src/app/media-player/media-player.service';
 import { ResumePointsService } from 'src/app/media-player/resume-points.service';
-import { formatPlaybackTime, MediaPlaylist, ResumePoint } from 'src/app/media-player/media-player.models';
+import { TrackProgress, TrackProgressService } from 'src/app/media-player/track-progress.service';
+import { MediaPlaylist, PlaybackStatus, ResumePoint } from 'src/app/media-player/media-player.models';
 
 const BOOK_ID = 'how-and-why';
 
@@ -21,8 +22,11 @@ export class HowAndWhyPage implements OnInit, OnDestroy {
   bookAuthor: any;
   chapters: any;
   activeChapterIndex = -1;
+  playerStatus: PlaybackStatus = 'idle';
   resumePoint: ResumePoint | null = null;
   private playlist: MediaPlaylist | null = null;
+  private chapterProgress: { [index: number]: TrackProgress } = {};
+  private liveProgress: TrackProgress | null = null;
   private stateSub?: Subscription;
 
   constructor(
@@ -30,7 +34,9 @@ export class HowAndWhyPage implements OnInit, OnDestroy {
     private platform: Platform,
     private router: Router,
     private player: MediaPlayerService,
-    private resumePoints: ResumePointsService
+    private resumePoints: ResumePointsService,
+    private trackProgress: TrackProgressService,
+    private zone: NgZone
   ) {
       this.platform.backButton.subscribeWithPriority(1, () => {
         this.router.navigate(['/audiobooks']);
@@ -40,9 +46,10 @@ export class HowAndWhyPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.getTodayJft();
     this.stateSub = this.player.state$.subscribe((state) => {
-      this.activeChapterIndex = state.playlist && state.playlist.id === BOOK_ID && state.status !== 'idle'
-        ? state.trackIndex
-        : -1;
+      const isThisBook = !!state.playlist && state.playlist.id === BOOK_ID && state.status !== 'idle';
+      this.activeChapterIndex = isThisBook ? state.trackIndex : -1;
+      this.playerStatus = state.status;
+      this.liveProgress = isThisBook ? this.trackProgress.live(state.position, state.duration) : null;
       if (state.status === 'idle') {
         this.loadResumePoint();
       }
@@ -81,26 +88,53 @@ export class HowAndWhyPage implements OnInit, OnDestroy {
   }
 
   async loadResumePoint() {
-    this.resumePoint = await this.resumePoints.get('book', BOOK_ID);
+    const point = await this.resumePoints.get('book', BOOK_ID);
+    this.zone.run(() => {
+      this.resumePoint = point;
+      this.buildChapterProgress();
+    });
   }
 
-  get resumeChapterTitle(): string {
-    if (!this.resumePoint || !this.chapters) {
-      return '';
+  private buildChapterProgress() {
+    const progress: { [index: number]: TrackProgress } = {};
+    if (this.resumePoint && this.chapters) {
+      const chapter = this.chapters[this.resumePoint.trackIndex];
+      const bar = this.trackProgress.fromResumePoint(this.resumePoint, chapter && chapter.duration);
+      if (bar) {
+        progress[this.resumePoint.trackIndex] = bar;
+      }
     }
-    const chapter = this.chapters[this.resumePoint.trackIndex];
-    return chapter ? chapter.title : '';
+    this.chapterProgress = progress;
   }
 
-  formatPosition(seconds: number): string {
-    return formatPlaybackTime(seconds);
-  }
-
-  /** Continue the book from the saved resume point. */
-  continueListening() {
-    if (this.playlist) {
-      this.player.play(this.playlist);
+  get continueIndex(): number {
+    if (this.activeChapterIndex >= 0) {
+      return this.activeChapterIndex;
     }
+    return this.resumePoint && this.chapters && this.chapters[this.resumePoint.trackIndex]
+      ? this.resumePoint.trackIndex
+      : -1;
+  }
+
+  chapterIcon(index: number): string {
+    return this.activeChapterIndex === index && this.playerStatus === 'playing'
+      ? 'pause-circle-outline'
+      : 'play-circle-outline';
+  }
+
+  chapterColor(index: number): string | undefined {
+    return this.progress(index) ? 'light' : undefined;
+  }
+
+  chapterIconColor(index: number): string {
+    return this.progress(index) ? 'primary' : 'medium';
+  }
+
+  progress(index: number): TrackProgress | null {
+    if (this.activeChapterIndex === index) {
+      return this.liveProgress;
+    }
+    return this.chapterProgress[index] || null;
   }
 
   playChapter(index: number) {

@@ -16,19 +16,33 @@
   <div class="player-header" style="text-align:center;">
     <img style="width:150px; height:150px; text-align:center;" src="./assets/img/audiobooks/basic-text.png"/>
   </div>
-  <ion-list class="chapters" #scheduleList>
-    <ion-item button *ngIf="resumePoint && activeChapterIndex === -1" lines="full" class="continue-item" (click)="continueListening()">
-      <ion-icon slot="start" name="play-circle" color="primary"></ion-icon>
-      <ion-label class="ion-text-wrap">
-        <h2>{{ 'PLAYER_CONTINUE' | translate }}</h2>
-        <p>{{ resumeChapterTitle }} &middot; {{ formatPosition(resumePoint.position) }}</p>
-      </ion-label>
-    </ion-item>
-    <ion-item-sliding *ngFor="let chapter of chapters; let i = index" #slidingItem>
-      <ion-item (click)="playChapter(i)" [ngClass]="{active: activeChapterIndex === i}">
-        <ion-label class="ion-text-wrap">{{ chapter.title }}</ion-label>
-        <ion-note slot="end">{{ chapter.duration }}</ion-note>
-      </ion-item>
-    </ion-item-sliding>
+  <ion-list class="chapters">
+    <ng-container *ngIf="continueIndex >= 0">
+      <ion-item-divider sticky>
+        <ion-label>{{ 'PLAYER_CONTINUE_LISTENING' | translate }}</ion-label>
+      </ion-item-divider>
+      <ng-container *ngTemplateOutlet="chapterRow; context: { index: continueIndex }"></ng-container>
+      <ion-item-divider sticky>
+        <ion-label>{{ 'CHAPTERS' | translate }}</ion-label>
+      </ion-item-divider>
+    </ng-container>
+
+    <ng-container *ngFor="let chapter of chapters; let i = index">
+      <ng-container *ngTemplateOutlet="chapterRow; context: { index: i }"></ng-container>
+    </ng-container>
   </ion-list>
 </ion-content>
+
+<ng-template #chapterRow let-i="index">
+  <ion-item button detail="false" (click)="playChapter(i)" [color]="chapterColor(i)">
+    <ion-icon slot="start" [name]="chapterIcon(i)" [color]="chapterIconColor(i)"></ion-icon>
+    <ion-label class="ion-text-wrap">
+      <h2>{{ chapters[i].title }}</h2>
+      <p>{{ chapters[i].duration }}</p>
+      <ion-progress-bar *ngIf="progress(i) as bar" [value]="bar.percent || 0"></ion-progress-bar>
+      <p *ngIf="progress(i) as bar">
+        <ion-note color="primary">{{ bar.label }}</ion-note>
+      </p>
+    </ion-label>
+  </ion-item>
+</ng-template>

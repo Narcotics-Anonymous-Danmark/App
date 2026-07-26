@@ -1,4 +1,4 @@
-﻿{
+{
   "MENU": "Menu",
   "HOME": "Hjem",
   "LOCATIONSEARCH": "Møder i nærheden",
@@ -67,7 +67,7 @@
   "IS_BMLT_YES_3": "har sat BMLT op for jeres mødeliste.",
   "IS_BMLT_NO_1": "I BMLT's verdensomspændende database ser det ud til, at det møde, der er nærmest din nuværende placering, er ",
   "IS_BMLT_NO_2": "Så det ser ud til, at din lokale service område ikke har implementeret BMLT for jeres mødeliste.",
-  "CLOSE": "Lukke",
+  "CLOSE": "Luk",
   "MEETING_DETAILS": "Mødedetaljer",
   "CANCEL": "Annuller",
   "VIRTUAL_LINK": "Link til netmøde",
@@ -154,5 +154,27 @@
     "PLAYER_PREVIOUS" : "Forrige kapitel",
     "PLAYER_NEXT" : "Næste kapitel",
     "PLAYER_REWIND" : "Spol 15 sekunder tilbage",
-    "PLAYER_FORWARD" : "Spol 30 sekunder frem"
+    "PLAYER_FORWARD" : "Spol 30 sekunder frem",
+    "SPEAK_SEARCH_PLACEHOLDER": "Søg navn, konvent, by, år …",
+    "SPEAK_FILTERS": "Filtre",
+    "SPEAK_ALL": "Alle",
+    "SPEAK_SORT": "Sortering",
+    "SPEAK_SORT_NEWEST": "Nyeste",
+    "SPEAK_SORT_OLDEST": "Ældste",
+    "SPEAK_SORT_NAME": "Navn",
+    "SPEAK_YEAR": "År",
+    "SPEAK_ONLY_STARTED": "Kun påbegyndte",
+    "CHAPTERS": "Kapitler",
+    "PLAYER_CONTINUE_LISTENING": "Fortsæt afspilning",
+    "PLAYER_CONTINUE_FROM": "Fortsæt fra {{time}}",
+    "PLAYER_TIME_LEFT": "{{time}} tilbage",
+    "PLAYER_NOW_PLAYING": "Afspiller nu",
+    "SPEAK_COUNT": "{{count}} speaks",
+    "SPEAK_NONE_FOUND": "Ingen speaks fundet",
+    "SPEAK_NONE_FOUND_BODY": "Prøv et andet søgeord, eller nulstil filtrene.",
+    "SPEAK_RESET_FILTERS": "Nulstil",
+    "SPEAK_LOAD_ERROR": "Kunne ikke hente speaks",
+    "SPEAK_LOAD_ERROR_BODY": "Tjek din internetforbindelse og prøv igen.",
+    "SPEAK_RETRY": "Prøv igen",
+    "SPEAK_FORGET": "Fjern fra listen"
 }
