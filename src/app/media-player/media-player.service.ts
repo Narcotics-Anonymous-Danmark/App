@@ -350,7 +350,8 @@ export class MediaPlayerService {
     }
 
     private get supportsElapsedUpdates(): boolean {
-        return (window as any).cordova?.platformId === 'ios';
+        const platform = (window as any).cordova?.platformId;
+        return platform === 'ios' || platform === 'android';
     }
 
     private syncMusicControlsMetadata(): void {
@@ -441,15 +442,25 @@ export class MediaPlayerService {
                 this.previous();
                 break;
             case 'music-controls-skip-forward':
+            case 'music-controls-forward':
+            case 'music-controls-media-button-fast-forward':
+            case 'music-controls-media-button-skip-forward':
+            case 'music-controls-media-button-step-forward':
                 this.seekBy(SKIP_FORWARD_SECONDS);
                 break;
             case 'music-controls-skip-backward':
+            case 'music-controls-rewind':
+            case 'music-controls-media-button-rewind':
+            case 'music-controls-media-button-skip-backward':
+            case 'music-controls-media-button-step-backward':
                 this.seekBy(-SKIP_BACKWARD_SECONDS);
                 break;
             case 'music-controls-seek-to':
                 this.seekTo(Number(event.position));
                 break;
             case 'music-controls-destroy':
+            case 'music-controls-stop':
+            case 'music-controls-media-button-stop':
                 this.stop();
                 break;
         }

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /**
  * Patches cordova-plugin-music-controls2@3.0.7, which is the latest published
- * version and cannot be shipped unmodified by this app. 3.0.7 predates Android 14
- * hardening, and its iOS Now Playing integration stops at title/artist — so the
- * lock screen shows the track but no working timeline or transport buttons.
+ * version and cannot be shipped unmodified by this app. 3.0.7 predates both
+ * Android 13's media-control rework and Android 14's hardening, and on neither
+ * platform does it publish more than title/artist/art — so the lock screen shows
+ * the track but no working timeline and only a partial set of transport buttons.
  *
  * ANDROID (target SDK 35)
  *
@@ -21,21 +22,59 @@
  *      keeps the mutability it needs, and the broadcasts are delivered to our own
  *      dynamically-registered receiver.
  *
+ *   3. No timeline. The notification, the lock screen and the Quick Settings media
+ *      player draw the seek bar and the elapsed/total labels from the *media
+ *      session*: the track length from METADATA_KEY_DURATION, the playhead from the
+ *      playback state's position + speed. The plugin published neither — the
+ *      metadata carried only title/artist/album/art, and every playback state was
+ *      built with PLAYBACK_POSITION_UNKNOWN and no ACTION_SEEK_TO — so Android
+ *      showed a blank, greyed-out timeline no matter what the app sent. Worse,
+ *      updateIsPlaying rebuilt the state from scratch, so a pause wiped the little
+ *      that was there. Fix: MusicControlsInfos learns to read duration/elapsed
+ *      (which the JS wrapper has always sent), the values are kept in fields so
+ *      *every* state publish carries them, and the position is published with a
+ *      playback speed — Android then extrapolates the playhead from its own clock,
+ *      which is what keeps the bar moving while the webview is frozen in the
+ *      background.
+ *
+ *   4. updateElapsed was implemented on iOS only; on Android execute() fell through
+ *      and did nothing (not even a callback). Fix: implement it — position, an
+ *      optional corrected duration and the play state, publishing a new playback
+ *      state and refreshing the notification only when the play state actually
+ *      flipped. This is the one call the app makes while playing, so it must be
+ *      cheap.
+ *
+ *   5. The transport advertised in the playback state was hard-coded to
+ *      play/pause + next/previous. From Android 13 the system media controls build
+ *      their buttons from those actions and *ignore* the notification's own, so a
+ *      single-track speak got dead previous/next buttons while the skip
+ *      backward/forward the app asks for (and iOS shows) had nowhere to appear.
+ *      Fix: derive the actions from what create() was given, add ACTION_SEEK_TO for
+ *      scrubbing, ACTION_REWIND/FAST_FORWARD for car and Bluetooth remotes, and
+ *      declare the ±interval skips as custom actions so Android 13+ renders them.
+ *      MediaSessionCallback gains the matching onSeekTo/onRewind/onFastForward/
+ *      onCustomAction/onStop handlers.
+ *
+ *   6. destroy() only cancelled the notification and left the session active with
+ *      a stale state and metadata, which leaves a ghost entry in the Quick
+ *      Settings media player. Fix: publish STATE_STOPPED, clear the metadata and
+ *      deactivate the session; create() reactivates it.
+ *
  * IOS (MPNowPlayingInfoCenter / MPRemoteCommandCenter)
  *
- *   3. updateIsPlaying: rebuilt every now-playing value from MusicControlsInfo,
+ *   7. updateIsPlaying: rebuilt every now-playing value from MusicControlsInfo,
  *      but the JS wrapper only sends { isPlaying } — so every pause/resume wrote
  *      elapsed = 0 and reset the lock-screen playhead to 0:00. Fix: only write the
  *      keys the call actually supplied, and accept an optional duration.
  *
- *   4. create: wrote the timeline keys as ints/BOOL and nothing else. iOS needs
+ *   8. create: wrote the timeline keys as ints/BOOL and nothing else. iOS needs
  *      duration + elapsed + playbackRate as doubles to draw the timeline, and it
  *      needs MediaType/IsLiveStream/DefaultPlaybackRate to render as a normal
  *      audio player rather than a live stream. Fix: write the full set. This is
  *      what lets iOS advance the playhead on its own while the webview is frozen
  *      in the background.
  *
- *   5. registerMusicControlsEventListener only ever *added* command targets and
+ *   9. registerMusicControlsEventListener only ever *added* command targets and
  *      never disabled a command. MediaPlayerService calls create() again on every
  *      track change and metadata refresh, so one lock-screen tap fired the JS
  *      handler once per create() ever made, and hasPrev/hasNext from an earlier
@@ -47,11 +86,11 @@
  *      iOS has three transport slots and shows either prev/next track or
  *      skip back/forward, so skipping wins and track commands are switched off.
  *
- *   6. deregisterMusicControlsEventListener removed the wrong notification
+ *  10. deregisterMusicControlsEventListener removed the wrong notification
  *      observer name ("receivedEvent"), left play/pause targets attached, and left
  *      a stale entry on the lock screen after the player was closed.
  *
- *   7. createCoverArtwork could not resolve a cover bundled with the web assets.
+ *  11. createCoverArtwork could not resolve a cover bundled with the web assets.
  *      Android already resolves those out of www/ (getBitmapFromLocal), iOS only
  *      looked in Documents, so a bundled cover never reached the lock screen. Fix:
  *      look in <bundle>/www first, use the non-deprecated MPMediaItemArtwork
@@ -106,12 +145,12 @@ function patchJava(src) {
 }
 
 // ---------------------------------------------------------------------------
-// Objective-C helpers
+// Method-body helpers (Java and Objective-C)
 //
-// The iOS patches replace whole method bodies. Matching them verbatim would tie
-// the patch to the plugin's exact whitespace (it has trailing spaces on blank
-// lines), so instead we find the signature and scan for the brace that closes
-// it, skipping string literals and comments.
+// Several patches replace a whole method body. Matching one verbatim would tie
+// the patch to the plugin's exact whitespace (it mixes tabs and spaces, and has
+// trailing spaces on blank lines), so instead we find the signature and scan for
+// the brace that closes it, skipping string literals and comments.
 // ---------------------------------------------------------------------------
 
 function endOfBlock(src, open) {
@@ -171,6 +210,381 @@ function replaceMethod(src, signature, body) {
         return src;
     }
     return src.slice(0, open) + body + src.slice(close + 1);
+}
+
+// ---------------------------------------------------------------------------
+// Android — the media-session timeline
+//
+// Everything Android renders for a media app comes out of the MediaSession, not
+// out of the notification: the notification only points at the session token.
+// So the seek bar, the elapsed/total labels and (from Android 13) the transport
+// buttons are all driven from the metadata + playback state published below.
+// ---------------------------------------------------------------------------
+
+/** Fields and helpers, inserted into MusicControls.java after the last field. */
+const ANDROID_SESSION_MEMBERS = `
+
+	// ------------------------------------------------------------------
+	// The timeline published to the Android media controls
+	//
+	// Kept in fields rather than read off each call, because every playback-state
+	// publish has to carry the whole picture: PlaybackStateCompat has no partial
+	// update, so a play/pause toggle that rebuilt the state from nothing (as the
+	// stock plugin did) erased the position and blanked the seek bar.
+	//
+	// volatile because create() runs on the Cordova thread pool while
+	// updateElapsed/updateIsPlaying/destroy arrive on the WebView thread.
+	// ------------------------------------------------------------------
+
+	public static final String CUSTOM_ACTION_SKIP_FORWARD = "music-controls-skip-forward";
+	public static final String CUSTOM_ACTION_SKIP_BACKWARD = "music-controls-skip-backward";
+
+	/** False until create() runs, and again after destroy(). */
+	private volatile boolean hasTrack = false;
+	private volatile boolean trackIsPlaying = false;
+	/** Track length in ms; 0 while unknown. */
+	private volatile long trackDurationMs = 0;
+	/** Playhead in ms as of the last publish; Android extrapolates from there. */
+	private volatile long trackPositionMs = 0;
+	private volatile boolean trackHasPrev = false;
+	private volatile boolean trackHasNext = false;
+	private volatile boolean trackHasClose = false;
+	private volatile boolean trackHasScrubbing = false;
+	private volatile boolean trackHasSkipForward = false;
+	private volatile boolean trackHasSkipBackward = false;
+	private volatile long trackSkipForwardSeconds = 0;
+	private volatile long trackSkipBackwardSeconds = 0;
+
+	/** Adopts what create() said about the track that is now current. */
+	private void rememberTrack(MusicControlsInfos infos) {
+		this.hasTrack = true;
+		this.trackDurationMs = infos.duration > 0 ? infos.duration * 1000L : 0L;
+		this.trackPositionMs = infos.elapsed > 0 ? infos.elapsed * 1000L : 0L;
+		this.trackHasPrev = infos.hasPrev;
+		this.trackHasNext = infos.hasNext;
+		this.trackHasClose = infos.hasClose;
+		this.trackHasScrubbing = infos.hasScrubbing;
+		this.trackHasSkipForward = infos.hasSkipForward;
+		this.trackHasSkipBackward = infos.hasSkipBackward;
+		this.trackSkipForwardSeconds = infos.skipForwardInterval;
+		this.trackSkipBackwardSeconds = infos.skipBackwardInterval;
+	}
+
+	/**
+	 * Takes the session out of the system media controls once the player is
+	 * closed. Without this an active session keeps its last state and metadata,
+	 * which the Quick Settings media player happily goes on showing after the
+	 * notification is gone. create() sets it active again.
+	 */
+	private void teardownMediaSession() {
+		this.hasTrack = false;
+		this.trackDurationMs = 0;
+		this.trackPositionMs = 0;
+		this.trackHasPrev = false;
+		this.trackHasNext = false;
+		this.trackHasClose = false;
+		this.trackHasScrubbing = false;
+		this.trackHasSkipForward = false;
+		this.trackHasSkipBackward = false;
+		setMediaPlaybackState(PlaybackStateCompat.STATE_STOPPED);
+		this.mediaSessionCompat.setMetadata(new MediaMetadataCompat.Builder().build());
+		this.mediaSessionCompat.setActive(false);
+	}
+
+	private static String skipActionLabel(String prefix, long seconds) {
+		return prefix + Math.max(1L, seconds) + "s";
+	}
+`;
+
+const ANDROID_PLAYBACK_STATE_BODY = `{
+		final boolean playing = state == PlaybackStateCompat.STATE_PLAYING;
+		this.trackIsPlaying = playing;
+
+		long actions = PlaybackStateCompat.ACTION_PLAY_PAUSE
+			| PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID
+			| PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH
+			| (playing ? PlaybackStateCompat.ACTION_PAUSE : PlaybackStateCompat.ACTION_PLAY);
+
+		// From Android 13 the system media controls take their buttons from these
+		// actions and ignore the notification's own, so advertising a transport we
+		// cannot honour leaves a dead button on screen — which is how a one-track
+		// speak used to get previous/next.
+		if (this.trackHasPrev) {
+			actions |= PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS;
+		}
+		if (this.trackHasNext) {
+			actions |= PlaybackStateCompat.ACTION_SKIP_TO_NEXT;
+		}
+		if (this.trackHasClose) {
+			actions |= PlaybackStateCompat.ACTION_STOP;
+		}
+		// What makes the seek bar draggable. Meaningless without a known length.
+		if (this.trackHasScrubbing && this.trackDurationMs > 0) {
+			actions |= PlaybackStateCompat.ACTION_SEEK_TO;
+		}
+		// How a car head unit, a Bluetooth remote or a watch reaches the same
+		// +30s/-15s skip the app and the lock screen offer.
+		if (this.trackHasSkipForward) {
+			actions |= PlaybackStateCompat.ACTION_FAST_FORWARD;
+		}
+		if (this.trackHasSkipBackward) {
+			actions |= PlaybackStateCompat.ACTION_REWIND;
+		}
+
+		PlaybackStateCompat.Builder playbackstateBuilder = new PlaybackStateCompat.Builder();
+		playbackstateBuilder.setActions(actions);
+
+		// Android 13+ fills the media-control slots left over after play/pause,
+		// previous and next from the session's custom actions — the only way the
+		// skip buttons can appear there at all.
+		if (this.trackHasSkipBackward) {
+			playbackstateBuilder.addCustomAction(new PlaybackStateCompat.CustomAction.Builder(
+				CUSTOM_ACTION_SKIP_BACKWARD,
+				skipActionLabel("-", this.trackSkipBackwardSeconds),
+				android.R.drawable.ic_media_rew).build());
+		}
+		if (this.trackHasSkipForward) {
+			playbackstateBuilder.addCustomAction(new PlaybackStateCompat.CustomAction.Builder(
+				CUSTOM_ACTION_SKIP_FORWARD,
+				skipActionLabel("+", this.trackSkipForwardSeconds),
+				android.R.drawable.ic_media_ff).build());
+		}
+
+		// The position is a snapshot taken now (the builder stamps it with
+		// SystemClock.elapsedRealtime()), and the speed tells Android how to move it
+		// on from there. That extrapolation is the only thing advancing the seek bar
+		// while the webview is throttled in the background, and it is why the app
+		// only has to re-publish every few seconds.
+		playbackstateBuilder.setState(state, this.trackPositionMs, playing ? 1.0f : 0.0f);
+
+		this.mediaSessionCompat.setPlaybackState(playbackstateBuilder.build());
+	}`;
+
+// The metadata + state publish at the end of create()'s background runnable.
+const ANDROID_CREATE_PUBLISH_RE =
+    /mediaSessionCompat\.setMetadata\(metadataBuilder\.build\(\)\);\s*if\s*\(\s*infos\.isPlaying\s*\)\s*setMediaPlaybackState\(PlaybackStateCompat\.STATE_PLAYING\);\s*else\s*setMediaPlaybackState\(PlaybackStateCompat\.STATE_PAUSED\);/;
+
+const ANDROID_CREATE_PUBLISH = `// The track length. Android needs it here to draw the seek bar and the
+					// total-time label at all; a negative value is its documented
+					// "length unknown" signal, which draws an indeterminate bar rather
+					// than a bar stuck at zero.
+					metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION,
+						infos.duration > 0 ? infos.duration * 1000L : -1L);
+
+					mediaSessionCompat.setMetadata(metadataBuilder.build());
+
+					// A closed player deactivates the session, so playing again has to
+					// bring it back or the system controls never reappear.
+					if (!mediaSessionCompat.isActive()) {
+						mediaSessionCompat.setActive(true);
+					}
+
+					rememberTrack(infos);
+					setMediaPlaybackState(infos.isPlaying
+						? PlaybackStateCompat.STATE_PLAYING
+						: PlaybackStateCompat.STATE_PAUSED);`;
+
+const ANDROID_UPDATE_ELAPSED = `else if (action.equals("updateElapsed")){
+			// The call the app makes every few seconds while playing, so it stays
+			// cheap: a new playback state (which is what moves the seek bar) and a
+			// notification rebuild only when the play state actually flipped.
+			final JSONObject params = args.getJSONObject(0);
+			final double elapsed = params.optDouble("elapsed", Double.NaN);
+			if (!Double.isNaN(elapsed) && elapsed >= 0) {
+				this.trackPositionMs = Math.round(elapsed * 1000.0d);
+			}
+			// Optional: the app learns the real length once the media plugin has
+			// opened the file, which can correct the estimate create() was given.
+			final double duration = params.optDouble("duration", Double.NaN);
+			if (!Double.isNaN(duration) && duration > 0) {
+				this.trackDurationMs = Math.round(duration * 1000.0d);
+			}
+			// The JS wrapper sends "" when the caller omitted isPlaying, and
+			// optBoolean falls back for anything that is not a boolean.
+			final boolean isPlaying = params.optBoolean("isPlaying", this.trackIsPlaying);
+			if (this.hasTrack) {
+				if (isPlaying != this.trackIsPlaying) {
+					this.notification.updateIsPlaying(isPlaying);
+				}
+				setMediaPlaybackState(isPlaying
+					? PlaybackStateCompat.STATE_PLAYING
+					: PlaybackStateCompat.STATE_PAUSED);
+			}
+			callbackContext.success("success");
+		}
+		else if (action.equals("updateDismissable")){`;
+
+// destroy(): tear the session down as well as the notification.
+const ANDROID_DESTROY_RE =
+    /(else if \(action\.equals\("destroy"\)\)\{\s*this\.notification\.destroy\(\);\s*this\.mMessageReceiver\.stopListening\(\);)(\s*callbackContext\.success)/;
+
+// onDestroy()/onReset(): same, for a webview reload or an activity teardown.
+const ANDROID_ON_DESTROY_RE =
+    /(public void onDestroy\(\) \{\s*this\.notification\.destroy\(\);\s*this\.mMessageReceiver\.stopListening\(\);)(\s*this\.unregisterMediaButtonEvent\(\);)/;
+
+function patchAndroidMediaSession(src) {
+    if (src.indexOf('CUSTOM_ACTION_SKIP_FORWARD') === -1) {
+        src = src.replace(
+            'private MediaSessionCallback mMediaSessionCallback = new MediaSessionCallback();\n',
+            'private MediaSessionCallback mMediaSessionCallback = new MediaSessionCallback();\n' +
+            ANDROID_SESSION_MEMBERS
+        );
+    }
+    if (src.indexOf('ACTION_SEEK_TO') === -1) {
+        src = replaceMethod(src, 'private void setMediaPlaybackState(int state) {', ANDROID_PLAYBACK_STATE_BODY);
+    }
+    // Both replacements below only match the unpatched shape, so re-running is a
+    // no-op without needing a marker.
+    src = src.replace(ANDROID_CREATE_PUBLISH_RE, ANDROID_CREATE_PUBLISH);
+    if (src.indexOf('action.equals("updateElapsed")') === -1) {
+        src = src.replace('else if (action.equals("updateDismissable")){', ANDROID_UPDATE_ELAPSED);
+    }
+    src = src.replace(ANDROID_DESTROY_RE, '$1\n\t\t\tthis.teardownMediaSession();$2');
+    src = src.replace(ANDROID_ON_DESTROY_RE, '$1\n\t\tthis.teardownMediaSession();$2');
+    return src;
+}
+
+// ---------------------------------------------------------------------------
+// Android — MusicControlsInfos.java
+// ---------------------------------------------------------------------------
+
+const ANDROID_INFOS_FIELDS = `public String notificationIcon;
+	/** Track length in seconds; 0 when unknown. */
+	public long duration;
+	/** Playhead in seconds at the time of the call. */
+	public long elapsed;
+	public boolean hasScrubbing;
+	public boolean hasSkipForward;
+	public boolean hasSkipBackward;
+	public long skipForwardInterval;
+	public long skipBackwardInterval;`;
+
+const ANDROID_INFOS_PARSE = `this.notificationIcon = params.getString("notificationIcon");
+
+		// The timeline and skip settings. The JS wrapper has always sent these —
+		// they were simply never read on Android, so there was nothing to draw a
+		// seek bar from. optXxx because a caller may legitimately omit them.
+		this.duration = Math.round(params.optDouble("duration", 0));
+		this.elapsed = Math.round(params.optDouble("elapsed", 0));
+		this.hasScrubbing = params.optBoolean("hasScrubbing", false);
+		this.hasSkipForward = params.optBoolean("hasSkipForward", false);
+		this.hasSkipBackward = params.optBoolean("hasSkipBackward", false);
+		this.skipForwardInterval = Math.round(params.optDouble("skipForwardInterval", 0));
+		this.skipBackwardInterval = Math.round(params.optDouble("skipBackwardInterval", 0));`;
+
+function patchAndroidInfos(src) {
+    if (src.indexOf('public long duration;') === -1) {
+        src = src.replace('public String notificationIcon;', ANDROID_INFOS_FIELDS);
+    }
+    if (src.indexOf('params.optDouble("duration"') === -1) {
+        src = src.replace('this.notificationIcon = params.getString("notificationIcon");', ANDROID_INFOS_PARSE);
+    }
+    return src;
+}
+
+// ---------------------------------------------------------------------------
+// Android — MediaSessionCallback.java
+//
+// The session commands the stock callback ignored. Every handler fires the same
+// events the JS side already listens for, so MediaPlayerService needs no
+// Android-specific branch.
+// ---------------------------------------------------------------------------
+
+const ANDROID_CALLBACK_METHODS = `    super.onPlayFromMediaId(mediaId, extras);
+  }
+
+  @Override
+  public void onSeekTo(long pos) {
+    super.onSeekTo(pos);
+    // Dragging the seek bar in the notification, on the lock screen or in the
+    // Quick Settings media player. Reported in seconds, like the iOS event, so
+    // both platforms hand the JS handler the same thing.
+    this.emit("{\\"message\\": \\"music-controls-seek-to\\", \\"position\\": " + (pos / 1000.0)
+      + ", \\"source\\": \\"music-controls-media-session-seek-to\\"}");
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    this.emitMessage("music-controls-destroy", "music-controls-media-session-stop");
+  }
+
+  @Override
+  public void onFastForward() {
+    super.onFastForward();
+    this.emitMessage("music-controls-skip-forward", "music-controls-media-session-fast-forward");
+  }
+
+  @Override
+  public void onRewind() {
+    super.onRewind();
+    this.emitMessage("music-controls-skip-backward", "music-controls-media-session-rewind");
+  }
+
+  @Override
+  public void onCustomAction(String action, Bundle extras) {
+    super.onCustomAction(action, extras);
+    // The skip buttons Android 13+ renders come back this way. The action name is
+    // already the event name, so it is passed straight through.
+    if (MusicControls.CUSTOM_ACTION_SKIP_FORWARD.equals(action)
+      || MusicControls.CUSTOM_ACTION_SKIP_BACKWARD.equals(action)) {
+      this.emitMessage(action, "music-controls-media-session-custom-action");
+    }
+  }
+
+  /**
+   * The callback is single-shot: the JS wrapper re-arms it by calling watch()
+   * again from the event handler, so an event with nothing armed is dropped.
+   */
+  private void emit(String json) {
+    if (this.cb != null) {
+      this.cb.success(json);
+      this.cb = null;
+    }
+  }
+
+  private void emitMessage(String message, String source) {
+    this.emit("{\\"message\\": \\"" + message + "\\", \\"source\\": \\"" + source + "\\"}");
+  }`;
+
+function patchAndroidSessionCallback(src) {
+    if (src.indexOf('public void onSeekTo(long pos)') !== -1) {
+        return src;
+    }
+    return src.replace('    super.onPlayFromMediaId(mediaId, extras);\n  }', ANDROID_CALLBACK_METHODS);
+}
+
+/**
+ * Verifies every intended Android change is present, so a silently-failed anchor
+ * match (e.g. after a plugin upgrade) is loud instead of shipping the bug again.
+ */
+const ANDROID_REQUIRED = {
+    'MusicControls.java': [
+        ['Android 14 receiver flags', 'ContextCompat.registerReceiver'],
+        ['explicit broadcast intents', 'setPackage(context.getPackageName())'],
+        ['track length in the metadata', 'METADATA_KEY_DURATION'],
+        ['published playhead', 'setState(state, this.trackPositionMs'],
+        ['scrubbable seek bar', 'ACTION_SEEK_TO'],
+        ['derived transport actions', 'if (this.trackHasNext) {'],
+        ['skip custom actions', 'CUSTOM_ACTION_SKIP_FORWARD'],
+        ['elapsed updates', 'action.equals("updateElapsed")'],
+        ['session teardown', 'this.teardownMediaSession();']
+    ],
+    'MusicControlsNotification.java': [
+        ['explicit broadcast intents', 'setPackage(context.getPackageName())']
+    ],
+    'MusicControlsInfos.java': [
+        ['timeline fields', 'params.optDouble("duration"']
+    ],
+    'MediaSessionCallback.java': [
+        ['seek-to handling', 'public void onSeekTo(long pos)'],
+        ['custom-action handling', 'public void onCustomAction(String action']
+    ]
+};
+
+function verifyAndroid(file, src) {
+    const required = ANDROID_REQUIRED[path.basename(file)] || [];
+    return required.filter((r) => src.indexOf(r[1]) === -1).map((r) => r[0]);
 }
 
 // ---------------------------------------------------------------------------
@@ -538,14 +952,35 @@ function patchFile(file, patchFn) {
 }
 
 const IOS_PLUGIN_DIR = 'platforms/ios/NA Danmark/Plugins/cordova-plugin-music-controls2';
+const ANDROID_SRC_DIR = 'plugins/cordova-plugin-music-controls2/src/android';
+const ANDROID_PLATFORM_DIR = 'platforms/android/app/src/main/java/com/homerours/musiccontrols';
+
+/** Which patches each Android source file gets, in order. */
+const ANDROID_FILE_PATCHES = {
+    'MusicControls.java': [patchJava, patchAndroidMediaSession],
+    'MusicControlsNotification.java': [patchJava],
+    'MusicControlsInfos.java': [patchAndroidInfos],
+    'MediaSessionCallback.java': [patchAndroidSessionCallback]
+};
+
+function patchAndroidFile(file) {
+    const chain = ANDROID_FILE_PATCHES[path.basename(file)] || [];
+    return (src) => chain.reduce((acc, patch) => patch(acc), src);
+}
+
+function reportMissing(rel, missing) {
+    console.error('[patch-music-controls] ERROR: ' + rel +
+        ' is missing: ' + missing.join(', ') +
+        '. cordova-plugin-music-controls2 may have changed upstream — re-check the anchors.');
+}
 
 function run(projectRoot) {
-    const javaTargets = [
-        'plugins/cordova-plugin-music-controls2/src/android/MusicControls.java',
-        'plugins/cordova-plugin-music-controls2/src/android/MusicControlsNotification.java',
-        'platforms/android/app/src/main/java/com/homerours/musiccontrols/MusicControls.java',
-        'platforms/android/app/src/main/java/com/homerours/musiccontrols/MusicControlsNotification.java'
-    ];
+    let failed = false;
+
+    const javaTargets = [];
+    Object.keys(ANDROID_FILE_PATCHES).forEach((name) => {
+        javaTargets.push(ANDROID_SRC_DIR + '/' + name, ANDROID_PLATFORM_DIR + '/' + name);
+    });
     const iosHeaders = [
         'plugins/cordova-plugin-music-controls2/src/ios/MusicControls.h',
         IOS_PLUGIN_DIR + '/MusicControls.h'
@@ -555,14 +990,26 @@ function run(projectRoot) {
         IOS_PLUGIN_DIR + '/MusicControls.m'
     ];
 
-    javaTargets.concat(iosHeaders).forEach((rel) => {
-        const patchFn = rel.endsWith('.java') ? patchJava : patchIosHeader;
-        if (patchFile(path.join(projectRoot, rel), patchFn)) {
+    javaTargets.forEach((rel) => {
+        const abs = path.join(projectRoot, rel);
+        if (patchFile(abs, patchAndroidFile(abs))) {
+            console.log('[patch-music-controls] patched ' + rel);
+        }
+        if (fs.existsSync(abs)) {
+            const missing = verifyAndroid(abs, fs.readFileSync(abs, 'utf8'));
+            if (missing.length > 0) {
+                reportMissing(rel, missing);
+                failed = true;
+            }
+        }
+    });
+
+    iosHeaders.forEach((rel) => {
+        if (patchFile(path.join(projectRoot, rel), patchIosHeader)) {
             console.log('[patch-music-controls] patched ' + rel);
         }
     });
 
-    let failed = false;
     iosImpls.forEach((rel) => {
         const abs = path.join(projectRoot, rel);
         if (patchFile(abs, patchIosImplementation)) {
@@ -571,13 +1018,12 @@ function run(projectRoot) {
         if (fs.existsSync(abs)) {
             const missing = verifyIos(fs.readFileSync(abs, 'utf8'));
             if (missing.length > 0) {
-                console.error('[patch-music-controls] ERROR: ' + rel +
-                    ' is missing: ' + missing.join(', ') +
-                    '. cordova-plugin-music-controls2 may have changed upstream — re-check the anchors.');
+                reportMissing(rel, missing);
                 failed = true;
             }
         }
     });
+
     if (failed) {
         process.exitCode = 1;
     }
