@@ -79,11 +79,14 @@ export class SpeaksPage implements OnInit, OnDestroy, ViewWillEnter {
             const playlist = state.playlist;
             const isSpeak = !!playlist && playlist.type === 'speak' && state.status !== 'idle';
             const previousStatus = this.playerStatus;
+            const previousActiveId = this.activeId;
             this.activeId = isSpeak && playlist ? playlist.id : null;
             this.playerStatus = state.status;
             this.liveProgress = isSpeak ? this.trackProgress.live(state.position, state.duration) : null;
             if (previousStatus !== state.status && (state.status === 'paused' || state.status === 'idle')) {
                 this.loadResumePoints();
+            } else if (this.activeId !== previousActiveId) {
+                this.refreshProgress();
             }
         }));
         this.subscriptions.push(this.translate.onLangChange.subscribe(() => {
@@ -148,11 +151,15 @@ export class SpeaksPage implements OnInit, OnDestroy, ViewWillEnter {
         const points = await this.resumePoints.getAll('speak');
         this.zone.run(() => {
             this.resumePointsById = points;
-            this.buildProgress();
-            if (this.onlyStarted) {
-                this.applyFilters(false);
-            }
+            this.refreshProgress();
         });
+    }
+
+    private refreshProgress() {
+        this.buildProgress();
+        if (this.onlyStarted) {
+            this.applyFilters(false);
+        }
     }
 
     reload(event: any) {
@@ -195,13 +202,18 @@ export class SpeaksPage implements OnInit, OnDestroy, ViewWillEnter {
             return left < right ? 1 : (left > right ? -1 : 0);
         });
 
+        const active = this.activeId ? byId[this.activeId] : null;
+        const ordered = active
+            ? [active].concat(started.filter((speak) => speak.id !== active.id))
+            : started;
+
         this.resumeProgress = progress;
-        this.startedCount = started.length;
-        this.continueItems = started.slice(0, CONTINUE_LIMIT);
+        this.startedCount = ordered.length;
+        this.continueItems = ordered.slice(0, CONTINUE_LIMIT);
     }
 
     isStarted(speak: Speak): boolean {
-        return !!this.resumeProgress[speak.id];
+        return !!this.resumeProgress[speak.id] || this.isActive(speak);
     }
 
 
@@ -399,7 +411,7 @@ export class SpeaksPage implements OnInit, OnDestroy, ViewWillEnter {
         if (this.conventions.length > 0 && this.conventions.indexOf(speak.conventionKey) < 0) {
             return false;
         }
-        if (this.onlyStarted && !this.resumeProgress[speak.id]) {
+        if (this.onlyStarted && !this.isStarted(speak)) {
             return false;
         }
         return true;

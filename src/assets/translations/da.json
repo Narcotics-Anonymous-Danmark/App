@@ -169,6 +169,7 @@
     "PLAYER_CONTINUE_FROM": "Fortsæt fra {{time}}",
     "PLAYER_TIME_LEFT": "{{time}} tilbage",
     "PLAYER_NOW_PLAYING": "Afspiller nu",
+    "BOOK_CHAPTER_OF": "Kapitel {{index}} af {{count}}",
     "SPEAK_COUNT": "{{count}} speaks",
     "SPEAK_NONE_FOUND": "Ingen speaks fundet",
     "SPEAK_NONE_FOUND_BODY": "Prøv et andet søgeord, eller nulstil filtrene.",

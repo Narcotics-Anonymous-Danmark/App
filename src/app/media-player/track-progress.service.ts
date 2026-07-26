@@ -7,7 +7,7 @@ export interface TrackProgress {
     label: string;
 }
 
-const MIN_RESUME_SECONDS = 5;
+export const MIN_RESUME_SECONDS = 5;
 
 @Injectable({
     providedIn: 'root'

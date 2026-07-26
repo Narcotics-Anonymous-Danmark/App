@@ -152,6 +152,7 @@
     "PLAYER_CONTINUE_FROM": "Continue from {{time}}",
     "PLAYER_TIME_LEFT": "{{time}} left",
     "PLAYER_NOW_PLAYING": "Now playing",
+    "BOOK_CHAPTER_OF": "Chapter {{index}} of {{count}}",
     "SPEAK_COUNT": "{{count}} speaks",
     "SPEAK_NONE_FOUND": "No speaks found",
     "SPEAK_NONE_FOUND_BODY": "Try another search word, or reset the filters.",
