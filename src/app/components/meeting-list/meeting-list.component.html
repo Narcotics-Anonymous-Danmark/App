@@ -26,8 +26,8 @@
   </ion-list>
 </div>
 
-<div *ngFor="let dailyList of meetingListGroupedByDay; let i = index" (click)="toggleDay(i)" [ngClass]="{active: isDayShown(i)}">
-  <ion-item-divider sticky="true" [color]="isToday(dailyList[0].weekday_tinyint) ? 'secondary' : 'primary'">
+<div *ngFor="let dailyList of meetingListGroupedByDay; let i = index" [ngClass]="{active: isDayShown(i)}">
+  <ion-item-divider sticky="true" (click)="toggleDay(i)" [color]="isToday(dailyList[0].weekday_tinyint) ? 'secondary' : 'primary'">
     <div ngSwitch="{{ dailyList[0].weekday_tinyint }}">
       <div *ngSwitchCase="'1'">
         <h3>{{'SUNDAY' | translate}} ({{dayCount[0]}})</h3></div>
