@@ -58,7 +58,7 @@
         <preference name="deployment-target" value="16.0" />
         <preference name="scheme" value="ionic" />
         <preference name="hostname" value="localhost" />
-        <preference name="GOOGLE_MAPS_IOS_API_KEY" value="AIzaSyDMx_XqtE1av0LDXDXHzMNlHbL9sXKn90s" />
+        <preference name="GOOGLE_MAPS_IOS_API_KEY" value="google_maps_api_key" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
         <icon height="29" src="resources/ios/icon/icon-small.png" width="29" />

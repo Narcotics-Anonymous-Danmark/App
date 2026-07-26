@@ -42,7 +42,7 @@ export class AudioService {
             .get<any[]>(`${SPEAKS_ENDPOINT}?excerpt[]=${excerpt}`, {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Basic " + btoa("na.app_api:Wt3QTExAaKqXJx")
+                    "Authorization": "Basic " + btoa("username:password")
                 }
             })
             .pipe(
