@@ -43,12 +43,13 @@
             <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
         </config-file>
         <allow-intent href="market:*" />
-        <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
-        <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
-        <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
-        <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
-        <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
-        <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
+        <resource-file src="resources/android/values/colors_adaptive_icon.xml" target="/app/src/main/res/values/colors_adaptive_icon.xml" />
+        <icon background="@color/background" density="ldpi" foreground="resources/android/icon/ldpi-foreground.png" />
+        <icon background="@color/background" density="mdpi" foreground="resources/android/icon/mdpi-foreground.png" />
+        <icon background="@color/background" density="hdpi" foreground="resources/android/icon/hdpi-foreground.png" />
+        <icon background="@color/background" density="xhdpi" foreground="resources/android/icon/xhdpi-foreground.png" />
+        <icon background="@color/background" density="xxhdpi" foreground="resources/android/icon/xxhdpi-foreground.png" />
+        <icon background="@color/background" density="xxxhdpi" foreground="resources/android/icon/xxxhdpi-foreground.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
