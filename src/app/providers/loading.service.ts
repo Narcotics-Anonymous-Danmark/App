@@ -1,35 +1,31 @@
 import { Injectable } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { BehaviorSubject } from 'rxjs';
+
+export interface LoadingState {
+  visible: boolean;
+  text: string;
+}
+
+const INITIAL_STATE: LoadingState = { visible: false, text: '' };
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoadingService {
 
-  isLoading = false;
+  private count = 0;
+  private readonly stateSubject = new BehaviorSubject<LoadingState>(INITIAL_STATE);
+  readonly state$ = this.stateSubject.asObservable();
 
-  constructor(public loadingController: LoadingController) { }
-
-  async present(text: string) {
-    this.isLoading = true;
-    return await this.loadingController.create({
-      spinner: 'circles',
-      message: text
-    }).then(a => {
-      a.present().then(() => {
-        if (!this.isLoading) {
-          a.dismiss();
-        }
-      });
-    });
+  present(text: string = '') {
+    this.count++;
+    this.stateSubject.next({ visible: true, text });
   }
 
-  async dismiss() {
-    this.isLoading = false;
-    return await this.loadingController.dismiss();
-  }
-
-  async getTop() {
-    return await this.loadingController.getTop();
+  dismiss() {
+    this.count = Math.max(0, this.count - 1);
+    if (this.count === 0) {
+      this.stateSubject.next(INITIAL_STATE);
+    }
   }
 }

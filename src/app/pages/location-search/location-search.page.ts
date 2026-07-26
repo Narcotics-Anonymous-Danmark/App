@@ -16,7 +16,7 @@ export class LocationSearchPage  {
   meetingsListGrouping: string;
 
   shownGroup = null;
-  loader: any = null;
+  loader = false;
   isLoaded = false;
   radius = 25;
 
@@ -56,14 +56,15 @@ export class LocationSearchPage  {
 
   presentLoader(loaderText: any) {
     if (!this.loader) {
-      this.loader = this.loaderCtrl.present(loaderText);
+      this.loader = true;
+      this.loaderCtrl.present(loaderText);
     }
   }
 
   dismissLoader() {
     if (this.loader) {
-      this.loader = this.loaderCtrl.dismiss();
-      this.loader = null;
+      this.loader = false;
+      this.loaderCtrl.dismiss();
     }
   }
 
@@ -90,12 +91,8 @@ export class LocationSearchPage  {
   }
 
   dismissLoaderAndLoadMeetings() {
-    this.loaderCtrl.getTop().then(loader => {
-      loader.onDidDismiss().then(() => {
-        this.getAllMeetings();
-      });
-    });
     this.dismissLoader();
+    this.getAllMeetings();
   }
 
 }

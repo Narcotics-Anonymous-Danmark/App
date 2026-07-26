@@ -22,7 +22,7 @@ export class ListfullPage {
   shownGroupL3 = null;
   shownGroupL4 = null;
   HTMLGrouping = 'counties';
-  loader: any = null;
+  loader = false;
   meetingListArea: any = [];
   meetingListCounty: any = [];
   areaName: any = '';
@@ -89,14 +89,15 @@ export class ListfullPage {
 
   presentLoader(loaderText: any) {
     if (!this.loader) {
-      this.loader = this.loaderCtrl.present(loaderText);
+      this.loader = true;
+      this.loaderCtrl.present(loaderText);
     }
   }
 
   dismissLoader() {
     if (this.loader) {
-      this.loader = this.loaderCtrl.dismiss();
-      this.loader = null;
+      this.loader = false;
+      this.loaderCtrl.dismiss();
     }
   }
 

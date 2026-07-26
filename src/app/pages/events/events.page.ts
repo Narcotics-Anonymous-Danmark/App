@@ -25,8 +25,8 @@ export class EventsPage implements OnInit {
         this.loadingCtrl.present('Loading Events...');
         this.eventProvider.load().subscribe((data: any) => {
             this.events = Array.of(data)[0];
+            this.loadingCtrl.dismiss();
         });
-        this.loadingCtrl.dismiss();
     }
 
     openWithInAppBrowser(url: string) {

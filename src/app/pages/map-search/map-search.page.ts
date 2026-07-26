@@ -21,7 +21,7 @@ declare const google: any;
 export class MapSearchPage implements OnInit {
 
   meetingList: any = [];
-  loader: any = null;
+  loader = false;
   zoom = 8;
   mapLatitude: any = 55.476224;
   mapLongitude: any = 8.4606976;
@@ -519,16 +519,16 @@ export class MapSearchPage implements OnInit {
 
   presentLoader(loaderText: any) {
     if (!this.loader) {
-      this.loader = this.loadingCtrl.present(loaderText);
+      this.loader = true;
+      this.loadingCtrl.present(loaderText);
     }
   }
 
 
   dismissLoader() {
     if (this.loader) {
-      console.log('Dismissing loader..');
-      this.loader = this.loadingCtrl.dismiss();
-      this.loader = null;
+      this.loader = false;
+      this.loadingCtrl.dismiss();
     }
   }
 
