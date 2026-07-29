@@ -282,7 +282,7 @@ Repository → Settings → Secrets and variables → Actions → **Secrets**:
 | `ANDROID_KEY_PASSWORD` | key password (usually the same) |
 | `ANDROID_KEY_ALIAS` | optional, defaults to `nadanmarkapp` |
 | `PLAY_SERVICE_ACCOUNT_JSON` | Google Play service account key (whole JSON file, or base64 of it) |
-| `IOS_DIST_CERT_BASE64` | base64 of a `.p12` holding the **Apple Distribution** certificate *and* its private key |
+| `IOS_DIST_CERT_BASE64` | base64 of a `.p12` holding the **Apple Distribution** certificate *and* its private key (an older `iPhone Distribution` certificate works too — the signing identity is read from the certificate, not assumed; `IOS_CODE_SIGN_IDENTITY` can override it) |
 | `IOS_DIST_CERT_PASSWORD` | password used when exporting that `.p12` |
 | `IOS_PROVISIONING_PROFILE_BASE64` | base64 of the App Store `.mobileprovision`. Optional — omit it and Xcode fetches/creates the profile itself using the App Store Connect key. |
 | `IOS_TEAM_ID` | Apple Developer team id (10 characters) |
