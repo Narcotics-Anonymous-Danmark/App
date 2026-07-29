@@ -1,0 +1,34 @@
+New workflows
+File	Trigger	Does
+release-draft.yml	manual	Sets version + build number, commits, tags, drafts a release with notes generated from PRs/commits since the last release, then builds both signed artefacts from that tag and attaches them
+build-android.yml	reusable + manual	Signed .aab on ubuntu-22.04
+build-ios.yml	reusable + manual	Signed .ipa on macos-15 (smallest free macOS runner, 3-core arm64)
+release-publish.yml	release draft → published	Downloads the artefacts from the release (no rebuild) → Play internal + closed track, TestFlight internal testing
+.github/release.yml	—	Label→section mapping for the generated PR changelog
+Artefacts upload with retention-days: 7. Caching: npm (setup-node), Gradle, CocoaPods, Android SDK. No fastlane anywhere — iOS uploads via xcrun iTMSTransporter (falls back to xcrun altool if an Xcode image lacks the Transporter binary), then the App Store Connect API assigns the build to the internal group. Play uses a ~100-line dependency-free client for the Developer API v3 (single edit → upload → both tracks → commit; the edit is discarded if anything fails).
+
+Secrets to add
+
+GOOGLE_MAPS_API_KEY              NA_API_BASIC_AUTH            (user:password)
+ANDROID_KEYSTORE_BASE64          ANDROID_KEYSTORE_PASSWORD
+ANDROID_KEY_PASSWORD             ANDROID_KEY_ALIAS            (optional, defaults to nadanmarkapp)
+PLAY_SERVICE_ACCOUNT_JSON
+IOS_DIST_CERT_BASE64             IOS_DIST_CERT_PASSWORD
+IOS_TEAM_ID                      IOS_PROVISIONING_PROFILE_BASE64  (optional — see below)
+APP_STORE_CONNECT_KEY_ID         APP_STORE_CONNECT_ISSUER_ID
+APP_STORE_CONNECT_PRIVATE_KEY    (the .p8 contents)
+Optional non-secret variables: PLAY_TRACKS (default internal,alpha — set your real closed-track id if it isn't alpha), PLAY_RELEASE_NOTES_LANGUAGE (e.g. da-DK; Play rejects notes for a language your listing lacks, so notes are opt-in), TESTFLIGHT_INTERNAL_GROUP, XCODE_VERSION.
+
+Omit IOS_PROVISIONING_PROFILE_BASE64 and xcodebuild fetches the profile itself using the ASC key (-allowProvisioningUpdates); supply it for deterministic manual signing. Also: Settings → Actions → Workflow permissions → Read and write, so the version-bump commit and tag can be pushed. README.md has the full setup incl. how to produce each value.
+
+na CLI
+There was no ./bin/na build in the repo (only bootstrap and run), so I added release-specific commands: release/ and publish/, sharing lib/util/release.js. They refuse to run unless every condition holds — credentials present, signing material valid, clean git worktree, version numbers consistent — and na publish additionally needs --yes outside CI. Credentials are injected into the tracked placeholder files just before the build and restored right after (verified byte-identical round-trip, including rollback on error).
+
+na release version is now the single writer of version numbers across config.xml (incl. new ios-CFBundleVersion), package.json, package-lock.json and environment.ts. New Android versionCode scheme: 1100000000 + (major*10000+minor*100+patch)*1000 + build → 1.2.4 build 1 = 1110204001; stays above your last uploaded 1022000001 and gives 999 rebuild slots per version. Bump --build to re-release a version (tag becomes 1.2.4-b2).
+
+Things you should know
+One change to app metadata: I added ITSAppUsesNonExemptEncryption=false to config.xml — without it App Store Connect holds every TestFlight build for an export-compliance answer. Matches the README's "not using any special algorithm".
+The release build uses the default Angular configuration, not --prod. angular.json's production config is broken: it references environment.prod.ts, app.component.prod.ts and ngsw-config.json, all of which were deleted, and outputs to www/prod which cordova doesn't read — so the documented ionic cordova build android --prod --release cannot currently work. The pipeline therefore ships exactly what na run produces today (unminified, with source maps). Worth fixing separately with a device test; I didn't want a first-time AOT/optimisation switch inside a release pipeline.
+Verified locally: version maths and file rewrites (minimal diffs), credential inject/restore round-trip, guard behaviour, both JWT signers (I found and fixed a real one — Node 16's OpenSSL throws once on Ubuntu 22.04's openssl.cnf, which would have broken the first Play/ASC signature), all Play + ASC request shapes against mocked transports (27 assertions), all workflow YAML, and a full na release android --dry-run. Not verified: an actual signed build or store upload — that needs your secrets. Run Build Android (signed) and Build iOS (signed) manually from the Actions tab first; they're dispatchable precisely so you can smoke-test without touching a release.
+Nothing is committed — all changes are in the working tree. Separately: the four files that were staged when we started (config.xml, index.html, the two services) no longer show as staged; I never ran any staging/reset command, so check that's what you intended.
+/model is a built-in CLI command — I can't act on it from here; type it on its own line and the CLI will handle it.

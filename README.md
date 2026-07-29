@@ -138,6 +138,17 @@ the system **npm 8.1.0**):
 Add `--dry-run` to print the steps without executing, or `--force` to re-run steps
 that would otherwise be skipped.
 
+It also drives releases — see [Automated releases](#automated-releases):
+
+```
+./bin/na release version 1.2.4   # set version + build number everywhere
+./bin/na release check           # can this checkout build a signed release?
+./bin/na release android         # signed .aab into dist/
+./bin/na release ios             # signed .ipa into dist/ (macOS only)
+./bin/na publish play --aab …    # upload to Play internal + closed testing
+./bin/na publish testflight --ipa …  # upload to TestFlight internal testing
+```
+
 
 ## Apple iphone/ipad app link
 
@@ -212,7 +223,151 @@ adb emu geo fix 8.9579 56.13504
 ```
 
 
-## Release
+## Automated releases
+
+Releases are built and shipped by GitHub Actions on the free standard runners.
+iOS and Android share **one release number**: one draft release carries both
+signed artefacts, and publishing that release is what sends them to the stores.
+
+### The two workflows
+
+| Workflow | Trigger | What it does |
+| --- | --- | --- |
+| **Draft release candidate** (`release-draft.yml`) | manual (`workflow_dispatch`) | Sets the version + build number, commits and tags it, drafts a GitHub release with notes generated from the PRs/commits since the last release, builds the signed `.aab` (ubuntu-22.04) and signed `.ipa` (macos-15) from that tag and attaches both to the draft. |
+| **Publish release to stores** (`release-publish.yml`) | a release goes draft → **published** | Downloads the artefacts *from the release* (nothing is rebuilt) and ships them: `.aab` → Google Play *internal* + *closed testing*, `.ipa` → TestFlight *internal testing*. |
+
+The two build jobs live in their own reusable workflows (`build-android.yml`,
+`build-ios.yml`) and can also be run on their own from the Actions tab to test
+the pipeline without touching a release. Every build uploads its artefact with
+**7 day** retention.
+
+So the flow is:
+
+1. Actions → **Draft release candidate** → pick `patch`/`minor`/`major` (or type
+   an explicit version) → Run.
+2. Wait for the draft release to appear with `nadanmark-<version>-<build>.aab`
+   and `.ipa` attached (~15 min for Android, ~30-40 min for iOS).
+3. Edit the release notes — the text between the `release-notes` markers is what
+   testers see in TestFlight and (optionally) Google Play.
+4. **Publish** the release. TestFlight and Play uploads start automatically.
+
+Nothing is signed or uploaded until you publish, and a failed build leaves the
+draft release in place so you can delete it (and its tag) and try again.
+
+### Version numbering
+
+`./bin/na release version <x.y.z> [--build n]` is the only thing that writes
+version numbers. It updates all four places that have to agree — `config.xml`
+(`version`, `android-versionCode`, `ios-CFBundleVersion`), `package.json`,
+`package-lock.json` and `src/environments/environment.ts` — so they can never
+drift apart again.
+
+* Android `versionCode` = `1100000000 + (major*10000 + minor*100 + patch) * 1000 + build`
+  (1.2.4 build 1 → `1110204001`). Monotonic, stays above the last manually
+  uploaded code (`1022000001`) and well under Play's `2100000000` ceiling.
+* iOS `CFBundleVersion` = the build number. TestFlight needs a fresh build number
+  for every upload of the same version, so raise `--build` to re-release a
+  version (the git tag then becomes `1.2.4-b2`).
+
+### Secrets to add
+
+Repository → Settings → Secrets and variables → Actions → **Secrets**:
+
+| Secret | What it is |
+| --- | --- |
+| `GOOGLE_MAPS_API_KEY` | Google Maps key, injected into `config.xml` and `src/index.html` at build time. Optional per-target overrides: `GOOGLE_MAPS_ANDROID_API_KEY`, `GOOGLE_MAPS_IOS_API_KEY`, `GOOGLE_MAPS_JS_API_KEY`. |
+| `NA_API_BASIC_AUTH` | `user:password` for the nadanmark.dk API (the `btoa("username:password")` placeholders). |
+| `ANDROID_KEYSTORE_BASE64` | `base64 -w0 keys/nadanmarkapp.keystore` |
+| `ANDROID_KEYSTORE_PASSWORD` | keystore password |
+| `ANDROID_KEY_PASSWORD` | key password (usually the same) |
+| `ANDROID_KEY_ALIAS` | optional, defaults to `nadanmarkapp` |
+| `PLAY_SERVICE_ACCOUNT_JSON` | Google Play service account key (whole JSON file, or base64 of it) |
+| `IOS_DIST_CERT_BASE64` | base64 of a `.p12` holding the **Apple Distribution** certificate *and* its private key (an older `iPhone Distribution` certificate works too — the signing identity is read from the certificate, not assumed; `IOS_CODE_SIGN_IDENTITY` can override it) |
+| `IOS_DIST_CERT_PASSWORD` | password used when exporting that `.p12` |
+| `IOS_PROVISIONING_PROFILE_BASE64` | base64 of the App Store `.mobileprovision`. Optional — omit it and Xcode fetches/creates the profile itself using the App Store Connect key. |
+| `IOS_TEAM_ID` | Apple Developer team id (10 characters) |
+| `APP_STORE_CONNECT_KEY_ID` | App Store Connect API key id |
+| `APP_STORE_CONNECT_ISSUER_ID` | App Store Connect issuer id |
+| `APP_STORE_CONNECT_PRIVATE_KEY` | contents of the `AuthKey_XXXXXXXX.p8` file |
+
+Optional **Variables** (same page, "Variables" tab — these are not secret):
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `PLAY_TRACKS` | `internal,alpha` | Play tracks to release to. Set the closed track's real id if it is not `alpha`. |
+| `PLAY_RELEASE_NOTES_LANGUAGE` | *(unset)* | e.g. `da-DK`. Play rejects notes for a language the listing does not have, so notes are only sent when this is set. |
+| `TESTFLIGHT_INTERNAL_GROUP` | *(all internal groups)* | Name of a single internal TestFlight group to add builds to. |
+| `XCODE_VERSION` | *(runner default)* | Pin Xcode, e.g. `16.4`, if the default image version ever breaks the build. |
+
+Producing the credentials, once:
+
+```
+# Android keystore (the existing upload key from keys/)
+base64 -w0 keys/nadanmarkapp.keystore          # Linux
+base64 -i keys/nadanmarkapp.keystore | tr -d '\n'   # macOS
+
+# iOS distribution certificate: Keychain Access -> right-click the *private key*
+# of the "Apple Distribution: ..." certificate -> Export -> .p12
+base64 -i dist-cert.p12 | tr -d '\n'
+
+# iOS provisioning profile: developer.apple.com -> Profiles -> App Store profile
+# for dk.nadanmark.ios.app -> Download
+base64 -i NA_Danmark_App_Store.mobileprovision | tr -d '\n'
+```
+
+Google Play service account: Play Console → Users and permissions → invite the
+service account and grant it **Release to testing tracks** (plus *View app
+information*) on `dk.nadanmark.app`. The JSON key itself comes from the linked
+Google Cloud project (IAM → Service accounts → Keys).
+
+App Store Connect API key: App Store Connect → Users and Access → Integrations →
+**App Store Connect API** → generate a team key with the **App Manager** role.
+The `.p8` can only be downloaded once.
+
+The Actions token needs to be allowed to push the version-bump commit and the
+tag: Settings → Actions → General → Workflow permissions → **Read and write**.
+If `master` is protected, allow `github-actions[bot]` to push to it.
+
+### Running a release build locally
+
+The same commands run locally, but they refuse to do anything unless *every*
+condition is met — no half-signed artefacts, no accidental uploads:
+
+```
+./bin/na release check            # what is missing?
+./bin/na release check android
+./bin/na release android --dry-run
+```
+
+The conditions are: `node_modules` present, all credentials in the environment,
+signing material available, a **clean git worktree** (pass `--allow-dirty` to
+override) and version numbers that agree. `na publish` additionally requires
+`--yes` outside CI, because it pushes builds to real testers.
+
+Credentials are injected into the tracked placeholder files (`config.xml`,
+`src/index.html`, `audio.service.ts`, `event.service.ts`) immediately before the
+build and restored immediately after, so they never end up in a commit.
+
+### Notes and caveats
+
+* The release build uses the **default** Angular configuration, i.e. the same
+  output that `na run` produces and the same output that has been shipping.
+  `angular.json`'s `production` configuration is currently broken — it
+  references `environment.prod.ts`, `app.component.prod.ts` and
+  `ngsw-config.json`, none of which exist any more, and it writes to `www/prod`
+  which cordova does not read. Fixing that (so releases get minified,
+  AOT-optimised bundles without source maps) is worth doing separately, with a
+  device test, rather than as part of the pipeline.
+* iOS builds run on `macos-15`, the smallest free macOS runner. macOS minutes
+  only count against the free allowance because this repository is public.
+* `ITSAppUsesNonExemptEncryption=false` is declared in `config.xml` (the app only
+  talks HTTPS), so App Store Connect does not hold every build for an export
+  compliance answer.
+
+## Manual release (fallback)
+
+The steps below are the pre-automation process, kept for reference and for the
+cases the pipeline cannot cover (uploading to production, Play Console checks).
 
 ### Android
 

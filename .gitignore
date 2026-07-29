@@ -27,6 +27,8 @@ npm-debug.log*
 /keys
 /coverage
 /dist
+# Scratch space for release builds: decoded keystores, signing configs, API keys
+/.na-release
 /node_modules
 /platforms
 /plugins
