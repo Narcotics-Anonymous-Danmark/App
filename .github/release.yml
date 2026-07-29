@@ -1,0 +1,22 @@
+# Shapes the PR list that GitHub generates for "Draft release candidate".
+# Labels on the merged PRs decide the sections; anything unlabelled lands in
+# "Andre ændringer".
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+      - dependencies
+    authors:
+      - dependabot
+      - github-actions
+  categories:
+    - title: Nye funktioner
+      labels: [feature, enhancement, feat]
+    - title: Fejlrettelser
+      labels: [bug, fix, bugfix]
+    - title: Oversættelser
+      labels: [translations, i18n]
+    - title: Vedligeholdelse
+      labels: [chore, refactor, ci, build]
+    - title: Andre ændringer
+      labels: ['*']

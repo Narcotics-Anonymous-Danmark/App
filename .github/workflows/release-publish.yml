@@ -1,0 +1,158 @@
+name: Publish release to stores
+
+# Fires when a release goes from draft to published. Nothing is rebuilt: the
+# exact artefacts that were attached to the release are downloaded and shipped,
+# so what testers get is bit-for-bit what was reviewed on the release page.
+#
+#   Android -> Google Play, internal + closed testing tracks
+#   iOS     -> TestFlight, internal testing (uploaded with Apple's iTMS
+#              Transporter, then handed to the internal group over the App
+#              Store Connect API)
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      tag: ${{ steps.info.outputs.tag }}
+      version: ${{ steps.info.outputs.version }}
+      build: ${{ steps.info.outputs.build }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Use Node 16.13.0 (pinned by the na CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 16.13.0
+
+      - name: Read the release numbers from the tagged checkout
+        id: info
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./lib/util/release').readVersions().config")
+          build=$(node -p "require('./lib/util/release').readVersions().iosBuild")
+          if [ -z "$version" ] || [ "$version" = "null" ]; then
+            echo "::error::could not read the version from config.xml at tag $TAG"; exit 1
+          fi
+          if [ -z "$build" ] || [ "$build" = "null" ]; then
+            echo "::error::config.xml at tag $TAG has no ios-CFBundleVersion — it was not tagged by the release workflow"; exit 1
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+          echo "Publishing $version build $build from tag $TAG"
+
+          assets=$(gh release view "$TAG" --json assets --jq '.assets[].name')
+          echo "Assets on the release:"; echo "$assets"
+          echo "$assets" | grep -q '\.aab$' || { echo "::error::the release has no .aab asset"; exit 1; }
+          echo "$assets" | grep -q '\.ipa$' || { echo "::error::the release has no .ipa asset"; exit 1; }
+
+  play-store:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.verify.outputs.tag }}
+
+      - name: Use Node 16.13.0 (pinned by the na CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 16.13.0
+
+      - name: Download the signed bundle from the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.verify.outputs.tag }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          gh release download "$TAG" --pattern '*.aab' --dir dist
+          gh release view "$TAG" --json body --jq .body > notes.md
+          ls -la dist
+
+      - name: Upload to Google Play (internal + closed testing)
+        env:
+          PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          # Optional repo variables: PLAY_TRACKS (default "internal,alpha"),
+          # PLAY_RELEASE_NOTES_LANGUAGE (e.g. "da-DK"; unset = no notes sent).
+          PLAY_TRACKS: ${{ vars.PLAY_TRACKS }}
+          PLAY_RELEASE_NOTES_LANGUAGE: ${{ vars.PLAY_RELEASE_NOTES_LANGUAGE }}
+        run: |
+          set -euo pipefail
+          aab=$(ls dist/*.aab | head -1)
+          ./bin/na publish play \
+            --aab "$aab" \
+            --version "${{ needs.verify.outputs.version }}" \
+            --build "${{ needs.verify.outputs.build }}" \
+            --notes notes.md
+
+      - name: Summary
+        if: success()
+        run: |
+          echo "### Google Play" >> "$GITHUB_STEP_SUMMARY"
+          echo "${{ needs.verify.outputs.version }} (${{ needs.verify.outputs.build }}) released to ${PLAY_TRACKS:-internal,alpha}" >> "$GITHUB_STEP_SUMMARY"
+        env:
+          PLAY_TRACKS: ${{ vars.PLAY_TRACKS }}
+
+  testflight:
+    needs: verify
+    # Apple's uploader only exists on macOS.
+    runs-on: macos-15
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.verify.outputs.tag }}
+
+      - name: Use Node 16.13.0 (pinned by the na CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 16.13.0
+
+      - name: Download the signed archive from the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.verify.outputs.tag }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          gh release download "$TAG" --pattern '*.ipa' --dir dist
+          gh release view "$TAG" --json body --jq .body > notes.md
+          ls -la dist
+
+      - name: Upload to TestFlight (internal testing)
+        env:
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+          # Optional repo variable: TESTFLIGHT_INTERNAL_GROUP (default: every internal group)
+          TESTFLIGHT_INTERNAL_GROUP: ${{ vars.TESTFLIGHT_INTERNAL_GROUP }}
+        run: |
+          set -euo pipefail
+          ipa=$(ls dist/*.ipa | head -1)
+          ./bin/na publish testflight --ipa "$ipa" --notes notes.md
+
+      - name: Summary
+        if: success()
+        run: |
+          echo "### TestFlight" >> "$GITHUB_STEP_SUMMARY"
+          echo "${{ needs.verify.outputs.version }} (${{ needs.verify.outputs.build }}) is with the internal testers" >> "$GITHUB_STEP_SUMMARY"

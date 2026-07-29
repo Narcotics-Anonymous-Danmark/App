@@ -1,0 +1,170 @@
+name: Build iOS (signed)
+
+# Archives and exports a signed, App Store ready .ipa. Reusable: called by
+# "Draft release candidate", and dispatchable on its own to test the pipeline
+# without touching a release.
+#
+# No fastlane anywhere — xcodebuild via cordova for the archive, Apple's own
+# uploader in the publish workflow.
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Git ref to build (tag, branch or SHA)
+        required: true
+        type: string
+      expected_version:
+        description: Fail if the checkout is not this version
+        required: false
+        type: string
+        default: ''
+      expected_build:
+        description: Fail if the checkout is not this build number
+        required: false
+        type: string
+        default: ''
+      artifact_name:
+        required: false
+        type: string
+        default: ios-release
+    outputs:
+      artifact_name:
+        value: ${{ inputs.artifact_name }}
+      ipa:
+        value: ${{ jobs.build.outputs.ipa }}
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Git ref to build (defaults to the branch this is run from)
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  build:
+    # macos-15 is the smallest free macOS runner (3-core arm64) and the only
+    # kind of runner that can sign and archive an iOS app.
+    runs-on: macos-15
+    timeout-minutes: 90
+    outputs:
+      ipa: ${{ steps.build.outputs.ipa }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Select Xcode
+        if: vars.XCODE_VERSION != ''
+        run: sudo xcode-select -s "/Applications/Xcode_${{ vars.XCODE_VERSION }}.app"
+
+      - name: Show toolchain
+        run: |
+          xcodebuild -version
+          pod --version
+
+      - name: Use Node 16.13.0 (pinned by the na CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 16.13.0
+          cache: npm
+
+      - name: Cache CocoaPods
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/CocoaPods
+            ~/.cocoapods/repos
+          key: pods-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            pods-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check the version matches what the release expects
+        if: inputs.expected_version
+        env:
+          EXPECTED_VERSION: ${{ inputs.expected_version }}
+          EXPECTED_BUILD: ${{ inputs.expected_build }}
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./lib/util/release').readVersions().config")
+          build=$(node -p "require('./lib/util/release').readVersions().iosBuild")
+          if [ "$version" != "$EXPECTED_VERSION" ]; then
+            echo "::error::checkout is version $version but the release expects $EXPECTED_VERSION"
+            exit 1
+          fi
+          if [ -n "$EXPECTED_BUILD" ] && [ "$build" != "$EXPECTED_BUILD" ]; then
+            echo "::error::checkout is build $build but the release expects $EXPECTED_BUILD"
+            exit 1
+          fi
+          echo "Building $version build $build"
+
+      - name: Pre-flight (secrets, versions, clean worktree)
+        env:
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+          GOOGLE_MAPS_IOS_API_KEY: ${{ secrets.GOOGLE_MAPS_IOS_API_KEY }}
+          GOOGLE_MAPS_JS_API_KEY: ${{ secrets.GOOGLE_MAPS_JS_API_KEY }}
+          NA_API_BASIC_AUTH: ${{ secrets.NA_API_BASIC_AUTH }}
+          IOS_DIST_CERT_BASE64: ${{ secrets.IOS_DIST_CERT_BASE64 }}
+          IOS_DIST_CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
+          IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+          IOS_TEAM_ID: ${{ secrets.IOS_TEAM_ID }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+        run: ./bin/na release check ios
+
+      - name: Build the signed archive
+        id: build
+        env:
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+          GOOGLE_MAPS_IOS_API_KEY: ${{ secrets.GOOGLE_MAPS_IOS_API_KEY }}
+          GOOGLE_MAPS_JS_API_KEY: ${{ secrets.GOOGLE_MAPS_JS_API_KEY }}
+          NA_API_BASIC_AUTH: ${{ secrets.NA_API_BASIC_AUTH }}
+          IOS_DIST_CERT_BASE64: ${{ secrets.IOS_DIST_CERT_BASE64 }}
+          IOS_DIST_CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
+          IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+          IOS_TEAM_ID: ${{ secrets.IOS_TEAM_ID }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          ./bin/na release ios
+          ipa=$(ls dist/*.ipa | head -1)
+          echo "ipa=$(basename "$ipa")" >> "$GITHUB_OUTPUT"
+          echo "### iOS archive" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`$(basename "$ipa")\` — $(du -h "$ipa" | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifact_name || 'ios-release' }}
+          path: dist/*.ipa
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Collect signing/build details on failure
+        if: failure()
+        run: |
+          mkdir -p build-logs
+          # What cordova handed to xcodebuild, and what the export produced.
+          cp platforms/ios/exportOptions.plist build-logs/ 2>/dev/null || true
+          cp platforms/ios/cordova/build-extras.xcconfig build-logs/ 2>/dev/null || true
+          cp platforms/ios/Podfile platforms/ios/Podfile.lock build-logs/ 2>/dev/null || true
+          ls -laR platforms/ios/build > build-logs/build-dir-listing.txt 2>/dev/null || true
+          security find-identity -v -p codesigning > build-logs/identities.txt 2>&1 || true
+          ls -la ~/Library/MobileDevice/Provisioning\ Profiles > build-logs/profiles.txt 2>&1 || true
+          ls -la build-logs
+
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build-logs
+          path: build-logs
+          retention-days: 7
+          if-no-files-found: ignore
