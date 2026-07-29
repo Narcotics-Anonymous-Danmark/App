@@ -9,11 +9,11 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class SettingsPage implements OnInit {
 
-    language: string;
-    firstdayofweek: string;
-    theme: string;
-    searchRange: number;
-    cleanTimeUnitSort: string;
+    language!: string;
+    firstdayofweek!: string;
+    theme!: string;
+    searchRange!: number;
+    cleanTimeUnitSort!: string;
     refreshed = true;
 
     constructor(

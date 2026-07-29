@@ -32,3 +32,7 @@ ion-popover [popover]:not(:popover-open):not(dialog[open]) {
 button.alert-button.danger {
     color: #ff0000;
 }
+/* Keep page content reachable while the global media player is docked */
+body.media-player-open ion-content {
+    --padding-bottom: 140px;
+}

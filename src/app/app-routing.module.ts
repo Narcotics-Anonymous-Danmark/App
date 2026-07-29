@@ -36,14 +36,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)
   },
   {
-    path: 'virt-tabs',
-    loadChildren: () => import('./pages/virt-tabs/virt-tabs.module').then( m => m.VirtTabsPageModule)
-  },
-  {
-    path: 'coming-soon',
-    loadChildren: () => import('./pages/coming-soon/coming-soon.module').then( m => m.ComingSoonPageModule)
-  },
-  {
     path: 'jft',
     loadChildren: () => import('./pages/jft/jft.module').then( m => m.JftPageModule)
   },

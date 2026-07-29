@@ -1,31 +1,28 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MeetingCardComponent } from '../meeting-card/meeting-card.component';
 import { MeetingListComponent } from '../meeting-list/meeting-list.component';
-import { PdfViewerComponent } from '../pdf-viewer/pdf-viewer.component';
 
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicModule } from '@ionic/angular';
-import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     MeetingCardComponent,
     MeetingListComponent,
-    PdfViewerComponent
   ],
   imports: [
     CommonModule,
+    FormsModule,
     PipesModule,
     IonicModule,
     TranslateModule,
-    FormsModule
   ],
   exports: [
     MeetingCardComponent,
     MeetingListComponent,
-    PdfViewerComponent
   ],
   entryComponents: [
     MeetingCardComponent,

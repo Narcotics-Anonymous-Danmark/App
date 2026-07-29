@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "rootDir": "./src",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -9,13 +10,30 @@
     "experimentalDecorators": true,
     "module": "esnext",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "importHelpers": true,
     "target": "es2015",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "types": [],
     "lib": [
       "es2018",
       "dom"
     ]
   },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "platforms",
+    "plugins",
+    "www",
+    "dist",
+    "src/**/*.spec.ts"
+  ],
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true

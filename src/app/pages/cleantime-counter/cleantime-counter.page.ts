@@ -4,7 +4,7 @@ import { CleantimeService } from 'src/app/providers/cleantime.service';
 import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { NotificationService } from 'src/app/providers/notification.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import 'moment-timezone';
 
 @Component({
@@ -14,7 +14,7 @@ import 'moment-timezone';
 })
 export class CleantimeCounterPage implements OnInit {
     activeProfile = "0";
-    profiles = [];
+    profiles: any[] = [];
     refreshed = true;
 
     maxDate: any;
@@ -28,15 +28,15 @@ export class CleantimeCounterPage implements OnInit {
     cleanTimeInDays2 = 0;
     cleanTimeInDays3 = 0;
 
-    years1;
-    months1;
-    days1;
-    months2;
-    days2;
-    days3;
-    tag;
-    tagTime;
-    keytagImage;
+    years1: any;
+    months1: any;
+    days1: any;
+    months2: any;
+    days2: any;
+    days3: any;
+    tag: any;
+    tagTime: any;
+    keytagImage: any;
     wait = true;
 
     monthNames = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
@@ -226,7 +226,6 @@ export class CleantimeCounterPage implements OnInit {
             this.storage.set('cleanDateProfiles', this.profiles);
             this.storage.set('activeProfile', this.activeProfile);
 
-            let todayMoment = moment(moment().format("YYYY-MM-DD"), "YYYY-MM-DD").tz(moment.tz.guess());
 
             let cleanDay = this.cleantime.getProfileCleanDay(this.profiles[parseInt(this.activeProfile)]);
             let cleanTimes = this.cleantime.getCleanTimes(cleanDay);
@@ -264,11 +263,11 @@ export class CleantimeCounterPage implements OnInit {
         }
     }
 
-    cleanTimeTag(cleanTimes) {
+    cleanTimeTag(cleanTimes: any) {
         let [cleanTimeInDays, cleanTimeInMonthsPrecise, cleanTimeInYearsPrecise, cleanTimeInYears] = cleanTimes;
         let anniversaryName = "";
-        let anniversariesDef = this.cleantime.getAnniversaryDefinitions();
-        let properties = {
+        let anniversariesDef: any = this.cleantime.getAnniversaryDefinitions();
+        let properties: any = {
             "cleanTimeInDays": cleanTimeInDays,
             "cleanTimeInMonthsPrecise": cleanTimeInMonthsPrecise,
             "cleanTimeInYearsPrecise": cleanTimeInYearsPrecise,
@@ -307,7 +306,6 @@ export class CleantimeCounterPage implements OnInit {
             this.keytagImage = "./assets/keytags/da/" + anniversaryName + ".png";
             let tagTime = anniversaryDef["tagTime"];
             if(typeof tagTime === "function"){
-                const func: Function = tagTime;
                 this.tagTime = tagTime(cleanTimes);
             } else if(typeof tagTime === "number"){
                 this.tagTime = tagTime;
@@ -319,7 +317,7 @@ export class CleantimeCounterPage implements OnInit {
         return this.tag;
     }
 
-    parseInt(value){
+    parseInt(value: any){
         return parseInt(value);
     }
 

@@ -20,15 +20,10 @@ export class ContactPage {
     currentConfiguration = environment.configuration;
     naApproved = environment.na_approved;
 
-    //appName = this.appVersion.getAppName();
-    //packageName = this.appVersion.getPackageName();
-    //versionCode = this.appVersion.getVersionCode();
-    //versionNumber = this.appVersion.getVersionNumber();
-
     constructor(private iab: InAppBrowser) {
 
     }
-    public openLink(url) {
-        const browser = this.iab.create(url, '_system');
+    public openLink(url: any) {
+        this.iab.create(url, '_system');
     }
 }

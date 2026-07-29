@@ -38,11 +38,11 @@
 
         <ion-item>
             <div>
-                <ion-label>{{'SEARCHRANGESETTING' | translate}} = {{searchRange}} {{'MEETINGS' | translate }}</ion-label>
+                <ion-label>{{'SEARCHRANGESETTING' | translate}} = {{searchRange}} {{'KM' | translate }}</ion-label>
             </div>
             <ion-range id="RadiusRange" min="5" max="50" [(ngModel)]="searchRange" (ionBlur)="selectSearchRange()" color="danger" pin="true">
-                <ion-label range-left>5 {{'MEETINGS' | translate }}</ion-label>
-                <ion-label range-right>50 {{'MEETINGS' | translate }}</ion-label>
+                <ion-label range-left>5 {{'KM' | translate }}</ion-label>
+                <ion-label range-right>50 {{'KM' | translate }}</ion-label>
             </ion-range>
         </ion-item>
 

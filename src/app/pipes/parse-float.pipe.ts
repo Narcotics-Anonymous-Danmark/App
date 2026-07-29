@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ParseFloatPipe implements PipeTransform {
 
-  transform(value: string, ...args) {
+  transform(value: string) {
     return parseFloat(value);
   }
 

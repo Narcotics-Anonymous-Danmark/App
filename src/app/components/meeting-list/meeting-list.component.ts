@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { firstBy } from 'thenby';
 import { Storage } from '@ionic/storage';
-import * as moment from 'moment';
+import moment from 'moment';
 import 'moment-timezone';
 
 @Component({
@@ -11,16 +11,16 @@ import 'moment-timezone';
 })
 export class MeetingListComponent implements OnInit, OnChanges {
 
-    @Input() data;
-    @Input() meetingType;
+    @Input() data: any;
+    @Input() meetingType: any;
 
-    meetingList = [];
-    savedList = [];
-    meetingListGroupedByDay;
+    meetingList: any[] = [];
+    savedList: any[] = [];
+    meetingListGroupedByDay: any;
     shownDay = null;
     meetingsListGrouping = 'weekday_tinyint';
-    timeDisplay;
-    localMeetingType;
+    timeDisplay: any;
+    localMeetingType: any;
     dayCount = [0, 0, 0, 0, 0, 0, 0];
     selectedDay = 'WEEKDAYS';
 
@@ -78,7 +78,7 @@ export class MeetingListComponent implements OnInit, OnChanges {
         }
         this.meetingListGroupedByDay = this.meetingList.concat();
         this.setRawStartTime();
-        this.meetingListGroupedByDay.sort((a, b) => a.weekday_tinyint.localeCompare(b.weekday_tinyint));
+        this.meetingListGroupedByDay.sort((a: any, b: any) => a.weekday_tinyint.localeCompare(b.weekday_tinyint));
         this.savedList = this.meetingListGroupedByDay;
         this.meetingListGroupedByDay = this.groupMeetingList(this.meetingListGroupedByDay, this.meetingsListGrouping);
         for (let i of this.meetingListGroupedByDay) {
@@ -88,10 +88,10 @@ export class MeetingListComponent implements OnInit, OnChanges {
     }
 
 
-    private groupMeetingList(meetingList, groupingOption) {
+    private groupMeetingList(meetingList: any, groupingOption: any) {
         // A function to convert a flat json list to an javascript array
-        const groupJSONList = function (inputArray, key) {
-            return inputArray.reduce(function (ouputArray, currentValue) {
+        const groupJSONList = function (inputArray: any, key: any) {
+            return inputArray.reduce(function (ouputArray: any, currentValue: any) {
                 (ouputArray[currentValue[key]] = ouputArray[currentValue[key]] || []).push(currentValue);
                 return ouputArray;
             }, {});
@@ -114,7 +114,7 @@ export class MeetingListComponent implements OnInit, OnChanges {
     }
 
 
-    toggleDay(dayGrouping) {
+    toggleDay(dayGrouping: any) {
         if (this.isDayShown(dayGrouping)) {
             this.shownDay = null;
         } else {
@@ -123,12 +123,12 @@ export class MeetingListComponent implements OnInit, OnChanges {
     }
 
 
-    isDayShown(dayGrouping) {
+    isDayShown(dayGrouping: any) {
         return this.shownDay === dayGrouping;
     }
 
 
-    public isToday(dayOfWeek) {
+    public isToday(dayOfWeek: any) {
         const d = new Date();
         const n = d.getDay();
         if (parseInt(dayOfWeek, 10) === (n + 1)) {
@@ -169,7 +169,7 @@ export class MeetingListComponent implements OnInit, OnChanges {
     }
 
 
-    getAdjustedDateTime(meetingDay, meetingTime, meetingTimeZone) {
+    getAdjustedDateTime(meetingDay: any, meetingTime: any, meetingTimeZone: any) {
         let meetingDateTimeObj;
 
         if (!meetingTimeZone) {
@@ -221,14 +221,14 @@ export class MeetingListComponent implements OnInit, OnChanges {
 
 
     public filterMeetings() {
-        let tempMeetingListGroupedByDay = [];
+        let tempMeetingListGroupedByDay: any[] = [];
         tempMeetingListGroupedByDay = this.savedList;
 
         //  Filter by Day
         if (this.days.indexOf(this.selectedDay) > 0) {
             var days = this.days.map((x) => x);
             if(this.firstday === "mo"){
-                days.splice(1, 0, days.pop());
+                days.splice(1, 0, days.pop()!);
             }
             
             tempMeetingListGroupedByDay = tempMeetingListGroupedByDay.filter(

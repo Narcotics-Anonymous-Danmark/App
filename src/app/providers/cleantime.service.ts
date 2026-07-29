@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import 'moment-timezone';
 
 @Injectable({
@@ -15,7 +15,7 @@ export class CleantimeService {
   ) { }
 
   async getProfiles() {
-    let profiles = [];
+    let profiles: any[] = [];
     await this.storage.ready().then(async () => {
       await this.storage.get('cleanDateProfiles').then(value => {
         if(value)
@@ -27,16 +27,16 @@ export class CleantimeService {
     return profiles;
   }
 
-  async getCleanDay(profileId){
+  async getCleanDay(profileId: any){
     let profiles = await this.getProfiles();
     return this.getProfileCleanDay(profiles[parseInt(profileId)]);
   }
 
-  getProfileCleanDay(profile){
+  getProfileCleanDay(profile: any){
     return profile.cleandate;
   }
 
-  getCleanTimes(cleanDay){
+  getCleanTimes(cleanDay: any){
     let todayMoment = moment(moment().format("YYYY-MM-DD"), "YYYY-MM-DD").tz(moment.tz.guess());
     let cleanDayMoment = moment(cleanDay);
     let cleanTimeInDays = Math.floor(todayMoment.diff(cleanDayMoment, 'days', true));
@@ -46,7 +46,7 @@ export class CleantimeService {
     return [cleanTimeInDays, cleanTimeInMonthsPrecise, cleanTimeInYearsPrecise, cleanTimeInYears];
   }
 
-  getCleanYearsMonthsDays(cleanDay, fromDate = new Date){
+  getCleanYearsMonthsDays(cleanDay: any, fromDate = new Date){
     let fromDateMoment = moment(moment(fromDate).format("YYYY-MM-DD"), "YYYY-MM-DD").tz(moment.tz.guess());
     let viewDate = moment(cleanDay);
     const cleanTimeInYears = Math.floor(fromDateMoment.diff(viewDate, 'years', true));
@@ -57,7 +57,7 @@ export class CleantimeService {
     return [cleanTimeInYears, cleanTimeInMonths, cleanTimeInDays];
   }
 
-  getCleanMonthsDays(cleanDay, fromDate = new Date){
+  getCleanMonthsDays(cleanDay: any, fromDate = new Date){
     let fromDateMoment = moment(moment(fromDate).format("YYYY-MM-DD"), "YYYY-MM-DD").tz(moment.tz.guess());
     let viewDate = moment(cleanDay);
     const cleanTimeInMonths = Math.floor(fromDateMoment.diff(viewDate, 'months', true));
@@ -117,13 +117,13 @@ export class CleantimeService {
             "tag": "MONTHSCLEAN"
         },
         "x-years": {
-            "cleanTimeInYearsPrecise": (value, cleanTimes) => {
+            "cleanTimeInYearsPrecise": (value: any, cleanTimes: any) => {
                 let [,,,cleanTimeInYears] = cleanTimes;
                 return value === cleanTimeInYears;
             },
-            "cleanTimeInYears": value => value > 1,
-            "nextDateArg": years => [0, 0, years],
-            "tagTime": cleanTimes => {
+            "cleanTimeInYears": (value: any) => value > 1,
+            "nextDateArg": (years: any) => [0, 0, years],
+            "tagTime": (cleanTimes: any) => {
               let [,,,cleanTimeInYears] = cleanTimes;
               return cleanTimeInYears;
             },
@@ -133,7 +133,7 @@ export class CleantimeService {
   }
 
   getAnniversaries(){
-    let anniversariesDef = this.getAnniversaryDefinitions();
+    let anniversariesDef: any = this.getAnniversaryDefinitions();
     return [
         anniversariesDef["1-day"],
         anniversariesDef["30-days"],
@@ -147,12 +147,12 @@ export class CleantimeService {
     ];
   }
 
-  getNextAnniversaries(cleanDay, duration){
-    let nextAnniversaries = [];
+  getNextAnniversaries(cleanDay: any, duration: any){
+    let nextAnniversaries: any[] = [];
     let todayMoment = moment(moment().format("YYYY-MM-DD"), "YYYY-MM-DD").tz(moment.tz.guess());
     let maxDateMoment = moment(todayMoment); // clone
     maxDateMoment.add(duration);
-    let anniversariesDef = this.getAnniversaryDefinitions();
+    let anniversariesDef: any = this.getAnniversaryDefinitions();
     Object.keys(anniversariesDef).forEach(key => {
       let anniversaryDef = anniversariesDef[key];
       let anniversaryDate = moment(cleanDay);
@@ -171,7 +171,6 @@ export class CleantimeService {
           });
         }
       } else if(typeof nextDateArg === "function"){
-        const func: Function = nextDateArg;
         let iterations = 0;
         do {
           anniversaryDate = moment(cleanDay);
@@ -196,8 +195,8 @@ export class CleantimeService {
     return nextAnniversaries;
   }
 
-  async getAnniversaryString(anniversary){
-    let anniversariesDefs = this.getAnniversaryDefinitions();
+  async getAnniversaryString(anniversary: any){
+    let anniversariesDefs: any = this.getAnniversaryDefinitions();
     let anniversariesDef = anniversariesDefs[anniversary.name];
     let anniversaryTagText = await this.translate.get(anniversariesDef["tag"]).toPromise();
     return anniversary.tagTime + " " + anniversaryTagText;

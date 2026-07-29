@@ -16,7 +16,7 @@ export class LocationSearchPage  {
   meetingsListGrouping: string;
 
   shownGroup = null;
-  loader = null;
+  loader = false;
   isLoaded = false;
   radius = 25;
 
@@ -56,31 +56,32 @@ export class LocationSearchPage  {
 
   presentLoader(loaderText: any) {
     if (!this.loader) {
-      this.loader = this.loaderCtrl.present(loaderText);
+      this.loader = true;
+      this.loaderCtrl.present(loaderText);
     }
   }
 
   dismissLoader() {
     if (this.loader) {
-      this.loader = this.loaderCtrl.dismiss();
-      this.loader = null;
+      this.loader = false;
+      this.loaderCtrl.dismiss();
     }
   }
 
-  locatePhone() {
+  async locatePhone() {
     this.translate.get('LOCATING').subscribe(value => {
       this.presentLoader(value);
     });
-    if (LocationService.hasPermission()) {
+    if (await LocationService.hasPermission()) {
       let locationTimeout = setTimeout(()=>{
         this.dismissLoaderAndLoadMeetings();
       }, 10000);
       LocationService.getMyLocation().then((myLocation: MyLocation) => {
         clearTimeout(locationTimeout);
-        this.currentLatitude = myLocation.latLng.lat;
-        this.currentLongitude = myLocation.latLng.lng;
+        this.currentLatitude = myLocation.latLng!.lat;
+        this.currentLongitude = myLocation.latLng!.lng;
         this.dismissLoaderAndLoadMeetings();
-      }, (reason) => {
+      }, () => {
         clearTimeout(locationTimeout);
         this.dismissLoaderAndLoadMeetings();
       });
@@ -90,12 +91,8 @@ export class LocationSearchPage  {
   }
 
   dismissLoaderAndLoadMeetings() {
-    this.loaderCtrl.getTop().then(loader => {
-      loader.onDidDismiss().then(() => {
-        this.getAllMeetings();
-      });
-    });
     this.dismissLoader();
+    this.getAllMeetings();
   }
 
 }

@@ -7,12 +7,6 @@ import { EventsPage } from './events.page';
 import { TranslateModule } from '@ngx-translate/core';
 import { AudioService } from '../../providers/audio.service';
 import { HTTP } from '@ionic-native/http/ngx';
-
-//import { HttpProvider } from '../../providers/http/http';
-//import { HttpAngularProvider } from '../../providers/http-angular/http-angular';
-//import { HttpNativeProvider } from '../../providers/http-native/http-native';
-
-import { Insomnia } from '@ionic-native/insomnia/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @NgModule({
@@ -26,11 +20,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
     declarations: [EventsPage],
     providers: [
         AudioService,
-        //HttpProvider,
-        //HttpAngularProvider,
-        //HttpNativeProvider,
         HTTP,
-        Insomnia,
         InAppBrowser
     ]
 
