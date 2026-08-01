@@ -37,6 +37,14 @@
 
   <ion-card-content>
     <h1>{{meeting.meeting_name}}</h1>
+
+    <div class="meeting-formats" *ngIf="formats.length" (click)="showFormats($event)"
+      title="{{'MEETING_FORMATS' | translate}}">
+      <ion-chip *ngFor="let format of formats" [color]="formatColor(format)">
+        <ion-label>{{format.name}}</ion-label>
+      </ion-chip>
+    </div>
+
     <div *ngIf="meeting.location_text">{{meeting.location_text}}<br></div>
     <div *ngIf="meeting.location_street">{{meeting.location_street}}<br></div>
     <div *ngIf="meeting.location_city_subsection">{{meeting.location_city_subsection}}<br></div>
@@ -47,7 +55,10 @@
     <div *ngIf="meeting.location_code_1">{{meeting.location_code_1}}<br></div>
     <div *ngIf="meeting.location_info">{{meeting.location_info}}<br></div>
     <div *ngIf="meetingType === 'regular'">
-      <div *ngIf="meeting.comments">{{meeting.comments}}<br></div>
+      <div class="meeting-note" *ngIf="meeting.comments">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        <span>{{meeting.comments}}</span>
+      </div>
     </div>
     <div *ngIf="meeting.virtual_meeting_additional_info">{{meeting.virtual_meeting_additional_info}}<br></div>
     <div *ngIf="meeting.contact_phone_1">{{meeting.contact_phone_1 | tidyDelimiter }}<br></div>

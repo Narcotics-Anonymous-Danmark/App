@@ -32,6 +32,13 @@ ion-popover [popover]:not(:popover-open):not(dialog[open]) {
 button.alert-button.danger {
     color: #ff0000;
 }
+
+/* The meeting format explanations need more room than a default popover */
+ion-popover.meeting-formats-popover {
+    --width: 92%;
+    --max-width: 420px;
+    --max-height: 70%;
+}
 /* Keep page content reachable while the global media player is docked */
 body.media-player-open ion-content {
     --padding-bottom: 140px;
