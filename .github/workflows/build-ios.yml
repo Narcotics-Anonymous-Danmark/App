@@ -3,9 +3,6 @@ name: Build iOS (signed)
 # Archives and exports a signed, App Store ready .ipa. Reusable: called by
 # "Draft release candidate", and dispatchable on its own to test the pipeline
 # without touching a release.
-#
-# No fastlane anywhere — xcodebuild via cordova for the archive, Apple's own
-# uploader in the publish workflow.
 
 on:
   workflow_call:
@@ -43,9 +40,7 @@ on:
 
 jobs:
   build:
-    # macos-15 is the smallest free macOS runner (3-core arm64) and the only
-    # kind of runner that can sign and archive an iOS app.
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 90
     outputs:
       ipa: ${{ steps.build.outputs.ipa }}
@@ -70,15 +65,16 @@ jobs:
           node-version: 16.13.0
           cache: npm
 
-      - name: Cache CocoaPods
-        uses: actions/cache@v4
+      - name: Restore the CocoaPods cache
+        id: pods-cache
+        uses: actions/cache/restore@v4
         with:
           path: |
             ~/Library/Caches/CocoaPods
             ~/.cocoapods/repos
-          key: pods-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: pods-v2-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            pods-${{ runner.os }}-
+            pods-v2-${{ runner.os }}-
 
       - name: Install dependencies
         run: npm ci
@@ -147,24 +143,11 @@ jobs:
           retention-days: 7
           if-no-files-found: error
 
-      - name: Collect signing/build details on failure
-        if: failure()
-        run: |
-          mkdir -p build-logs
-          # What cordova handed to xcodebuild, and what the export produced.
-          cp platforms/ios/exportOptions.plist build-logs/ 2>/dev/null || true
-          cp platforms/ios/cordova/build-extras.xcconfig build-logs/ 2>/dev/null || true
-          cp platforms/ios/Podfile platforms/ios/Podfile.lock build-logs/ 2>/dev/null || true
-          ls -laR platforms/ios/build > build-logs/build-dir-listing.txt 2>/dev/null || true
-          security find-identity -v -p codesigning > build-logs/identities.txt 2>&1 || true
-          ls -la ~/Library/MobileDevice/Provisioning\ Profiles > build-logs/profiles.txt 2>&1 || true
-          ls -la build-logs
-
-      - name: Upload failure logs
-        if: failure()
-        uses: actions/upload-artifact@v4
+      - name: Save the CocoaPods cache
+        if: always() && steps.pods-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
         with:
-          name: ios-build-logs
-          path: build-logs
-          retention-days: 7
-          if-no-files-found: ignore
+          path: |
+            ~/Library/Caches/CocoaPods
+            ~/.cocoapods/repos
+          key: pods-v2-${{ runner.os }}-${{ hashFiles('package-lock.json') }}

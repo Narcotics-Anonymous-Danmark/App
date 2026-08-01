@@ -132,4 +132,8 @@
     <plugin name="cordova-plugin-music-controls2" spec="^3.0.7" />
     <hook src="scripts/patch-music-controls.js" type="before_compile" />
     <hook src="scripts/patch-ios-media.js" type="before_compile" />
+    <hook src="scripts/use-cocoapods-cdn.js" type="before_platform_add" />
+    <hook src="scripts/use-cocoapods-cdn.js" type="before_prepare" />
+    <hook src="scripts/align-deployment-target.js" type="before_compile" />
+    <hook src="scripts/patch-advanced-http.js" type="before_compile" />
 </widget>
