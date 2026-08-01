@@ -72,22 +72,31 @@ export class LocationSearchPage  {
     this.translate.get('LOCATING').subscribe(value => {
       this.presentLoader(value);
     });
-    if (await LocationService.hasPermission()) {
-      let locationTimeout = setTimeout(()=>{
-        this.dismissLoaderAndLoadMeetings();
-      }, 10000);
-      LocationService.getMyLocation().then((myLocation: MyLocation) => {
-        clearTimeout(locationTimeout);
-        this.currentLatitude = myLocation.latLng!.lat;
-        this.currentLongitude = myLocation.latLng!.lng;
-        this.dismissLoaderAndLoadMeetings();
-      }, () => {
-        clearTimeout(locationTimeout);
-        this.dismissLoaderAndLoadMeetings();
-      });
-    } else {
+
+    const hasPermission = await LocationService.hasPermission();
+    const locateTimeout = hasPermission ? 10000 : 45000;
+
+    let timedOut = false;
+    const locationTimeout = setTimeout(() => {
+      timedOut = true;
       this.dismissLoaderAndLoadMeetings();
-    }
+    }, locateTimeout);
+
+    LocationService.getMyLocation().then((myLocation: MyLocation) => {
+      clearTimeout(locationTimeout);
+      this.currentLatitude = myLocation.latLng!.lat;
+      this.currentLongitude = myLocation.latLng!.lng;
+      if (timedOut) {
+        this.getAllMeetings();
+      } else {
+        this.dismissLoaderAndLoadMeetings();
+      }
+    }, () => {
+      clearTimeout(locationTimeout);
+      if (!timedOut) {
+        this.dismissLoaderAndLoadMeetings();
+      }
+    });
   }
 
   dismissLoaderAndLoadMeetings() {

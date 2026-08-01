@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title size="small">{{'MEETING_FORMATS' | translate}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list lines="full" class="format-list">
+    <ion-item *ngIf="meetingName" class="format-meeting-name">
+      <ion-label class="ion-text-wrap"><b>{{meetingName}}</b></ion-label>
+    </ion-item>
+
+    <ion-item *ngFor="let format of formats">
+      <ion-badge slot="start" [color]="colorFor(format)">{{format.key}}</ion-badge>
+      <ion-label class="ion-text-wrap">
+        <h3>{{format.name}}</h3>
+        <p *ngIf="format.description">{{format.description}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

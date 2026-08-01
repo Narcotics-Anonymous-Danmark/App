@@ -71,6 +71,7 @@
     "IS_BMLT_NO_2"      : "So, it looks like your local service body has not implemented the BMLT for their meetings list.",
     "CLOSE"             : "Close",
     "MEETING_DETAILS"   : "Meeting Details",
+    "MEETING_FORMATS"   : "Meeting Formats",
     "CANCEL"            : "Cancel",
     "VIRTUAL_LINK"      : "Virtual Link",
     "PHONE_MEETING"     : "Phone Meeting Dial-in",
