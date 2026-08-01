@@ -145,7 +145,7 @@ It also drives releases — see [Automated releases](#automated-releases):
 ./bin/na release check           # can this checkout build a signed release?
 ./bin/na release android         # signed .aab into dist/
 ./bin/na release ios             # signed .ipa into dist/ (macOS only)
-./bin/na publish play --aab …    # upload to Play internal + closed testing
+./bin/na publish play --aab …    # upload to Play internal testing
 ./bin/na publish testflight --ipa …  # upload to TestFlight internal testing
 ```
 
@@ -234,7 +234,13 @@ signed artefacts, and publishing that release is what sends them to the stores.
 | Workflow | Trigger | What it does |
 | --- | --- | --- |
 | **Draft release candidate** (`release-draft.yml`) | manual (`workflow_dispatch`) | Sets the version + build number, commits and tags it, drafts a GitHub release with notes generated from the PRs/commits since the last release, builds the signed `.aab` (ubuntu-22.04) and signed `.ipa` (macos-15) from that tag and attaches both to the draft. |
-| **Publish release to stores** (`release-publish.yml`) | a release goes draft → **published** | Downloads the artefacts *from the release* (nothing is rebuilt) and ships them: `.aab` → Google Play *internal* + *closed testing*, `.ipa` → TestFlight *internal testing*. |
+| **Publish release to stores** (`release-publish.yml`) | a release goes draft → **published** | Downloads the artefacts *from the release* (nothing is rebuilt) and ships them: `.aab` → Google Play *internal testing*, `.ipa` → App Store Connect (the internal TestFlight group picks it up automatically once Apple finishes processing). |
+
+**Internal testing only.** Neither store gets an external/closed-testing release
+from the pipeline, so nothing it does is ever submitted to Google or Apple for
+review. Promoting a build to closed/open testing or production is a manual
+decision in the Play Console, and so is sending one to external TestFlight
+testers.
 
 The two build jobs live in their own reusable workflows (`build-android.yml`,
 `build-ios.yml`) and can also be run on their own from the Actions tab to test
@@ -247,8 +253,10 @@ So the flow is:
    an explicit version) → Run.
 2. Wait for the draft release to appear with `nadanmark-<version>-<build>.aab`
    and `.ipa` attached (~15 min for Android, ~30-40 min for iOS).
-3. Edit the release notes — the text between the `release-notes` markers is what
-   testers see in TestFlight and (optionally) Google Play.
+3. Edit the release notes — the text between the `release-notes` markers is sent
+   to Google Play as the release notes (when `PLAY_RELEASE_NOTES_LANGUAGE` is
+   set). TestFlight's "What to Test" is *not* filled in automatically; write it
+   in App Store Connect if the testers need it.
 4. **Publish** the release. TestFlight and Play uploads start automatically.
 
 Nothing is signed or uploaded until you publish, and a failed build leaves the
@@ -284,20 +292,22 @@ Repository → Settings → Secrets and variables → Actions → **Secrets**:
 | `PLAY_SERVICE_ACCOUNT_JSON` | Google Play service account key (whole JSON file, or base64 of it) |
 | `IOS_DIST_CERT_BASE64` | base64 of a `.p12` holding the **Apple Distribution** certificate *and* its private key (an older `iPhone Distribution` certificate works too — the signing identity is read from the certificate, not assumed; `IOS_CODE_SIGN_IDENTITY` can override it) |
 | `IOS_DIST_CERT_PASSWORD` | password used when exporting that `.p12` |
-| `IOS_PROVISIONING_PROFILE_BASE64` | base64 of the App Store `.mobileprovision`. Optional — omit it and Xcode fetches/creates the profile itself using the App Store Connect key. |
+| `IOS_PROVISIONING_PROFILE_BASE64` | base64 of the App Store `.mobileprovision`. **Required.** cordova-ios pins `CODE_SIGN_IDENTITY = "iPhone Distribution"` in `build-release.xcconfig`, and Xcode refuses to combine any pinned identity with automatic signing — so the release build signs manually, which needs a profile. |
 | `IOS_TEAM_ID` | Apple Developer team id (10 characters) |
 | `APP_STORE_CONNECT_KEY_ID` | App Store Connect API key id |
 | `APP_STORE_CONNECT_ISSUER_ID` | App Store Connect issuer id |
-| `APP_STORE_CONNECT_PRIVATE_KEY` | contents of the `AuthKey_XXXXXXXX.p8` file |
+| `APP_STORE_CONNECT_PRIVATE_KEY` | contents of the `AuthKey_XXXXXXXX.p8` file, or base64 of that file — both are accepted, as are CRLF endings and `\n` escapes |
 
 Optional **Variables** (same page, "Variables" tab — these are not secret):
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
-| `PLAY_TRACKS` | `internal,alpha` | Play tracks to release to. Set the closed track's real id if it is not `alpha`. |
 | `PLAY_RELEASE_NOTES_LANGUAGE` | *(unset)* | e.g. `da-DK`. Play rejects notes for a language the listing does not have, so notes are only sent when this is set. |
-| `TESTFLIGHT_INTERNAL_GROUP` | *(all internal groups)* | Name of a single internal TestFlight group to add builds to. |
 | `XCODE_VERSION` | *(runner default)* | Pin Xcode, e.g. `16.4`, if the default image version ever breaks the build. |
+
+If `PLAY_CLOSED_TESTING`, `PLAY_CLOSED_TRACK`, `PLAY_TRACKS` or
+`TESTFLIGHT_INTERNAL_GROUP` are still set on that page from an earlier version of
+this pipeline, delete them — nothing reads them any more.
 
 Producing the credentials, once:
 

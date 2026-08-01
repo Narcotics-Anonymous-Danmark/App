@@ -75,7 +75,6 @@ jobs:
           BUILD: ${{ inputs.build }}
         run: |
           set -euo pipefail
-          # Unquoted on purpose: an empty VERSION_INPUT means "derive from --bump".
           ./bin/na release version ${VERSION_INPUT} \
             --bump "$BUMP" \
             --build "$BUILD" \
@@ -128,8 +127,6 @@ jobs:
 
           previous="$PREVIOUS_TAG_INPUT"
           if [ -z "$previous" ]; then
-            # Newest published release whose tag looks like a version of this app.
-            # (The repo also carries inherited upstream v3/v4 tags — ignore those.)
             previous=$(gh release list --limit 100 --json tagName,isDraft \
               --jq 'map(select(.isDraft == false) | .tagName) | map(select(test("^[0-9]+\\.[0-9]+\\.[0-9]+"))) | .[0] // ""')
           fi
@@ -152,8 +149,9 @@ jobs:
 
           {
             echo '<!-- release-notes:start -->'
-            echo '_Skriv de brugerrettede noter her. Denne sektion sendes til TestFlight ("What to Test")_'
-            echo '_og kan bruges som release notes i Google Play. Resten af teksten er kun til os._'
+            echo '_Skriv de brugerrettede noter her. Denne sektion sendes som release notes til_'
+            echo '_Google Play. TestFlight-noterne ("What to Test") skrives manuelt i App Store_'
+            echo '_Connect — resten af teksten er kun til os._'
             echo '<!-- release-notes:end -->'
             echo
             echo "## Ændringer siden ${previous:-første automatiske release}"
@@ -172,14 +170,13 @@ jobs:
             echo
             echo 'Signerede artefakter (.aab + .ipa) vedhæftes af dette workflow.'
             echo 'Når denne release udgives (draft → published), sendes præcis de artefakter til'
-            echo 'Google Play (internal + closed testing) og TestFlight (internal testing).'
+            echo 'Google Play (internal testing) og TestFlight (internal testing).'
             echo
             echo '- [ ] Release notes skrevet i sektionen ovenfor'
             echo '- [ ] Artefakter vedhæftet (se nedenfor)'
             echo '- [ ] Testet på en fysisk enhed'
           } > body.md
 
-          # GitHub rejects bodies over 125 000 characters.
           head -c 100000 body.md > body.trimmed.md && mv body.trimmed.md body.md
 
       - name: Create the draft release

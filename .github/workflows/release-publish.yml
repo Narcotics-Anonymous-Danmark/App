@@ -4,20 +4,24 @@ name: Publish release to stores
 # exact artefacts that were attached to the release are downloaded and shipped,
 # so what testers get is bit-for-bit what was reviewed on the release page.
 #
-#   Android -> Google Play, internal + closed testing tracks
-#   iOS     -> TestFlight, internal testing (uploaded with Apple's iTMS
-#              Transporter, then handed to the internal group over the App
-#              Store Connect API)
+#   Android -> Google Play, internal testing track only
+#   iOS     -> TestFlight, internal group only
 
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to publish (e.g. 1.3.0)
+        required: true
+        type: string
 
 permissions:
   contents: read
 
 concurrency:
-  group: publish-${{ github.event.release.tag_name }}
+  group: publish-${{ inputs.tag || github.event.release.tag_name }}
   cancel-in-progress: false
 
 jobs:
@@ -32,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.release.tag_name }}
+          ref: ${{ inputs.tag || github.event.release.tag_name }}
 
       - name: Use Node 16.13.0 (pinned by the na CLI)
         uses: actions/setup-node@v4
@@ -43,7 +47,7 @@ jobs:
         id: info
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.event.release.tag_name }}
+          TAG: ${{ inputs.tag || github.event.release.tag_name }}
         run: |
           set -euo pipefail
           version=$(node -p "require('./lib/util/release').readVersions().config")
@@ -89,12 +93,9 @@ jobs:
           gh release view "$TAG" --json body --jq .body > notes.md
           ls -la dist
 
-      - name: Upload to Google Play (internal + closed testing)
+      - name: Upload to Google Play (internal testing)
         env:
           PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
-          # Optional repo variables: PLAY_TRACKS (default "internal,alpha"),
-          # PLAY_RELEASE_NOTES_LANGUAGE (e.g. "da-DK"; unset = no notes sent).
-          PLAY_TRACKS: ${{ vars.PLAY_TRACKS }}
           PLAY_RELEASE_NOTES_LANGUAGE: ${{ vars.PLAY_RELEASE_NOTES_LANGUAGE }}
         run: |
           set -euo pipefail
@@ -109,15 +110,12 @@ jobs:
         if: success()
         run: |
           echo "### Google Play" >> "$GITHUB_STEP_SUMMARY"
-          echo "${{ needs.verify.outputs.version }} (${{ needs.verify.outputs.build }}) released to ${PLAY_TRACKS:-internal,alpha}" >> "$GITHUB_STEP_SUMMARY"
-        env:
-          PLAY_TRACKS: ${{ vars.PLAY_TRACKS }}
+          echo "${{ needs.verify.outputs.version }} (${{ needs.verify.outputs.build }}) released to the internal testing track" >> "$GITHUB_STEP_SUMMARY"
 
   testflight:
     needs: verify
-    # Apple's uploader only exists on macOS.
-    runs-on: macos-15
-    timeout-minutes: 90
+    runs-on: macos-26
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -136,7 +134,6 @@ jobs:
           set -euo pipefail
           mkdir -p dist
           gh release download "$TAG" --pattern '*.ipa' --dir dist
-          gh release view "$TAG" --json body --jq .body > notes.md
           ls -la dist
 
       - name: Upload to TestFlight (internal testing)
@@ -144,15 +141,15 @@ jobs:
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
-          # Optional repo variable: TESTFLIGHT_INTERNAL_GROUP (default: every internal group)
-          TESTFLIGHT_INTERNAL_GROUP: ${{ vars.TESTFLIGHT_INTERNAL_GROUP }}
         run: |
           set -euo pipefail
           ipa=$(ls dist/*.ipa | head -1)
-          ./bin/na publish testflight --ipa "$ipa" --notes notes.md
+          ./bin/na publish testflight --ipa "$ipa" --no-wait
 
       - name: Summary
         if: success()
         run: |
           echo "### TestFlight" >> "$GITHUB_STEP_SUMMARY"
-          echo "${{ needs.verify.outputs.version }} (${{ needs.verify.outputs.build }}) is with the internal testers" >> "$GITHUB_STEP_SUMMARY"
+          echo "${{ needs.verify.outputs.version }} (${{ needs.verify.outputs.build }}) uploaded to App Store Connect" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Processing takes another 10-40 minutes on Apple's side; the internal group picks the build up automatically when it finishes. Watch for a rejection email — this job cannot see the outcome." >> "$GITHUB_STEP_SUMMARY"
