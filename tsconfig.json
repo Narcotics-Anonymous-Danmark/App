@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -17,22 +17,25 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "skipLibCheck": true,
-    "types": [],
+    "types": [
+      "jest",
+      "node"
+    ],
     "lib": [
       "es2018",
       "dom"
     ]
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "test/**/*.ts"
   ],
   "exclude": [
     "node_modules",
     "platforms",
     "plugins",
     "www",
-    "dist",
-    "src/**/*.spec.ts"
+    "dist"
   ],
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
