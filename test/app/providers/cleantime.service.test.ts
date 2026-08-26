@@ -4,18 +4,16 @@ import { of } from 'rxjs';
 
 import { CleantimeService } from 'src/app/providers/cleantime.service';
 
-// All "today" maths in the service goes through moment(), which reads Date.now().
-// Freezing Date.now therefore pins the service's notion of today.
 const TODAY = new Date(2026, 7, 19); // 19 Aug 2026, local (TZ pinned in jest.config.js)
 
 describe('CleantimeService', () => {
   let storage: { ready: jest.Mock; get: jest.Mock };
   let translate: { get: jest.Mock };
   let service: CleantimeService;
-  let nowSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    nowSpy = jest.spyOn(Date, 'now').mockReturnValue(TODAY.getTime());
+    jest.useFakeTimers('modern');
+    jest.setSystemTime(TODAY);
 
     storage = {
       ready: jest.fn().mockResolvedValue(undefined),
@@ -29,7 +27,7 @@ describe('CleantimeService', () => {
   });
 
   afterEach(() => {
-    nowSpy.mockRestore();
+    jest.useRealTimers();
   });
 
   describe('getCleanYearsMonthsDays', () => {
