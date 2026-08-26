@@ -35,6 +35,8 @@ const DK_ROWS = [
 const danishMeeting = (extra: any = {}) => ({ root_server_uri: DANISH_URI, ...extra });
 const foreignMeeting = (extra: any = {}) => ({ root_server_uri: FOREIGN_URI, ...extra });
 
+const NOW = new Date(2026, 7, 19, 12, 0, 0);
+
 describe('MeetingFormatsProvider', () => {
   let http: { get: jest.Mock };
   let storage: { ready: jest.Mock; get: jest.Mock; set: jest.Mock };
@@ -45,6 +47,9 @@ describe('MeetingFormatsProvider', () => {
     new MeetingFormatsProvider(http as unknown as HttpClient, storage as unknown as Storage, translate as unknown as TranslateService);
 
   beforeEach(() => {
+    jest.useFakeTimers('modern');
+    jest.setSystemTime(NOW);
+
     http = {
       get: jest.fn().mockImplementation((url: string) => of(url.indexOf('lang_enum=dk') > -1 ? DK_ROWS : EN_ROWS)),
     };
@@ -60,6 +65,10 @@ describe('MeetingFormatsProvider', () => {
     };
 
     service = build();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   describe('meetings without formats', () => {
@@ -141,16 +150,12 @@ describe('MeetingFormatsProvider', () => {
     });
 
     it('degrades to the raw format keys when there is no cache at all', async () => {
-      jest.useFakeTimers();
       http.get.mockReturnValue(throwError(new Error('offline')));
       service = build();
 
       const formats = await service.getFormatsForMeeting(danishMeeting({ formats: 'Å' }));
 
       expect(formats).toEqual([{ key: 'Å', name: 'Å', description: '', category: 'content' }]);
-
-      jest.clearAllTimers();
-      jest.useRealTimers();
     });
   });
 
