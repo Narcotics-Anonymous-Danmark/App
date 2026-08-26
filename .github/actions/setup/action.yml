@@ -1,0 +1,40 @@
+name: Set up the toolchain
+description: >
+  Installs the Node version the na CLI pins and the project's dependencies.
+  Reads the version straight out of bin/na so there is one source of truth for
+  it instead of a copy in every workflow.
+
+inputs:
+  install:
+    description: Run "npm ci" after setting Node up
+    required: false
+    default: 'true'
+
+outputs:
+  node-version:
+    description: The Node version that was installed
+    value: ${{ steps.pin.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    - name: Read the Node version pinned by the na CLI
+      id: pin
+      shell: bash
+      run: |
+        set -euo pipefail
+        version=$(sed -n 's/^REQUIRED_NODE_VERSION="\(.*\)"$/\1/p' bin/na | head -1)
+        if [ -z "$version" ]; then
+          echo "::error file=bin/na::could not read REQUIRED_NODE_VERSION from bin/na"
+          exit 1
+        fi
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+        echo "Node $version (pinned by bin/na)"
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ steps.pin.outputs.version }}
+        cache: npm
+    - name: Install dependencies
+      if: inputs.install == 'true'
+      shell: bash
+      run: npm ci

@@ -1,0 +1,63 @@
+name: Unit tests
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Git ref to test (defaults to the caller's ref)
+        required: false
+        type: string
+        default: ''
+    outputs:
+      coverage:
+        description: Line coverage reported by the run, e.g. "9.22%"
+        value: ${{ jobs.jest.outputs.coverage }}
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Git ref to test (defaults to the branch this is run from)
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  jest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      coverage: ${{ steps.run.outputs.coverage }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+      - uses: ./.github/actions/setup
+      - name: Run the suite
+        id: run
+        run: |
+          set -euo pipefail
+          npm run test:coverage -- --ci --runInBand 2>&1 | tee "$RUNNER_TEMP/jest.log"
+          lines=$(sed -n 's/^Lines *: *\([0-9.]*%\).*/\1/p' "$RUNNER_TEMP/jest.log" | head -1)
+          echo "coverage=${lines:-unknown}" >> "$GITHUB_OUTPUT"
+      - name: Report coverage in the run summary
+        if: always()
+        run: |
+          set -euo pipefail
+          [ -f "$RUNNER_TEMP/jest.log" ] || exit 0
+          {
+            echo '### Test coverage'
+            echo
+            echo '```'
+            sed -n '/^=* Coverage summary/,/^=*$/p' "$RUNNER_TEMP/jest.log" || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload the coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage
+          retention-days: 7
+          if-no-files-found: ignore

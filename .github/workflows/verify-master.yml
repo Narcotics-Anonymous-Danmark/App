@@ -1,0 +1,19 @@
+name: Verify master
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-master-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  typecheck:
+    uses: ./.github/workflows/check-types.yml
+
+  test:
+    uses: ./.github/workflows/test-unit.yml
