@@ -1,0 +1,35 @@
+name: Typecheck
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Git ref to check (defaults to the caller's ref)
+        required: false
+        type: string
+        default: ''
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Git ref to check (defaults to the branch this is run from)
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  tsc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - uses: ./.github/actions/setup
+
+      - name: Typecheck the app and the specs
+        run: npm run typecheck
