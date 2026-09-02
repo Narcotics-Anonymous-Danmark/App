@@ -130,6 +130,8 @@
     <plugin name="cordova-plugin-local-notification" spec="^1.2.1" />
     <plugin name="cordova-plugin-media" spec="^7.0.0" />
     <plugin name="cordova-plugin-music-controls2" spec="^3.0.7" />
+    <plugin name="na-cast" spec="./local-plugins/na-cast" />
+    <plugin name="na-airplay-picker" spec="./local-plugins/na-airplay-picker" />
     <hook src="scripts/patch-music-controls.js" type="before_compile" />
     <hook src="scripts/patch-ios-media.js" type="before_compile" />
     <hook src="scripts/use-cocoapods-cdn.js" type="before_platform_add" />

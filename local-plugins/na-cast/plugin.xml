@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="na-cast"
+        version="1.0.1">
+    <name>NA Cast</name>
+    <description>Minimal Google Cast sender (default media receiver) for the media player.</description>
+    <license>MIT</license>
+    <keywords>cordova,chromecast,cast,media</keywords>
+    <engines>
+        <engine name="cordova" version=">=10.0.0" />
+        <engine name="cordova-android" version=">=12.0.0" />
+        <engine name="cordova-ios" version=">=6.0.0" />
+    </engines>
+    <js-module src="www/na-cast.js" name="NaCast">
+        <clobbers target="NaCast" />
+    </js-module>
+    <preference name="CAST_RECEIVER_APP_ID" default="CC1AD845" />
+    <preference name="CAST_FRAMEWORK_VERSION" default="22.0.0" />
+    <preference name="ANDROIDX_MEDIAROUTER_VERSION" default="1.7.0" />
+    <preference name="IOS_CAST_SDK_VERSION" default="~> 4.8" />
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="NaCast">
+                <param name="android-package" value="dk.nadanmark.cast.NaCast" />
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <meta-data
+                android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
+                android:value="dk.nadanmark.cast.CastOptionsProvider" />
+        </config-file>
+        <config-file target="res/values/strings.xml" parent="/resources">
+            <string name="na_cast_receiver_app_id">$CAST_RECEIVER_APP_ID</string>
+        </config-file>
+        <framework src="com.google.android.gms:play-services-cast-framework:$CAST_FRAMEWORK_VERSION" />
+        <framework src="androidx.mediarouter:mediarouter:$ANDROIDX_MEDIAROUTER_VERSION" />
+        <source-file src="src/android/NaCast.kt" target-dir="app/src/main/kotlin/dk/nadanmark/cast" />
+        <source-file src="src/android/CastOptionsProvider.kt" target-dir="app/src/main/kotlin/dk/nadanmark/cast" />
+        <source-file src="src/android/CastEvents.kt" target-dir="app/src/main/kotlin/dk/nadanmark/cast" />
+    </platform>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="NaCast">
+                <param name="ios-package" value="NaCast" />
+            </feature>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NSLocalNetworkUsageDescription">
+            <string>Local network access is used to find Chromecast devices so you can play audio on them.</string>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NSBonjourServices">
+            <array>
+                <string>_googlecast._tcp</string>
+                <string>_$CAST_RECEIVER_APP_ID._googlecast._tcp</string>
+            </array>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NaCastReceiverAppId">
+            <string>$CAST_RECEIVER_APP_ID</string>
+        </config-file>
+        <header-file src="src/ios/NaCast-Bridging-Header.h" type="BridgingHeader" />
+        <source-file src="src/ios/NaCast.swift" />
+        <podspec>
+            <config>
+                <source url="https://cdn.cocoapods.org/" />
+            </config>
+            <pods use-frameworks="true">
+                <pod name="google-cast-sdk-no-bluetooth" spec="$IOS_CAST_SDK_VERSION" />
+            </pods>
+        </podspec>
+    </platform>
+</plugin>

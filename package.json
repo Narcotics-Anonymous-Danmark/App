@@ -84,6 +84,13 @@
 			"cordova-plugin-googlemaps-2": {
 				"LOCATION_WHEN_IN_USE_DESCRIPTION": "This app wants to get your location while this app runs only.",
 				"LOCATION_ALWAYS_USAGE_DESCRIPTION": "This app wants to get your location always, even this app runs in background."
+			},
+			"na-airplay-picker": {},
+			"na-cast": {
+				"CAST_RECEIVER_APP_ID": "CC1AD845",
+				"CAST_FRAMEWORK_VERSION": "22.0.0",
+				"ANDROIDX_MEDIAROUTER_VERSION": "1.7.0",
+				"IOS_CAST_SDK_VERSION": "~> 4.8"
 			}
 		},
 		"platforms": [

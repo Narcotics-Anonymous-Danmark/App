@@ -1,0 +1,11 @@
+{
+  "name": "na-cast",
+  "version": "1.0.1",
+  "description": "Minimal Google Cast sender (default media receiver) for the NA Danmark media player.",
+  "cordova": {
+    "id": "na-cast",
+    "platforms": ["android", "ios"]
+  },
+  "license": "MIT",
+  "private": true
+}

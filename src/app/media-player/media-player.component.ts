@@ -8,6 +8,7 @@ import {
     SKIP_FORWARD_SECONDS
 } from './media-player.models';
 import { MediaPlayerService } from './media-player.service';
+import { CastSessionService, CastSessionState, IDLE_CAST_STATE } from './cast.service';
 
 /**
  * Global mini player docked at the bottom of the app. Rendered once in
@@ -27,8 +28,13 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
     private seeking = false;
     private seekPreview = 0;
     private stateSub?: Subscription;
+    private castSub?: Subscription;
+    private unsubscribeAirPlay: (() => void) | null = null;
 
-    constructor(public player: MediaPlayerService) { }
+    castState: CastSessionState = IDLE_CAST_STATE;
+    airPlayActive = false;
+
+    constructor(public player: MediaPlayerService, public cast: CastSessionService) { }
 
     ngOnInit() {
         this.stateSub = this.player.state$.subscribe((state) => {
@@ -36,13 +42,54 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
             // Pages pad their content while the player is docked (global.scss).
             document.body.classList.toggle('media-player-open', state.status !== 'idle');
         });
+        this.castSub = this.cast.state$.subscribe((castState) => this.castState = castState);
+        const airPlay = this.airPlayPlugin;
+        if (airPlay) {
+            this.unsubscribeAirPlay = airPlay.onRouteChange((route) => this.airPlayActive = !!route.airplay);
+        }
     }
 
     ngOnDestroy() {
         if (this.stateSub) {
             this.stateSub.unsubscribe();
         }
+        if (this.castSub) {
+            this.castSub.unsubscribe();
+        }
+        if (this.unsubscribeAirPlay) {
+            this.unsubscribeAirPlay();
+            this.unsubscribeAirPlay = null;
+        }
         document.body.classList.remove('media-player-open');
+    }
+
+    private get airPlayPlugin(): NaAirPlayPlugin | undefined {
+        return (window as any).NaAirPlay as NaAirPlayPlugin | undefined;
+    }
+
+    get showCast(): boolean {
+        return this.castState.available || this.castState.connected || this.castState.connecting;
+    }
+
+    get castIcon(): string {
+        return this.castState.connected
+            ? 'assets/img/player/cast-connected.svg'
+            : 'assets/img/player/cast.svg';
+    }
+
+    get showAirPlay(): boolean {
+        return !!this.airPlayPlugin;
+    }
+
+    onCastClick(): void {
+        this.cast.requestSession().catch((e) => console.warn('Cast: could not open picker', e));
+    }
+
+    onAirPlayClick(): void {
+        const airPlay = this.airPlayPlugin;
+        if (airPlay) {
+            airPlay.showPicker().catch((e) => console.warn('AirPlay: could not open picker', e));
+        }
     }
 
     get visible(): boolean {

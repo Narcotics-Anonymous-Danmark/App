@@ -73,3 +73,71 @@ interface MusicControlsStatic {
 interface Window {
     MusicControls?: MusicControlsStatic;
 }
+
+// ---------------------------------------------------------------------------
+// na-cast (local-plugins/na-cast) — window.NaCast
+// ---------------------------------------------------------------------------
+
+interface NaCastSessionState {
+    available: boolean;
+    connected: boolean;
+    connecting: boolean;
+    deviceName: string | null;
+}
+
+type NaCastPlayerState = 'IDLE' | 'PLAYING' | 'PAUSED' | 'BUFFERING' | 'LOADING' | 'UNKNOWN';
+type NaCastIdleReason = 'NONE' | 'FINISHED' | 'CANCELLED' | 'INTERRUPTED' | 'ERROR';
+
+interface NaCastMediaStatus {
+    playerState: NaCastPlayerState;
+    idleReason: NaCastIdleReason | null;
+    position: number;
+    duration: number;
+}
+
+interface NaCastMedia {
+    url: string;
+    contentType?: string;
+    title?: string;
+    artist?: string;
+    duration?: number;
+    position?: number;
+    autoplay?: boolean;
+}
+
+interface NaCastPlugin {
+    initialize(): Promise<NaCastSessionState>;
+    onSessionState(cb: (state: NaCastSessionState) => void): () => void;
+    requestSession(): Promise<void>;
+    endSession(stopReceiver?: boolean): Promise<void>;
+    loadMedia(media: NaCastMedia): Promise<void>;
+    play(): Promise<void>;
+    pause(): Promise<void>;
+    seek(seconds: number): Promise<void>;
+    onMediaStatus(cb: (status: NaCastMediaStatus) => void): () => void;
+    getPosition(): Promise<number>;
+    readonly sessionState: NaCastSessionState | null;
+    readonly mediaStatus: NaCastMediaStatus | null;
+}
+
+// ---------------------------------------------------------------------------
+// na-airplay-picker (local-plugins/na-airplay-picker) — window.NaAirPlay, iOS only
+// ---------------------------------------------------------------------------
+
+interface NaAirPlayRoute {
+    airplay: boolean;
+    routeName: string;
+    portType: string;
+}
+
+interface NaAirPlayPlugin {
+    showPicker(): Promise<void>;
+    getRoute(): Promise<NaAirPlayRoute>;
+    onRouteChange(cb: (route: NaAirPlayRoute) => void): () => void;
+    readonly route: NaAirPlayRoute | null;
+}
+
+interface Window {
+    NaCast?: NaCastPlugin;
+    NaAirPlay?: NaAirPlayPlugin;
+}
