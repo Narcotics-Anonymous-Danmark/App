@@ -1,0 +1,11 @@
+{
+  "name": "na-airplay-picker",
+  "version": "1.0.0",
+  "description": "In-app AirPlay route picker + active-route reporting for iOS.",
+  "cordova": {
+    "id": "na-airplay-picker",
+    "platforms": ["ios"]
+  },
+  "license": "MIT",
+  "private": true
+}

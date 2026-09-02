@@ -2,8 +2,26 @@
     <div class="media-player__header">
         <div class="media-player__titles">
             <div class="media-player__track">{{ trackTitle }}</div>
-            <div class="media-player__playlist">{{ state.playlist?.title }}</div>
+            <div class="media-player__playlist" *ngIf="!castState.connected && !castState.connecting">{{ state.playlist?.title }}</div>
+            <div class="media-player__playlist media-player__playlist--cast" *ngIf="castState.connected">
+                {{ 'PLAYER_PLAYING_ON' | translate:{ device: castState.deviceName || 'Chromecast' } }}
+            </div>
+            <div class="media-player__playlist" *ngIf="castState.connecting && !castState.connected">
+                {{ 'PLAYER_CONNECTING_TO_CAST' | translate }}
+            </div>
         </div>
+        <ion-button *ngIf="showAirPlay" fill="clear" size="small" class="media-player__route"
+            [color]="airPlayActive ? 'primary' : 'medium'"
+            (click)="onAirPlayClick()" [attr.aria-label]="'PLAYER_AIRPLAY' | translate">
+            <ion-icon slot="icon-only" src="assets/img/player/airplay.svg"></ion-icon>
+        </ion-button>
+        <ion-button *ngIf="showCast" fill="clear" size="small" class="media-player__route"
+            [color]="castState.connected ? 'primary' : 'medium'"
+            (click)="onCastClick()"
+            [attr.aria-label]="(castState.connected ? 'PLAYER_CAST_CONNECTED' : 'PLAYER_CAST') | translate">
+            <ion-spinner *ngIf="castState.connecting && !castState.connected" name="dots"></ion-spinner>
+            <ion-icon *ngIf="!castState.connecting || castState.connected" slot="icon-only" [src]="castIcon"></ion-icon>
+        </ion-button>
         <ion-button fill="clear" size="small" color="medium" class="media-player__close"
             (click)="player.stop()" [attr.aria-label]="'PLAYER_CLOSE' | translate">
             <ion-icon slot="icon-only" name="close-outline"></ion-icon>

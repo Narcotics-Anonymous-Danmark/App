@@ -37,10 +37,26 @@
     color: var(--ion-color-medium, #92949c);
 }
 
-.media-player__close {
+.media-player__close,
+.media-player__route {
     margin: 0;
     --padding-start: 6px;
     --padding-end: 6px;
+}
+
+.media-player__route {
+    ion-icon {
+        font-size: 20px;
+    }
+
+    ion-spinner {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.media-player__playlist--cast {
+    color: var(--ion-color-primary, #3880ff);
 }
 
 .media-player__progress {

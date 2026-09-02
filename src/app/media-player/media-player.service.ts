@@ -1,6 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AudioBackend, CordovaMediaBackend, HtmlAudioBackend } from './audio-backend';
+import { CastBackend } from './cast-backend';
+import { CastSessionService } from './cast.service';
 import {
     INITIAL_PLAYER_STATE,
     MediaPlaylist,
@@ -28,6 +30,9 @@ const MUSIC_CONTROLS_SYNC_INTERVAL_MS = 5000;
  *   published duration/position and the skip + scrub commands.
  * - Persists resume points: one per book (chapter + position) and one per
  *   speak file, restored automatically on the next play.
+ * - Casts to a Chromecast while a Cast session is connected (CastBackend):
+ *   the queue logic is unchanged, only the backend is swapped, and playback
+ *   is handed over in both directions at the current position.
  *
  * The behaviour contract is documented in docs/media-player.md and mirrored
  * by the Dart implementation in flutter/na_media_player.
@@ -48,14 +53,23 @@ export class MediaPlayerService {
     private musicControlsDuration = 0;
     private lastMusicControlsSyncAt = 0;
     private notificationPermissionRequested = false;
+    private casting = false;
 
     constructor(
         private resumePoints: ResumePointsService,
+        private cast: CastSessionService,
         private zone: NgZone
     ) {
         // Save the position when the app goes to the background so a swipe-kill
         // does not lose more than one poll interval of progress.
         document.addEventListener('pause', () => this.persistResumePoint(), false);
+
+        this.cast.initialize();
+        this.cast.state$.subscribe((castState) => this.onCastConnectionChanged(castState.connected));
+    }
+
+    get isCasting(): boolean {
+        return this.casting;
     }
 
     get state(): PlayerState {
@@ -139,6 +153,7 @@ export class MediaPlayerService {
             await this.persistResumePoint();
         }
         this.releaseBackend();
+        this.casting = false;
         this.destroyMusicControls();
         this.patchState(INITIAL_PLAYER_STATE);
     }
@@ -195,10 +210,21 @@ export class MediaPlayerService {
             duration: parseDurationLabel(track.durationLabel)
         });
 
-        this.backend = CordovaMediaBackend.isAvailable()
-            ? new CordovaMediaBackend()
-            : new HtmlAudioBackend();
-        this.pendingSeek = startPosition >= MIN_RESUME_POSITION_SECONDS ? startPosition : null;
+        this.casting = this.cast.connected;
+        if (this.casting) {
+            this.backend = new CastBackend(this.cast, {
+                title: track.title,
+                artist: playlist.title,
+                duration: parseDurationLabel(track.durationLabel),
+                startPosition
+            });
+            this.pendingSeek = null;
+        } else {
+            this.backend = CordovaMediaBackend.isAvailable()
+                ? new CordovaMediaBackend()
+                : new HtmlAudioBackend();
+            this.pendingSeek = startPosition >= MIN_RESUME_POSITION_SECONDS ? startPosition : null;
+        }
 
         this.backend.load(track.url, {
             onEnded: () => this.zone.run(() => this.onTrackEnded()),
@@ -209,7 +235,36 @@ export class MediaPlayerService {
         this.setStatus('playing');
         this.startPolling();
         this.persistResumePoint();
-        this.syncMusicControlsMetadata();
+        if (this.casting) {
+            this.destroyMusicControls();
+        } else {
+            this.syncMusicControlsMetadata();
+        }
+    }
+
+    /**
+     * Hands playback over when a Cast session connects or drops: the current
+     * track is restarted on the other backend at the same position. Also what
+     * brings playback back to the device when a session ends unexpectedly.
+     */
+    private async onCastConnectionChanged(connected: boolean): Promise<void> {
+        if (connected === this.casting) {
+            return;
+        }
+        const { playlist, trackIndex, status } = this.state;
+        if (!this.backend || !playlist || status === 'idle') {
+            this.casting = connected && this.state.status !== 'idle';
+            return;
+        }
+        const wasPaused = status === 'paused';
+        const position = await this.backend.getPosition();
+        if (this.state.playlist !== playlist || this.state.trackIndex !== trackIndex || this.state.status === 'idle') {
+            return;
+        }
+        this.startTrack(playlist, trackIndex, position > 0 ? position : this.state.position);
+        if (wasPaused) {
+            this.pause();
+        }
     }
 
     private onTrackRunning(): void {
@@ -357,7 +412,7 @@ export class MediaPlayerService {
     private syncMusicControlsMetadata(): void {
         const controls = this.musicControls;
         const { playlist, trackIndex, position, duration, status } = this.state;
-        if (!controls || !playlist) {
+        if (!controls || !playlist || this.casting) {
             return;
         }
         const track = playlist.tracks[trackIndex];
@@ -396,7 +451,7 @@ export class MediaPlayerService {
 
     private syncMusicControlsPlayback(): void {
         const controls = this.musicControls;
-        if (!controls || !this.musicControlsActive) {
+        if (!controls || !this.musicControlsActive || this.casting) {
             return;
         }
         const isPlaying = this.state.status !== 'paused';

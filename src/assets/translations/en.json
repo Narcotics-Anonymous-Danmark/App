@@ -166,5 +166,10 @@
     "CONVENTION": "Convention",
     "OPENING_SPEAKER": "Opening speak",
     "MAIN_SPEAKER": "Main speak",
-    "CLOSING_SPEAKER": "Closing speak"
+    "CLOSING_SPEAKER": "Closing speak",
+    "PLAYER_CAST": "Play on Chromecast",
+    "PLAYER_CAST_CONNECTED": "Casting — tap for options",
+    "PLAYER_PLAYING_ON": "Playing on {{device}}",
+    "PLAYER_CONNECTING_TO_CAST": "Connecting to Chromecast…",
+    "PLAYER_AIRPLAY": "AirPlay"
 }

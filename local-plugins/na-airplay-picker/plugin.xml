@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        id="na-airplay-picker"
+        version="1.0.0">
+    <name>NA AirPlay Picker</name>
+    <description>Shows the system AirPlay route picker and reports the active output route.</description>
+    <license>MIT</license>
+    <keywords>cordova,airplay,ios,audio,route</keywords>
+
+    <engines>
+        <engine name="cordova" version=">=10.0.0" />
+        <engine name="cordova-ios" version=">=6.0.0" />
+    </engines>
+
+    <platform name="ios">
+        <js-module src="www/na-airplay.js" name="NaAirPlay">
+            <clobbers target="NaAirPlay" />
+        </js-module>
+
+        <config-file target="config.xml" parent="/*">
+            <feature name="NaAirPlay">
+                <param name="ios-package" value="NaAirPlay" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+
+        <header-file src="src/ios/NaAirPlay-Bridging-Header.h" type="BridgingHeader" />
+        <source-file src="src/ios/NaAirPlay.swift" />
+
+        <framework src="AVFoundation.framework" />
+        <framework src="AVKit.framework" />
+    </platform>
+</plugin>

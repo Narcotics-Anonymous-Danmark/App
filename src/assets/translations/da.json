@@ -179,5 +179,10 @@
     "SPEAK_LOAD_ERROR": "Kunne ikke hente speaks",
     "SPEAK_LOAD_ERROR_BODY": "Tjek din internetforbindelse og prøv igen.",
     "SPEAK_RETRY": "Prøv igen",
-    "SPEAK_FORGET": "Fjern fra listen"
+    "SPEAK_FORGET": "Fjern fra listen",
+    "PLAYER_CAST": "Afspil på Chromecast",
+    "PLAYER_CAST_CONNECTED": "Caster – tryk for valgmuligheder",
+    "PLAYER_PLAYING_ON": "Afspiller på {{device}}",
+    "PLAYER_CONNECTING_TO_CAST": "Forbinder til Chromecast…",
+    "PLAYER_AIRPLAY": "AirPlay"
 }
